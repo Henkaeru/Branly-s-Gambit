@@ -1,0 +1,108 @@
+[
+  {
+      "id": "flat_slash",
+      "amount": 40,
+      "calc_field": "attack",
+      "name": "Flat Slash",
+      "enabled": true,
+      "type": "dev",
+      "category": "damage",
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "A simple 40-ish flat attack.",
+      "actions": [
+          {
+              "id": "attack",
+              "crit_chance": 0.1,
+              "crit_damage": 10
+          }
+      ]
+  },
+  {
+      "id": "hp_blast",
+      "amount": 0.2,
+      "add": 0.05,
+      "multiply": 1.5,
+      "calc_field": "hp",
+      "name": "HP Blast",
+      "enabled": true,
+      "type": "dev",
+      "category": "damage",
+      "subtract": 0,
+      "divide": 1,
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "Blast equal to 20% of your HP,multiplied by 1.5,+5% of your HP",
+      "actions": [ { "id": "attack" } ]
+  },
+  {
+      "id": "triple_slash",
+      "amount": 20,
+      "calc_field": "attack",
+      "name": "Triple Slash",
+      "type": "dev",
+      "category": "damage",
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "Three hits; first hit is weak, others use base amount.",
+      "actions": [
+          { 
+              "id": "attack",
+              "amount": 10
+          },
+          { "id": "attack" },
+          { "id": "attack" }
+      ]
+  },
+  {
+      "id": "poison_cloud",
+      "chance": 0.9,
+      "duration": 3,
+      "calc_target": "opponent",
+      "name": "Poison Cloud",
+      "type": "admin",
+      "category": "support",
+      "amount": 0,
+      "target": "opponent",
+      "calc_field": "hp",
+      "description": "deal 5% of opponent hp to opponent each turn",
+      "actions": [
+          {
+              "id": "status",
+              "operation": "add",
+              "status": [
+                  { 
+                      "id": "poison",
+                      "amount": 0.05 
+                  }
+              ]
+          }
+      ]
+  },
+  {
+      "id": "chaos_strike",
+      "amount": 10,
+      "target": "opponent",
+      "description": "1/4 to heal opponent,3/4 to damage him",
+      "actions": [
+          {
+          "id": "random",
+              "choices": [
+                  { "action": { "id": "attack" },"weight": 3 },
+                  { 
+                      "action": { 
+                          "id": "heal",
+                          "calc_target": "opponent"
+                      },
+                      "weight": 1  
+                  }
+              ],
+              "count": 10,
+              "unique": false  
+          }
+      ]
+  }
+]

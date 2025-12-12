@@ -1,0 +1,30 @@
+# @ Main game configuration (aggregator)
+from dataclasses import dataclass
+
+from .display_config import DisplayConfig
+from .font_config import FontConfig
+from .color_config import ColorConfig
+from .audio_config import AudioConfig
+from .battle_config import BattleConfig
+from .move_config import MoveConfig
+from .fighter_config import FighterConfig
+from .type_config import TypeConfig
+from .item_config import ItemConfig
+from .ai_config import AIConfig
+
+
+@dataclass(frozen=True)
+class Config:
+    DISPLAY = DisplayConfig()
+    FONTS = FontConfig()
+    COLORS = ColorConfig()
+    AUDIO = AudioConfig()
+    BATTLE = BattleConfig()
+    MOVES = MoveConfig()
+    FIGHTERS = FighterConfig()
+    TYPES = TypeConfig()
+    ITEMS = ItemConfig()
+    AI = AIConfig()
+
+
+CONFIG = Config()
