@@ -1,3 +1,3 @@
 from .loader import load_moves
-from .schema import MoveModel
+from .schema import Move
 from .default import DEFAULTS

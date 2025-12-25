@@ -13,7 +13,7 @@
       "description": "A simple 40-ish flat attack.",
       "actions": [
           {
-              "id": "attack",
+              "id": "damage",
               "crit_chance": 0.1,
               "crit_damage": 10
           }
@@ -35,7 +35,7 @@
       "target": "opponent",
       "calc_target": "self",
       "description": "Blast equal to 20% of your HP,multiplied by 1.5,+5% of your HP",
-      "actions": [ { "id": "attack" } ]
+      "actions": [ { "id": "damage" } ]
   },
   {
       "id": "triple_slash",
@@ -50,11 +50,11 @@
       "description": "Three hits; first hit is weak, others use base amount.",
       "actions": [
           { 
-              "id": "attack",
+              "id": "damage",
               "amount": 10
           },
-          { "id": "attack" },
-          { "id": "attack" }
+          { "id": "damage" },
+          { "id": "damage" }
       ]
   },
   {
@@ -63,7 +63,7 @@
       "duration": 3,
       "calc_target": "opponent",
       "name": "Poison Cloud",
-      "type": "admin",
+      "type": "opti",
       "category": "support",
       "amount": 0,
       "target": "opponent",
@@ -91,7 +91,7 @@
           {
           "id": "random",
               "choices": [
-                  { "action": { "id": "attack" },"weight": 3 },
+                  { "action": { "id": "damage" },"weight": 3 },
                   { 
                       "action": { 
                           "id": "heal",

@@ -1,7 +1,7 @@
 import pygame, sys, random
 from typing import Optional, Dict
 
-from config import *
+from config.config import *
 from ui import UI
 from scenes.menu import Menu
 from data.characters import CHARACTERS

@@ -1,6 +1,6 @@
 import json
 from config.moves.loader import load_moves
-from config.moves.schema import MoveModel
+from config.moves.schema import Action
 
 
 def pretty(obj):
@@ -8,41 +8,52 @@ def pretty(obj):
     return json.dumps(obj, indent=2, ensure_ascii=False)
 
 
-# Load the JSON
+# Load moves (already validated Move objects)
 moves = load_moves("config/moves/moves.json")
 
 print("=== RAW MOVES ===")
 for move in moves.values():
-    print(pretty(move))
+    print(pretty(move.model_dump(exclude_none=True)))
     print("-" * 60)
 
-# Validate with Pydantic schema
 print("\n=== VALIDATED MOVES ===")
 for move in moves.values():
-    try:
-        validated = MoveModel(**move)
-        print(f"✅ {validated.id}: validated successfully")
-        print(f"  name: {validated.name}")
-        print(f"  category: {validated.category}")
-        print(f"  target: {validated.target}")
-        print(f"  calc_target: {validated.calc_target}")
-        print(f"  actions: {len(validated.actions)} action(s) loaded")
+    print(f"✅ {move.id}: validated successfully")
+    print(f"  name: {move.name}")
+    print(f"  category: {move.category}")
+    print(f"  target: {move.target}")
+    print(f"  calc_target: {move.calc_target}")
+    print(f"  actions: {len(move.actions)} action(s) loaded")
 
-        # Display each action in a readable, structured way
-        for i, action in enumerate(validated.actions):
-            print(f"    ├─ action[{i}] id: {action.id}")
-            if action.params:
-                print(f"    │    params:")
-                for k, v in action.params.items():
-                    print(f"    │      {k}: {v}")
+    def print_actions(actions: list[Action], indent: int = 4):
+        for i, action in enumerate(actions):
+            prefix = " " * indent
+            print(f"{prefix}├─ action[{i}] id: {action.id}")
+
+            params = action.params
+            if params:
+                print(f"{prefix}│    params:")
+                for k, v in params.items():
+                    print(f"{prefix}│      {k}: {v}")
             else:
-                print(f"    │    params: None")
-        print("    └───────────────────────────────")
+                print(f"{prefix}│    params: None")
 
-    except Exception as e:
-        print(f"❌ Validation failed for move '{move.get('id', 'unknown')}': {e}")
+            # Recursive actions (repeat / condition)
+            nested = getattr(action, "actions", None)
+            if nested:
+                print_actions(nested, indent + 4)
 
-    print("-" * 60)
+            # RandomAction choices
+            choices = getattr(action, "choices", None)
+            if choices:
+                for j, choice in enumerate(choices):
+                    print(f"{prefix}│    choice[{j}] weight: {choice.weight}")
+                    print_actions([choice.action], indent + 8)
+
+    print_actions(move.actions)
+    print("└───────────────────────────────\n")
+
+
 
 
 from typing import Any, Dict, List

@@ -1,5 +1,5 @@
 import pygame
-from config import FONT, WHITE, GREEN, BLUE, YELLOW, ORANGE, DARK
+from config.config import FONT, WHITE, GREEN, BLUE, YELLOW, ORANGE, DARK
 
 class UI:
     @staticmethod
