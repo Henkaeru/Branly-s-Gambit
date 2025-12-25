@@ -53,13 +53,13 @@ Numeric transforms to `amount` are applied in PEMDAS order (as applied to the DS
 
 ```python
 // flat amount
-effective_amount = (((amount * multiply) / divide) + add) - subtract
+effective_amount = (amount * multiply) + add
 // percent amount
-effective_amount = ((((calc_target.calc_field * amount) * multiply) / divide) + add) - subtract
+effective_amount = (calc_target.calc_field * amount) * multiply + add
 ```
 
 * `amount`: int -> flat; float -> percent (0.25 = 25%).
-* `multiply` / `divide` / `add` / `subtract` follow the order above.
+* `multiply` / `add` follow the order above.
 * After the arithmetic pipeline, action-specific modifiers (e.g. `crit_damage`) may be applied as specified by the action.
 
 ### Dual target model
@@ -86,16 +86,14 @@ Examples:
   "enabled": true,                // default: true
   "type": "string",               // default: "none"
   "category": "string",           // default: "none"
-  "charge_usage": 0.1,            // default: 0.0 (1.0 if category: "special")
+  "charge_usage": 0.1,            // default: 0.0
   "amount": 0,                    // default: 0 (int or float)
   "chance": 1.0,                  // default: 1.0 (0.0 - 1.0)
   "target": "self" / "opponent",  // default: "opponent"
   "calc_target": "self",          // default: "self"
   "calc_field": "string",         // default: "hp"
   "multiply": 1.0,                // default: 1.0
-  "divide": 1.0,                  // default: 1.0
   "add": 0,                       // default: 0
-  "subtract": 0,                  // default: 0
   "duration": -1,                 // default: -1 (infinite)
   "sound": "string",              // default: null
   "description": "string",        // default: ""
@@ -131,7 +129,7 @@ Each action is an object with:
 
 ## Action function reference
 
-> Defaults listed where applicable. The general move fields (`amount`, `chance`, `target`, `calc_target`, `calc_field`, `multiply`, `divide`, `add`, `subtract`, `duration`, `description`) are available to all action (they may however not be relevent to some action).
+> Defaults listed where applicable. The general move fields (`amount`, `chance`, `target`, `calc_target`, `calc_field`, `multiply`, `add`, `duration`, `description`) are available to all action (they may however not be relevent to some action).
 
 ---
 
@@ -160,12 +158,14 @@ Applies a temporary positive modifier to base stat(s)
 **params (required)**
 
 * `stat` (string or list) — one or multiple stats: `"attack"`, `"defense"`, `"hp"`, `"charge_bonus"`.
-* `max_stack` (int, default `-1`) — maximum stacks; `-1` means infinite.
 
 **Usage**
 
 * Uses the general `amount` to determine the magnitude (flat if int, percent if float). For debuff use negative `amount`.
 * Uses `duration` general field (default `-1`) for application length.
+* A debuff is still a buff
+* You can only have 4 buff applied at the same time
+* `+25% "attack"`, `-50 "defense"`, `+35 "attack"` makes 3 out of 4 buffs
 
 **Behavior notes**
 
@@ -239,8 +239,6 @@ Randomly selects actions to trigger.
 **params (required)**
 
 * `choices`: list of `{ "action": <action_object>, "weight": int }` — the possible choices.
-* `count` (int, default `1`) — how many choices to execute.
-* `unique` (bool, default `false`) — when `true`, prevents choosing the same choice more than once within this random call.
 
 **Behavior**
 
@@ -321,7 +319,7 @@ The `"type"` field takes one of the following IDs. These are used for type inter
 }
 ```
 
-### Percent-of-self-HP attack with add/subtract/multiply/divide (PEMDAS)
+### Percent-of-self-HP attack with add/multiply (PEMDAS)
 
 ```json
 {
@@ -334,8 +332,6 @@ The `"type"` field takes one of the following IDs. These are used for type inter
     "enabled": true, // not required
     "type": "dev", // not required
     "category": "damage", // not required
-    "subtract": 0, // not required
-    "divide": 1, // not required
     "chance": 1.0, // not required
     "target": "opponent", // not required
     "calc_target": "self", // not required
@@ -432,7 +428,7 @@ The `"type"` field takes one of the following IDs. These are used for type inter
 ## Notes & implementation tips
 
 * **Defaults:** Implement default defaults as listed in the top-level schema (e.g. `amount=0`, `chance=1.0`, `multiply=1.0`, `duration=-1`, `type="none"`, `category="none"`).
-* **PEMDAS:** Implement arithmetic transforms strictly in the order: `multiply`, `divide`, then `add`, then `subtract`.
+* **PEMDAS:** Implement arithmetic transforms strictly in the order: `multiply` then `add`.
 * **Percent interpretation:** Any numeric field that is a Python/JSON float should be interpreted as a fraction (e.g., `0.25 = 25%`). For `amount` and other fields, if `amount` is `0.25` and `calc_target` is `"self"`, compute 25% of the chosen field (`calc_field`) from the `self` entity.
 * **Context propagation:** The loader merges context top-down; every nested structure receives the merged dictionary. For example, a `condition` receives the move context, and the `condition`'s `actions` receive the same context with any condition-level overrides applied.
 * **Action `params` requirement:** Some actions require `params` (e.g., `status` requires `operation` and `status` list; `modify` requires `field` and `value`); make sure action schemas declare `params` required or optional accordingly.
