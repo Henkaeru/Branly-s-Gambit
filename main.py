@@ -13,4 +13,4 @@ move_engine = registry.get("moves")
 #     print(id, move, sep="\n\n:", end="\n\n" + "="*80 + "\n\n")
 
 # print(move_engine.move_set["random_slash"])
-move_engine.execute("random_slash")
+move_engine.execute("ultimate_chaos_blast")

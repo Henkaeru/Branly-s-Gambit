@@ -23,7 +23,7 @@ class MoveEngine:
 
         # This chance gates the entire move.
         # Action chances are independent and NOT inherited.
-        if random.random() > move.chance:
+        if random.random() > (move.chance() if callable(move.chance) else move.chance):
             return
 
         # Start from default Context, then merge move overrides,
@@ -51,7 +51,7 @@ class MoveEngine:
         # Only applies if the action explicitly defines `chance`.
         # Otherwise, action chance is implicitly 100%.
         if hasattr(action, "chance"):
-            if random.random() > action.chance:
+            if random.random() > (action.chance() if callable(action.chance) else action.chance):
                 return
 
         # Dispatch action execution
@@ -83,7 +83,10 @@ def merge_context(parent: Context, obj) -> Context:
         if field in overrides:
             data[field] = overrides[field]
 
-    return Context(**data)
+    ctx = parent.model_copy()
+    for field, value in data.items():
+        setattr(ctx, field, value)
+    return ctx
 
 
 def create_engine(moves_config, registry):
