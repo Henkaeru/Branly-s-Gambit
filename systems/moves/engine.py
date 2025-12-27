@@ -76,18 +76,14 @@ class MoveEngine:
         print(f"     action params: {action}")
 
 def merge_context(parent: Context, obj) -> Context:
-    data = parent.model_dump()
+    base = parent.model_dump()
     overrides = obj.model_dump(exclude_none=True)
 
     for field in Context.model_fields:
         if field in overrides:
-            data[field] = overrides[field]
+            base[field] = overrides[field]
 
-    ctx = parent.model_copy()
-    for field, value in data.items():
-        setattr(ctx, field, value)
-    return ctx
-
+    return Context.model_validate(base)
 
 def create_engine(moves_config, registry):
     return MoveEngine(moves_config)

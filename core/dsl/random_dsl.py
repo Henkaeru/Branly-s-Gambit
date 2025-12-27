@@ -261,6 +261,10 @@ class RandomNumber(float):
 
     @classmethod
     def validate(cls, v, info=None):
+        # Direct pass-through for callables
+        if callable(v):
+            return v
+
         if isinstance(v, (int, float)):
             return float(v)
         if isinstance(v, str):
@@ -285,10 +289,14 @@ class RandomString(str):
 
     @classmethod
     def validate(cls, v, info=None):
+        # Direct pass-through for callables
+        if callable(v):
+            return v
+        
         if isinstance(v, str):
             val = parse_dsl(v)
             return val
-        raise TypeError(f"RandomString must be a string or DSL, got {type(v)}")
+        raise TypeError(f"RandomString must be a string or DSL string, got {type(v)}")
 
 # -------------------------
 # Aliases
