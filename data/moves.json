@@ -1,0 +1,218 @@
+[
+  {
+      "id": "flat_slash",
+      "amount": 40,
+      "calc_field": "attack",
+      "name": "Flat Slash",
+      "enabled": true,
+      "type": "dev",
+      "category": "damage",
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "A simple 40-ish flat attack.",
+      "actions": [
+          {
+              "id": "damage",
+              "crit_chance": 0.1,
+              "crit_damage": 10
+          }
+      ]
+  },
+  {
+      "id": "hp_blast",
+      "amount": 0.2,
+      "add": 0.05,
+      "multiply": 1.5,
+      "calc_field": "hp",
+      "name": "HP Blast",
+      "enabled": true,
+      "type": "dev",
+      "category": "damage",
+      "subtract": 0,
+      "divide": 1,
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "Blast equal to 20% of your HP,multiplied by 1.5,+5% of your HP",
+      "actions": [ { "id": "damage" } ]
+  },
+  {
+      "id": "triple_slash",
+      "amount": 20,
+      "calc_field": "attack",
+      "name": "Triple Slash",
+      "type": "dev",
+      "category": "damage",
+      "chance": 1.0,
+      "target": "opponent",
+      "calc_target": "self",
+      "description": "Three hits; first hit is weak, others use base amount.",
+      "actions": [
+          { 
+              "id": "damage",
+              "amount": 10
+          },
+          { "id": "damage" },
+          { "id": "damage" }
+      ]
+  },
+  {
+      "id": "poison_cloud",
+      "chance": 0.9,
+      "duration": 3,
+      "calc_target": "opponent",
+      "name": "Poison Cloud",
+      "type": "opti",
+      "category": "support",
+      "amount": 0,
+      "target": "opponent",
+      "calc_field": "hp",
+      "description": "deal 5% of opponent hp to opponent each turn",
+      "actions": [
+          {
+              "id": "status",
+              "operation": "add",
+              "status": [
+                  { 
+                      "id": "poison",
+                      "amount": 0.05 
+                  }
+              ]
+          }
+      ]
+  },
+  {
+      "id": "chaos_strike",
+      "amount": 10,
+      "target": "opponent",
+      "description": "1/4 to heal opponent,3/4 to damage him",
+      "actions": [
+          {
+          "id": "random",
+              "choices": [
+                  { "action": { "id": "damage" },"weight": 3 },
+                  { 
+                      "action": { 
+                          "id": "heal",
+                          "calc_target": "opponent"
+                      },
+                      "weight": 1  
+                  }
+              ],
+              "count": 10,
+              "unique": false  
+          }
+      ]
+  },
+  {
+    "id": "ultimate_chaos_blast",
+    "name": "Ultimate Chaos Blast",
+    "description": "A wild, unpredictable combination of attacks, buffs, debuffs, status, and random effects.",
+    "enabled": true,
+    "type": "dev",
+    "category": "damage",
+    "charge_usage": "r[0.3,0.7]",
+    "amount": "r[50,100]",
+    "chance": "r[0.5,1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "r[0.8,1.2]",
+    "flat": "r[-10,10]",
+    "duration": "r[1,5]",
+    "sound": "chaos_blast.wav",
+    "actions": [
+        {
+        "id": "damage",
+        "crit_chance": "r[0.1,0.5]",
+        "crit_damage": "r[10,50]",
+        "piercing": "r[0,0.3]"
+        },
+        {
+        "id": "buff",
+        "stat": ["attack", "defense"],
+        "amount": "r[5,20]",
+        "duration": "r[2,4]"
+        },
+        {
+        "id": "shield",
+        "amount": "r[20,40]",
+        "duration": "r[1,3]"
+        },
+        {
+        "id": "heal",
+        "amount": "r[15,30]",
+        "calc_target": "opponent"
+        },
+        {
+        "id": "modify",
+        "field": "self.charge_bonus",
+        "value": "r[1,5]"
+        },
+        {
+        "id": "status",
+        "operation": "add",
+        "status": [
+            {"id": "poison"},
+            {"id": "javaBien"}
+        ]
+        },
+        {
+        "id": "condition",
+        "conditions": [
+            {"id": "hp_below", "value": "r[0.3,0.5]"}
+        ],
+        "actions": [
+            {"id": "damage", "amount": "r[30,60]"},
+            {"id": "text", "text": "Critical strike!", "style": "{'color':'red','bold':true}"}
+        ]
+        },
+        {
+        "id": "random",
+        "choices": [
+            {
+            "action": {"id": "damage", "amount": "r[10,50]"},
+            "weight": 2
+            },
+            {
+            "action": {"id": "heal", "amount": "r[5,25]", "calc_target": "self"},
+            "weight": 1
+            },
+            {
+            "action": {"id": "buff", "stat": "hp", "amount": "r[5,10]"},
+            "weight": 1
+            }
+        ],
+        "count": "r[1,3]",
+        "unique": true
+        },
+        {
+        "id": "repeat",
+        "count": "r[l(1, 2, 10, 0), l[10, 15]]",
+        "actions": [
+            {"id": "text", "text": "Chaos surge!", "style": "{'color':'gold','italic':true}"},
+            {"id": "damage", "amount": "r[5,15]"}
+        ]
+        },
+        {
+        "id": "text",
+        "text": "End of Ultimate Chaos Blast",
+        "style": "{'color':'light_purple','bold':true,'italic':true}"
+        }
+    ]
+    },
+    {
+        "id": "random_slash",
+        "amount": "1",
+        "calc_field": "attack",
+        "name": "Random Slash",
+        "type": "dev",
+        "category": "damage",
+        "chance": 1.0,
+        "target": "opponent",
+        "calc_target": "self",
+        "description": "A slash with random damage between 1 and 100.",
+        "actions": [ { "id": "damage", "amount": "r[1, 100]" } ]
+    }
+]

@@ -1,59 +1,41 @@
+from core.registry import registry
+
+import systems.moves
+
 import json
-from config.moves.loader import load_moves
-from config.moves.schema import Action
 
 
 def pretty(obj):
-    """Nicely format dicts/lists as indented JSON strings."""
-    return json.dumps(obj, indent=2, ensure_ascii=False)
+    """Nicely format objects as indented JSON, stringifying non-JSON values."""
+    return json.dumps(
+        obj,
+        indent=2,
+        ensure_ascii=False,
+        default=_pretty_default,
+    )
+
+
+def _pretty_default(o):
+    # DSL callable with domain
+    if callable(o):
+        dom = getattr(o, "_domain", None)
+        return f"<dsl {o.__name__ if hasattr(o, '__name__') else 'callable'} domain={dom}>"
+
+    # Fallback: readable repr
+    return repr(o)
 
 
 # Load moves (already validated Move objects)
-moves = load_moves("config/moves/moves.json")
+moves = registry.get("moves").moves
 
 print("=== RAW MOVES ===")
-for move in moves.values():
-    print(pretty(move.model_dump(exclude_none=True)))
+for move in moves.model_dump():
+    print(pretty(move))
     print("-" * 60)
 
-print("\n=== VALIDATED MOVES ===")
-for move in moves.values():
-    print(f"✅ {move.id}: validated successfully")
-    print(f"  name: {move.name}")
-    print(f"  category: {move.category}")
-    print(f"  target: {move.target}")
-    print(f"  calc_target: {move.calc_target}")
-    print(f"  actions: {len(move.actions)} action(s) loaded")
-
-    def print_actions(actions: list[Action], indent: int = 4):
-        for i, action in enumerate(actions):
-            prefix = " " * indent
-            print(f"{prefix}├─ action[{i}] id: {action.id}")
-
-            params = action.params
-            if params:
-                print(f"{prefix}│    params:")
-                for k, v in params.items():
-                    print(f"{prefix}│      {k}: {v}")
-            else:
-                print(f"{prefix}│    params: None")
-
-            # Recursive actions (repeat / condition)
-            nested = getattr(action, "actions", None)
-            if nested:
-                print_actions(nested, indent + 4)
-
-            # RandomAction choices
-            choices = getattr(action, "choices", None)
-            if choices:
-                for j, choice in enumerate(choices):
-                    print(f"{prefix}│    choice[{j}] weight: {choice.weight}")
-                    print_actions([choice.action], indent + 8)
-
-    print_actions(move.actions)
-    print("└───────────────────────────────\n")
-
-
+for move in moves.model_dump():
+    print(pretty(move))
+    print("-" * 60)
 
 
 from typing import Any, Dict, List
