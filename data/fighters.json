@@ -1,0 +1,26 @@
+[
+    {
+        "id": "fighter_001",
+        "name": "Ryu",
+        "description": "A skilled martial artist from Japan.",
+        "stats": {
+            "hp": 101,
+            "attack": 15,
+            "defense": 12,
+            "charge_bonus": 1.0
+        },
+        "moves": ["flat_slash", "hp_blast", "triple_slash", "ultimate_chaos_blast"]
+    },
+    {
+        "id": "fighter_002",
+        "name": "Ken",
+        "description": "A skilled martial artist from Japan.",
+        "stats": {
+            "hp": 115,
+            "attack": 13,
+            "defense": 14,
+            "charge_bonus": 1.0
+        },
+        "moves": ["flat_slash", "hp_blast", "triple_slash", "ultimate_chaos_blast"]
+    }
+]

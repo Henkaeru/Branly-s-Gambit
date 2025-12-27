@@ -111,7 +111,7 @@
     "description": "A wild, unpredictable combination of attacks, buffs, debuffs, status, and random effects.",
     "enabled": true,
     "type": "dev",
-    "category": "damage",
+    "category": "special",
     "charge_usage": "r[0.3,0.7]",
     "amount": "r[50,100]",
     "chance": "r[0.5,1.0]",
@@ -153,7 +153,7 @@
         },
         {
         "id": "status",
-        "operation": "add",
+        "operation": "l[add, remove]",
         "status": [
             {"id": "poison"},
             {"id": "javaBien"}
@@ -202,18 +202,5 @@
         "style": "{'color':'light_purple','bold':true,'italic':true}"
         }
     ]
-    },
-    {
-        "id": "random_slash",
-        "amount": "1",
-        "calc_field": "attack",
-        "name": "Random Slash",
-        "type": "dev",
-        "category": "damage",
-        "chance": 1.0,
-        "target": "opponent",
-        "calc_target": "self",
-        "description": "A slash with random damage between 1 and 100.",
-        "actions": [ { "id": "damage", "amount": "r[1, 100]" } ]
     }
 ]

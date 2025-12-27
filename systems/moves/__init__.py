@@ -1,4 +1,3 @@
-from pathlib import Path
 from core.registry import registry, SystemSpec
 from .schema import MoveSet
 from .engine import create_engine as create_moves

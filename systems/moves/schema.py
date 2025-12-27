@@ -214,13 +214,24 @@ class StatusAction(ActionBase):
         try:
             check("x in ('add', 'remove')", x=self.operation)
         except ValueError:
+            print(f"Invalid operation: {self.operation() if callable(self.operation) else self.operation}")
             raise ValueError("StatusAction 'operation' must be 'add' or 'remove'.")
+        if not self.status:
+            raise ValueError("StatusAction must have at least one status.")
         return self
 
 class ConditionAction(ActionBase):
     id: Literal["condition"]
     conditions: list[Condition]
     actions: list[Action]
+
+    @model_validator(mode="after")
+    def check_condition(self):
+        if not self.conditions:
+            raise ValueError("ConditionAction must have at least one condition.")
+        if not self.actions:
+            raise ValueError("ConditionAction must have at least one action.")
+        return self
 
 # ------------------------------
 # Recursive Actions
@@ -239,6 +250,19 @@ class RandomAction(ActionBase):
     id: Literal["random"]
     choices: list[RandomChoice]
 
+    @model_validator(mode="after")
+    def check_random(self):
+        if not self.choices:
+            raise ValueError("RandomAction must have at least one choice")
+        
+        # Validate that each choice's action is a valid Action
+        # Need it 'cause pydantic doesn't parse nested discriminated unions automatically here
+        for c in self.choices:
+            if not isinstance(c.action, Action.__origin__): 
+                raise TypeError(f"Choice action not valid: {c.action}")
+        return self
+
+
 class RepeatAction(ActionBase):
     id: Literal["repeat"]
     actions: list[Action]
@@ -247,6 +271,8 @@ class RepeatAction(ActionBase):
     @model_validator(mode="after")
     def check_repeat(self):
         check("x >= 0", x=self.count)
+        if not self.actions:
+            raise ValueError("RepeatAction must have at least one action")
         return self
 
 # ------------------------------
@@ -358,10 +384,18 @@ class MoveSet(RootModel[list[Move]]):
 
     def __str__(self):
         return str(self._by_id)
-        
-    @property
-    def moves(self):
-        return list(self._by_id.values())
+    
+    def keys(self):
+        return self._by_id.keys()
+
+    def values(self):
+        return self._by_id.values()
+
+    def items(self):
+        return self._by_id.items()
+
+    def __contains__(self, key):
+        return key in self._by_id
 
 
 ConditionAction.model_rebuild()

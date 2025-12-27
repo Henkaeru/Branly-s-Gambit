@@ -81,12 +81,14 @@ def parse_dsl(s: str) -> Union[Any, Callable[[], Any]]:
         
         min_val = make_dsl(parts[0])
         max_val = make_dsl(parts[1])
+        min_vals = resolve_numeric_domain(min_val)
+        max_vals = resolve_numeric_domain(max_val)
 
-        min_const = min_val() if callable(min_val) else min_val
-        max_const = max_val() if callable(max_val) else max_val
-        if isinstance(min_const, (int, float)) and isinstance(max_const, (int, float)):
-            if min_const > max_const:
-                raise ValueError(f"Range min must be <= max: {s}")
+        # check all combinations
+        for a in min_vals:
+            for b in max_vals:
+                if a > b:
+                    raise ValueError(f"Range min {a} > max {b} in {s}")
 
         def rng():
             a = min_val() if callable(min_val) else min_val
@@ -213,6 +215,24 @@ def _compute_range_domain(min_val, max_val):
             raise TypeError("Invalid domain for range max")
     return (min_val, max_val)
 
+def resolve_numeric_domain(val):
+    if callable(val):
+        dom = getattr(val, "_domain", None)
+        if dom is None:
+            # fallback: evaluate once and wrap in list
+            return [val()]
+        # dom can be set of values or tuple (min,max)
+        if isinstance(dom, set):
+            return [x for x in dom if isinstance(x, (int, float))]
+        elif isinstance(dom, tuple) and len(dom) == 2:
+            return list(dom)
+        else:
+            raise TypeError(f"Cannot resolve domain for {val}")
+    elif isinstance(val, (int, float)):
+        return [val]
+    else:
+        raise TypeError(f"Range endpoints must be numeric or DSL returning numeric, got {val}")
+
 # -------------------------
 # Comparison helpers
 # -------------------------
@@ -302,9 +322,9 @@ class RandomString(str):
 # Aliases
 # -------------------------
 NUM = Union[int, float]
-RNUM = Union[NUM, RandomNumber, Callable[[], Any]]
-RINT = Union[int, RandomInt, Callable[[], Any]]
-RSTR = Union[str, RandomString, Callable[[], Any]]
+RNUM = Union[RandomNumber, NUM, Callable[[], Any]]
+RINT = Union[RandomInt, int, Callable[[], Any]]
+RSTR = Union[RandomString, str, Callable[[], Any]]
 RVAL = Union[RNUM, RSTR]
 
 # -------------------------

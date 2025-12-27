@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Any, Callable, Type
+import warnings
 from pydantic import BaseModel
 
 
@@ -24,12 +25,24 @@ class SystemRegistry:
         self._specs[spec.name] = spec
 
     def _load_config(self, spec: SystemSpec):
+        raw = []
         path = self._data_root / spec.data_file
-        if not path.exists():
-            raise FileNotFoundError(path)
 
-        with path.open() as f:
-            raw = json.load(f)
+        if not path.exists():
+            warnings.warn(f"Data file for system '{spec.name}' not found: {path}. Using empty default.", stacklevel=2)
+        else:
+            if path.stat().st_size == 0:
+                warnings.warn(f"Data file for system '{spec.name}' is empty: {path}. Using empty default.", stacklevel=2)
+            else:
+                with path.open() as f:
+                    try:
+                        data = json.load(f)
+                        if isinstance(data, list):
+                            raw = data
+                        else:
+                            warnings.warn(f"Data file for system '{spec.name}' has invalid format (expected list): {path}. Using empty default.", stacklevel=2)
+                    except json.JSONDecodeError:
+                        warnings.warn(f"Data file for system '{spec.name}' is invalid JSON: {path}. Using empty default.", stacklevel=2)
 
         return spec.schema.model_validate(raw)
     
