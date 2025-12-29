@@ -1,23 +1,15 @@
-import random
-from pydantic import BaseModel
-from core.registry import SystemRegistry
-from .schema import Fighter, FighterSet
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pydantic import BaseModel
+    from .schema import FighterSet
+    from core.registry import SystemRegistry
 
 
 class FighterEngine:
-    def __init__(self, fighter_set: FighterSet):
-        self.fighter_set = fighter_set
-
-    def take_damage(self, fighter_id: str, amount: int):
-        fighter = self.fighter_set[fighter_id]
-        fighter.stats.hp = max(0, fighter.stats.hp - amount)
-
-    def heal(self, fighter_id: str, amount: int):
-        fighter = self.fighter_set[fighter_id]
-        fighter.stats.hp += amount
-
-    def random_target(self) -> Fighter:
-        return random.choice(self.fighter_set.fighters)
+    def __init__(self, set: FighterSet, registry: SystemRegistry):
+        self.set = set
+        self.registry = registry
     
 def create_engine(fighter_config : BaseModel, registry : SystemRegistry) -> FighterEngine:
-    return FighterEngine(fighter_set=fighter_config)
+    return FighterEngine(set=fighter_config, registry=registry)

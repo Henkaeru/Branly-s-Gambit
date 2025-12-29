@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Type
 import warnings
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 @dataclass
@@ -25,7 +25,6 @@ class SystemRegistry:
         self._specs[spec.name] = spec
 
     def _load_config(self, spec: SystemSpec):
-        raw = []
         path = self._data_root / spec.data_file
 
         if not path.exists():
@@ -36,15 +35,16 @@ class SystemRegistry:
             else:
                 with path.open() as f:
                     try:
-                        data = json.load(f)
-                        if isinstance(data, list):
-                            raw = data
-                        else:
-                            warnings.warn(f"Data file for system '{spec.name}' has invalid format (expected list): {path}. Using empty default.", stacklevel=2)
+                        raw = json.load(f)
+                        try:
+                            return spec.schema.model_validate(raw)
+                        except Exception as e:
+                            warnings.warn( f"Failed to validate config for system '{spec.name}': {e}. Using empty default.", stacklevel=2)
                     except json.JSONDecodeError:
                         warnings.warn(f"Data file for system '{spec.name}' is invalid JSON: {path}. Using empty default.", stacklevel=2)
-
-        return spec.schema.model_validate(raw)
+        
+        # Determine empty default based on schema type
+        return spec.schema.model_validate([] if issubclass(spec.schema, RootModel) else {})
     
     def build(self, name: str):
         if name in self._systems:

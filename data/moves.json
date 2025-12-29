@@ -112,7 +112,7 @@
     "enabled": true,
     "type": "dev",
     "category": "special",
-    "charge_usage": "r[0.3,0.7]",
+    "charge_usage": 100,
     "amount": "r[50,100]",
     "chance": "r[0.5,1.0]",
     "target": "opponent",

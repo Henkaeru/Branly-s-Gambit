@@ -1,7 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ...battle.schema import BattleContext, FighterVolatile
+    from ..schema import ActionBase, MoveContext
+    from ..engine import MoveEngine
+
 from abc import ABC, abstractmethod
-from ..schema import Context
 
 class ActionHandler(ABC):
     @abstractmethod
-    def execute(self, action, ctx: Context, engine):
+    def execute(self, engine : MoveEngine, action : ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx : BattleContext | None = None, move_ctx: MoveContext | None = None):
         ...

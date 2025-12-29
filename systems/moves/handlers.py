@@ -1,3 +1,4 @@
+from __future__ import annotations
 from .actions.damage import DamageHandler
 from .actions.buff import BuffHandler
 from .actions.shield import ShieldHandler

@@ -1,12 +1,12 @@
 from __future__ import annotations
-import json
-import re
 from pydantic import BaseModel, Field, RootModel, model_validator
 from typing import Annotated, Dict, Literal, Optional, Union
-import warnings
 from core.dsl.random_dsl import RINT, RNUM, RSTR, RVAL, check
+import re
+import warnings
+from ..fighters.schema import FighterStats
 
-Stat = ("attack", "defense", "hp", "charge_bonus")
+Stat = tuple(FighterStats().model_dump().keys())
 Target = ("self", "opponent")
 
 COLOR = (
@@ -25,13 +25,12 @@ TYPE = ("dev", "opti", "syst", "data", "proj", "team", "none")
 CATEGORY = ("damage", "support", "special", "none")
     
 # ------------------------------
-# Full Context with defaults
+# Full Move Context with defaults
 # ------------------------------
-class Context(BaseModel):
+class MoveContext(BaseModel):
     amount: RNUM = 0
     chance: RNUM = 1.0
 
-    target: RSTR = "opponent"
     calc_target: RSTR = "self"
     calc_field: RSTR = "hp"
 
@@ -48,24 +47,19 @@ class Context(BaseModel):
         check("x >= -1", x=self.duration)
         try:
             check("x in target", 
-                  x=self.target, target=Target)
-        except ValueError:
-            raise ValueError("Context 'target' must be 'self' or 'opponent'.")
-        try:
-            check("x in target", 
                   x=self.calc_target, target=Target)
         except ValueError:
-            raise ValueError("Context 'calc_target' must be 'self' or 'opponent'.")
+            raise ValueError("MoveContext 'calc_target' must be 'self' or 'opponent'.")
         try:
             check("x in stat", 
                   x=self.calc_field, stat=Stat)
         except ValueError:
-            raise ValueError("Context 'calc_field' must be a valid stat.")
+            raise ValueError("MoveContext 'calc_field' must be a valid stat.")
         try:
             check("x + y >= 0", 
                   x=self.amount, y=self.flat)
         except ValueError:
-            raise ValueError("Context 'amount' and 'flat' cannot sum to negative.")
+            raise ValueError("MoveContext 'amount' and 'flat' cannot sum to negative.")
         return self
 
 # ------------------------------
@@ -214,7 +208,6 @@ class StatusAction(ActionBase):
         try:
             check("x in ('add', 'remove')", x=self.operation)
         except ValueError:
-            print(f"Invalid operation: {self.operation() if callable(self.operation) else self.operation}")
             raise ValueError("StatusAction 'operation' must be 'add' or 'remove'.")
         if not self.status:
             raise ValueError("StatusAction must have at least one status.")
@@ -299,7 +292,7 @@ Action = Annotated[
 # Move
 # ------------------------------
 
-class Move(Context):
+class Move(MoveContext):
     id: str
     name: RSTR = "unknown move"
     description: RSTR = "no description provided."
@@ -318,7 +311,7 @@ class Move(Context):
     @model_validator(mode="after")
     def check_move(self):
         try:
-            check("3 <= len(x) <= 63", x=self.id)
+            check("1 <= len(x) <= 63", x=self.id)
         except ValueError:
             raise ValueError(f"Invalid move id: {self.id}")
         try:
@@ -340,7 +333,7 @@ class Move(Context):
         except ValueError:
             raise ValueError(f"Invalid move category: {self.category}")
         try:
-            check("0.0 <= x <= 1.0", x=self.charge_usage)
+            check("0.0 <= x <= 999.0", x=self.charge_usage)
         except ValueError:
             raise ValueError(f"Invalid move charge usage: {self.charge_usage}")
         return self
@@ -393,6 +386,9 @@ class MoveSet(RootModel[list[Move]]):
 
     def items(self):
         return self._by_id.items()
+
+    def get(self, move_id: str, default=None) -> Move | None:
+        return self._by_id.get(move_id, default)
 
     def __contains__(self, key):
         return key in self._by_id

@@ -175,8 +175,13 @@ def get_domain(obj):
             raise ValueError("Callable has no domain metadata")
         return dom
 
-    return {obj}
-
+    # If hashable, wrap in a set
+    try:
+        hash(obj)
+        return {obj}
+    except TypeError:
+        # Unhashable objects (like lists) -> return as a single-item list
+        return [obj]
 # -------------------------
 def _compute_list_domain(choices):
     """Compute symbolic domain for a list of DSL callables or values."""

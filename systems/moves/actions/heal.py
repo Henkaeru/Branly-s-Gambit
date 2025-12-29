@@ -1,13 +1,19 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ...battle.schema import BattleContext, FighterVolatile
+    from ..schema import ActionBase, MoveContext
+    from ..engine import MoveEngine
+    
 from .action import ActionHandler
 
 
 class HealHandler(ActionHandler):
-    def execute(self, action, ctx, engine):
-        amount = ctx.amount() if callable(ctx.amount) else ctx.amount
-        mult = ctx.mult() if callable(ctx.mult) else ctx.mult
-        flat = ctx.flat() if callable(ctx.flat) else ctx.flat
-        target = ctx.target() if callable(ctx.target) else ctx.target
-
+    def execute(self, engine : MoveEngine, action : ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx : BattleContext | None = None, move_ctx: MoveContext | None = None):
+        amount = move_ctx.amount() if callable(move_ctx.amount) else move_ctx.amount
+        mult = move_ctx.mult() if callable(move_ctx.mult) else move_ctx.mult
+        flat = move_ctx.flat() if callable(move_ctx.flat) else move_ctx.flat
         final = amount * mult + flat
 
-        print(f"Healing {target} for {final} HP!")
+        battle_ctx.log.append(f"{target.current_fighter.name} heals for {int(final)} HP")
