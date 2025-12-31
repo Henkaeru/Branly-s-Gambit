@@ -1,10 +1,12 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field, model_validator
+from pydantic import Field, model_validator
 from typing import Callable, Optional
 from core.dsl.random_dsl import RINT, RNUM, RSTR, RVAL, check
 import copy
 import inspect
 import warnings
+
+from core.dsl.resolvable import ResolvableModel
 from ..fighters.schema import Buff, Fighter, FighterStats, Status
 from core.registry import registry
 
@@ -19,7 +21,7 @@ import systems.fighters
 # ------------------------------
 # Fighter Volatile
 # ------------------------------
-class FighterVolatile(BaseModel):
+class FighterVolatile(ResolvableModel):
     base_id: str
 
     current_fighter: Optional[Fighter] = None # mutable, per-battle fighter
@@ -38,6 +40,7 @@ class FighterVolatile(BaseModel):
         # --- Merge current_fighter with base ---
         if self.current_fighter is None:
             self.current_fighter = copy.deepcopy(base)
+            self.current_fighter.stats = copy.deepcopy(base.starting_stats)
         else:
             # merge: keep overrides, fill missing with base
             base_data = base.model_dump()
@@ -62,11 +65,7 @@ class FighterVolatile(BaseModel):
             
     @property
     def base_fighter(self) -> Optional[Fighter]:
-        fighter_set = registry.get("fighters").set
-        return fighter_set.get(self.base_id, None)
-    @property
-    def alive(self) -> bool:
-        return self.current_stats.hp > 0
+        return registry.get("fighters").set.get(self.base_id, None)
     @property
     def current_stats(self) -> FighterStats:
         return self.current_fighter.stats
@@ -76,16 +75,24 @@ class FighterVolatile(BaseModel):
             setattr(self.current_fighter.stats, k, v)
         FighterStats.model_validate(self.current_fighter.stats)
     @property
-    def current_moves(self) -> list[str]:
-        return self.current_fighter.moves
-    @current_moves.setter
-    def current_moves(self, new_moves: list[str]):
-        for i, move in enumerate(new_moves):
-            if i < len(self.current_fighter.moves):
-                self.current_fighter.moves[i] = move
-            else:
-                self.current_fighter.moves.append(move)
-        Fighter.model_validate(self.current_fighter)
+    def computed_stats(self) -> FighterStats:
+        """
+        Compute all stats with buffs applied proportionally.
+        """
+        stats = copy.deepcopy(self.current_stats)
+
+        for buff in self._current_buffs or []:
+            if buff.stat not in stats.model_fields:
+                continue
+
+            base_value = getattr(self.current_stats, buff.stat)
+            buffed_value = base_value + buff.amount  # all buffs are flat amounts
+
+            # Maintain ratio: new / old
+            setattr(stats, buff.stat, buffed_value)
+
+        FighterStats.model_validate(stats)
+        return stats
     @property
     def current_buffs(self) -> list[Buff]:
         return self._current_buffs
@@ -108,6 +115,59 @@ class FighterVolatile(BaseModel):
                 self.current_status[i] = status
             else:
                 self.current_status.append(status)
+    @property
+    def current_moves(self) -> list[str]:
+        return self.current_fighter.moves
+    @current_moves.setter
+    def current_moves(self, new_moves: list[str]):
+        for i, move in enumerate(new_moves):
+            if i < len(self.current_fighter.moves):
+                self.current_fighter.moves[i] = move
+            else:
+                self.current_fighter.moves.append(move)
+        Fighter.model_validate(self.current_fighter)
+    @property
+    def alive(self) -> bool:
+        return self.computed_stats.hp > 0
+    @property
+    def has_shield(self) -> bool:
+        return self.computed_stats.shield > 0
+
+    def _apply_stat_delta(self, stat: str, delta: int):
+        """
+        Apply delta to a stat as if modifying computed_stats,
+        but actually update current_stats proportionally.
+        """
+        current_value = getattr(self.current_stats, stat)
+        computed_value = getattr(self.computed_stats, stat)
+
+        if computed_value == 0:
+            # Avoid division by zero
+            setattr(self.current_stats, stat, max(0, current_value + delta))
+            return
+
+        # Determine the ratio in current_stats relative to computed_stats
+        ratio = current_value / computed_value
+        # Apply delta to computed_value, then scale back to current_stats
+        new_computed = computed_value + delta
+        new_current = int(new_computed * ratio)
+        # Clamp to 0..new_computed
+        new_current = max(0, min(new_current, new_computed))
+        setattr(self.current_stats, stat, new_current)
+
+
+    def take_damage(self, amount: int):
+        if self.has_shield:
+            shield_before = self.current_stats.shield
+            if amount >= shield_before:
+                amount -= shield_before
+                self.current_stats.shield = 0
+            else:
+                self.current_stats.shield -= amount
+                amount = 0
+        self.current_stats.hp -= amount
+        if self.current_stats.hp < 0:
+            self.current_stats.hp = 0
     
     @model_validator(mode="before")
     @classmethod
@@ -131,7 +191,7 @@ class FighterVolatile(BaseModel):
 # ------------------------------
 # Battle Context
 # ------------------------------
-class BattleContext(BaseModel):
+class BattleContext(ResolvableModel):
     turn: RINT = 0
     active_side: RINT = "l[0, 1]"  # "left" or "right"
     active_fighter_index: RINT = 0
@@ -139,7 +199,8 @@ class BattleContext(BaseModel):
     sides: list[list[FighterVolatile]] = Field(default_factory=dict) # "left" and "right" sides
 
     event_queue: list[Callable] = Field(default_factory=list)  # queued actions to process
-    log: list[str] = Field(default_factory=list)  # flavor/battle log
+    log_stack: list[str] = Field(default_factory=list)  # current log stack
+    log_history: list[str] = Field(default_factory=list)  # full log history
 
     @model_validator(mode="before")
     @classmethod
@@ -187,10 +248,10 @@ class BattleContext(BaseModel):
 
     @model_validator(mode="after")
     def check_context(self):
-        check("x >= 0", x=self.turn)
-        check("0 <= x <= len(sides)-1", x=self.active_side, sides=self.sides)
-        check("0 <= x <= side_size-1", x=self.active_fighter_index, side_size=len(self.sides[self.active_side]))
-        check("len(x) == max_side", x=self.sides, max_side=MAX_SIDE) # must have two sides, could have more, but for now just two TODO support more sides (issue with the display logic)
+        check("turn >= 0", turn=self.turn)
+        check("0 <= active_side <= len(sides)-1", active_side=self.active_side, sides=self.sides)
+        check("0 <= active_fighter_index <= side_size-1", active_fighter_index=self.active_fighter_index, side_size=len(self.sides[self.active_side]))
+        check("len(sides) == max_side", sides=self.sides, max_side=MAX_SIDE) # must have two sides, could have more, but for now just two TODO support more sides (issue with the display logic)
         for c in self.event_queue:
             sig = inspect.signature(c)
             for param in sig.parameters.values():
@@ -228,6 +289,13 @@ class BattleContext(BaseModel):
             if fighter in fighters:
                 return side
         raise ValueError(f"Fighter {fighter.base_id} not found in either side.")
+    def get_next_logs(self) -> list[str]:
+        next_logs = []
+        while(self.log_stack):
+            next_log = self.log_stack.pop(0)
+            next_logs.append(next_log)
+            self.log_history.append(next_log)
+        return next_logs
 
     @classmethod
     def from_sides(
@@ -263,7 +331,7 @@ class BattleContext(BaseModel):
 # Battle Schema
 # ------------------------------
 
-class Battle(BaseModel):
+class Battle(ResolvableModel):
     id: str
 
     max_turns: RINT = MAX_TURN
@@ -275,13 +343,19 @@ class Battle(BaseModel):
     current_context: Optional[BattleContext] = None  # mutable, per-battle context
 
     def model_post_init(self, __context=None):
-        check("x >= 0", x=self.max_turns)
+        check("max_turns >= 0", max_turns=self.max_turns)
         if self.current_context is None:
             self.current_context = copy.deepcopy(self.base_context)
 
     @property
     def is_battle_over(self) -> bool:
-        return sum(self.current_context.sides_alive) <= 1
+        if sum(self.current_context.sides_alive) <= 1:
+            self.current_context.log_stack.append("All opponents defeated!")
+            return True
+        if self.current_context.turn >= self.max_turns:
+            self.current_context.log_stack.append("Maximum turns reached!")
+            return True
+        return False
 
     @classmethod
     def from_sides(
@@ -289,6 +363,7 @@ class Battle(BaseModel):
         id: str,
         sides: list[list[str]],
         *,
+        max_turns: int = MAX_TURN,
         background_sprite: str | None = None,
         music: str | None = None,
     ) -> Battle:
@@ -296,6 +371,7 @@ class Battle(BaseModel):
 
         battle = cls(
             id=id,
+            max_turns=max_turns,
             background_sprite=background_sprite or "/backgrounds/default.png",
             music=music,
             base_context=base_ctx,
@@ -308,5 +384,5 @@ class Battle(BaseModel):
 # Battle Config
 # ------------------------------
 
-class BattleConfig(BaseModel):
+class BattleConfig(ResolvableModel):
     pass

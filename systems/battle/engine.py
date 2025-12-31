@@ -39,7 +39,13 @@ class BattleEngine:
         Initialize a battle.
         """
         self.battle = battle
-        self.battle.current_context.log.append("Battle started!")
+        self.battle.current_context.log_stack.append("Battle started!")
+
+    def end(self):
+        """
+        End the current battle.
+        """
+        self.battle.current_context.log_stack.append("Battle ended!")
 
     # ------------------------------
     # Event Queue
@@ -81,7 +87,7 @@ class BattleEngine:
 
         # Queue the move execution
         def do_move():
-            self.battle.current_context.log.append(f"{user.current_fighter.name} uses {move.name} on {target.current_fighter.name}!")
+            self.battle.current_context.log_stack.append(f"{user.current_fighter.name} uses {move.name} on {target.current_fighter.name}!")
             move_engine.execute(move_id, user, target, self.battle.current_context)
 
         self.queue_action(do_move)
@@ -89,7 +95,7 @@ class BattleEngine:
     # ------------------------------
     # Battle Step
     # ------------------------------
-    def step(self):
+    def step(self) -> bool:
         """
         Execute a single battle step:
         - Active fighter chooses move
@@ -97,6 +103,10 @@ class BattleEngine:
         - Events are processed
         - Active fighter advances
         """
+        if self.battle.is_battle_over:
+            self.end()
+            return False
+        
         ctx = self.battle.current_context
         fighter = ctx.active_fighter
 
@@ -118,6 +128,7 @@ class BattleEngine:
 
         # Advance to next fighter in column-wise order
         self.advance_active_fighter()
+        return True
 
     def advance_active_fighter(self):
         """
@@ -131,7 +142,7 @@ class BattleEngine:
         while side_idx < num_sides:
             if ctx.active_fighter_index < len(ctx.sides[side_idx]):
                 ctx.active_side = side_idx
-                ctx.log.append(f"Active fighter is now {ctx.active_fighter.current_fighter.name}")
+                ctx.log_stack.append(f"Active fighter is now {ctx.active_fighter.current_fighter.name}")
                 return
             side_idx += 1
 
@@ -150,7 +161,7 @@ class BattleEngine:
             for i, side in enumerate(ctx.sides):
                 if ctx.active_fighter_index < len(side):
                     ctx.active_side = i
-                    ctx.log.append(f"--- Turn {ctx.turn} begins ---")
+                    ctx.log_stack.append(f"--- Turn {ctx.turn} begins ---")
                     return
 
 def create_engine(battle_config : BaseModel, registry : SystemRegistry) -> BattleEngine:

@@ -1,32 +1,40 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field, RootModel, model_validator
+import copy
+from pydantic import Field, RootModel, model_validator
 from typing import Dict, Optional
 from core.dsl.random_dsl import RINT, RNUM, RSTR, RVAL, check
 import warnings
+from core.dsl.resolvable import ResolvableModel
 from core.registry import registry
 
 TYPE = ("dev", "opti", "syst", "data", "proj", "team", "none")
 STATUS = ("javaBien", "poison")
+DEFAULT_STARTING_SHIELD = 0
+DEFAULT_STARTING_CHARGE = 0
+MAX_BUFFS = 4
 
 # ------------------------------
 # Fighter Stats
 # ------------------------------
-class FighterStats(BaseModel):
-    hp: RINT = 100
-    attack: RINT = 10
-    defense: RINT = 10
-    shield: RINT = 0
-    charge: RNUM = 0.0
+class FighterStats(ResolvableModel):
+    hp: RINT = 300
+    attack: RINT = 100
+    defense: RINT = 100
+    shield: RINT = None  # if None, defaults to hp at start
+    charge: RINT = 999
     charge_bonus: RNUM = 0.0
 
     @model_validator(mode="after")
     def check_stats(self):
-        check("0 <= x <= 999", x=self.hp)
-        check("0 <= x <= 999", x=self.attack)
-        check("0 <= x <= 999", x=self.defense)
-        check("0 <= x <= 999", x=self.shield)
-        check("0.0 <= x <= 999", x=self.charge)
-        check("0.0 <= x <= 10.0", x=self.charge_bonus)
+        if self.shield is None:
+            self.shield = self.hp
+        check("0 <= hp <= 999", hp=self.hp)
+        check("0 <= attack <= 999", attack=self.attack)
+        check("0 <= defense <= 999", defense=self.defense)
+        check("0 <= shield <= 999", shield=self.shield)
+        check("0 <= charge <= 999", charge=self.charge)
+        check("0.0 <= charge_bonus <= 10.0", charge_bonus=self.charge_bonus)
+        check("shield <= hp", shield=self.shield, hp=self.hp)
         return self
 
 
@@ -35,18 +43,18 @@ Stat = tuple(FighterStats().model_dump().keys())
 # ------------------------------
 # Buff Schema
 # ------------------------------
-class Buff(BaseModel):
+class Buff(ResolvableModel):
     stat: str
     amount: RNUM = 0.10 # optional: flat/percentage increase/decrease
     duration: int = 1   # optional: how long it lasts, -1 for infinite
 
     @model_validator(mode="after")
     def check_buff(self):
-        check("x >= 0", x=self.amount)
-        check("x >= -1", x=self.duration)
+        check("amount >= 0", amount=self.amount)
+        check("duration >= -1", duration=self.duration)
         try:
-            check("x in stat", 
-                    x=self.stat, stat=Stat)
+            check("stat in stats", 
+                    stat=self.stat, stats=Stat)
         except ValueError:
             raise ValueError("Buff 'stat' must be a valid stat")
         return self
@@ -54,15 +62,15 @@ class Buff(BaseModel):
 # ------------------------------
 # Status Schema
 # ------------------------------
-class Status(BaseModel):
+class Status(ResolvableModel):
     id: str
     stacks: int = 1    # optional: number of stacks for stackable statuses
     duration: int = 1  # optional: how long it lasts, -1 for infinite
 
     @model_validator(mode="after")
     def check_status(self):
-        check("x >= 0", x=self.stacks)
-        check("x >= -1", x=self.duration)
+        check("stacks >= 0", stacks=self.stacks)
+        check("duration >= -1", duration=self.duration)
         if self.id not in STATUS:
             raise ValueError(f"Invalid status id: {self.id}")
         return self
@@ -76,7 +84,7 @@ from ..import moves
 # ------------------------------
 # Fighter Schema
 # ------------------------------
-class Fighter(BaseModel):
+class Fighter(ResolvableModel):
     id: str
     name: RSTR = "Unnamed Fighter"
     description: RSTR = "No description."
@@ -94,27 +102,27 @@ class Fighter(BaseModel):
     stats: FighterStats = Field(default_factory=FighterStats) # base stats
     moves: list[str] = Field(default_factory=list) # list of move IDs (max 4)
     
-    starting_stats: Optional[FighterStats] = Field(default_factory=FighterStats) # optional starting stats
+    starting_stats: Optional[FighterStats] = None # optional starting stats
     starting_buffs: list[Buff] = Field(default_factory=list) # optional starting buffs
     starting_status: list[Status] = Field(default_factory=list) # optional starting status effects
 
     @model_validator(mode="after")
     def check_fighter(self):
         try:
-            check("1 <= len(x) <= 63", x=self.id)
+            check("1 <= len(id) <= 63", id=self.id)
         except ValueError:
             raise ValueError(f"Invalid fighter id: {self.id}")
-        try:
-            check("len(x) <= 127", x=self.name)
+        try:    
+            check("len(name) <= 127", name=self.name)
         except ValueError:
             raise ValueError(f"Invalid fighter name: {self.name}")
         try:
-            check("len(x) <= 511", x=self.description)
+            check("len(description) <= 511", description=self.description)
         except ValueError:
             raise ValueError(f"Invalid fighter description: {self.description}")
         try:
-            check("x in type", 
-                  x=self.type, type=TYPE)
+            check("type in types", 
+                  type=self.type, types=TYPE)
         except ValueError:
             raise ValueError(f"Invalid fighter type: {self.type}")
         move_set = registry.get("moves").set
@@ -122,7 +130,31 @@ class Fighter(BaseModel):
             if m not in move_set:
                 raise ValueError(f"Fighter '{self.id}' references unknown move '{m}'")
         if len(self.moves) > 4:
-            warnings.warn(f"Fighter '{self.id}' has more than 4 moves.", stacklevel=2)
+            raise ValueError(f"Fighter '{self.id}' has more than 4 moves.")
+        # --- Build starting_stats by merging defaults + overrides ---
+        base_stats = copy.deepcopy(self.stats)
+
+        if self.starting_stats is not None:
+            for field_name in self.starting_stats.model_fields_set:
+                value = getattr(self.starting_stats, field_name)
+                setattr(base_stats, field_name, value)
+
+        self.starting_stats = base_stats
+
+        # Apply default starting overrides (unless explicitly set)
+        explicit = self.starting_stats.model_fields_set if self.starting_stats else set()
+
+        if "shield" not in explicit:
+            self.starting_stats.shield = DEFAULT_STARTING_SHIELD
+
+        if "charge" not in explicit:
+            self.starting_stats.charge = DEFAULT_STARTING_CHARGE
+        for field_name in self.stats.model_fields:
+            max_value = getattr(self.stats, field_name)
+            start_value = getattr(self.starting_stats, field_name)
+            check("start_value <= max_value", start_value=start_value, max_value=max_value)
+        if len(self.starting_buffs) > MAX_BUFFS:
+            raise ValueError(f"Fighter '{self.id}' has more than {MAX_BUFFS} starting buffs.")
         return self
 
 # ------------------------------

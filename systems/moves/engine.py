@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .actions.action import ActionHandler
     from core.registry import SystemRegistry
 
-from .schema import MoveContext
+from .schema import Move, MoveContext
 from .handlers import ACTION_HANDLERS
 import random
 
@@ -30,15 +30,13 @@ class MoveEngine:
         - runtime_ctx: MoveContext overrides (per move execution)
         """
         move = self.set[move_id]
-        charge_usage = move.charge_usage if callable(move.charge_usage) else move.charge_usage
-        user_charge = user.current_stats.charge() if user and callable(user.current_stats.charge) else user.current_stats.charge if user else None
-        if user and move.charge_usage > user_charge:
-            battle_ctx.log.append(f"{user.current_fighter.name} does not have enough charge to use {move.name}. Required: {charge_usage}, Available: {user_charge}")
+        if user and move.charge_usage > user.current_stats.charge:
+            battle_ctx.log_stack.append(f"{user.current_fighter.name} does not have enough charge to use {move.name}. Required: {move.charge_usage}, Available: {user.current_stats.charge}")
             return
 
         # This chance gates the entire move.
         # Action chances are independent and NOT inherited.
-        if random.random() > (move.chance() if callable(move.chance) else move.chance):
+        if random.random() > move.chance:
             return
 
         # Start from default Context, then merge move overrides,
@@ -51,9 +49,9 @@ class MoveEngine:
 
         # Execute each action in sequence
         for action in move.actions:
-            self._execute_action(action, user, target, battle_ctx, exec_ctx)
+            self._execute_action(action, user, target, battle_ctx, exec_ctx, move)
 
-    def _execute_action(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, parent_ctx: MoveContext | None = None):
+    def _execute_action(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, parent_ctx: MoveContext | None = None, move: Move | None = None):
         """
         Execute a single action with proper context propagation.
         """
@@ -69,9 +67,9 @@ class MoveEngine:
                 return
 
         # Dispatch action execution
-        self._dispatch(action, user, target, battle_ctx, ctx)
+        self._dispatch(action, user, target, battle_ctx, ctx, move)
 
-    def _dispatch(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, move_ctx: MoveContext | None = None):
+    def _dispatch(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, move_ctx: MoveContext | None = None, move: Move | None = None):
         """
         Dispatch action execution.
         This is intentionally dumb here — real logic lives elsewhere.
@@ -80,7 +78,7 @@ class MoveEngine:
         if not handler:
             raise RuntimeError(f"No handler registered for action '{action.id}'")
 
-        handler.execute(self, action, user, target, battle_ctx, move_ctx)
+        handler.execute(self, action, user, target, battle_ctx, move_ctx, move)
 
 def merge_context(parent: MoveContext, obj) -> MoveContext:
     base = parent.model_dump()

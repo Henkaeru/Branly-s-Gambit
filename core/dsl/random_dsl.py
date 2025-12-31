@@ -2,6 +2,8 @@ import random
 from typing import Any, Callable, Union
 from itertools import product
 
+from core.utils.callables import call_if_zero_arg
+
 # -------------------------
 # DSL core
 # -------------------------
@@ -24,15 +26,6 @@ def parse_list_content(s: str) -> list:
         items.append(current.strip())
     return items
 
-def _choose(choices):
-    """Helper to pick a random choice, evaluating callables."""
-    item = random.choice(choices)
-    return item() if callable(item) else item
-
-def _choose_weighted(values, weights):
-    picked = random.choices(values, weights=weights, k=1)[0]
-    return picked() if callable(picked) else picked
-
 # -------------------------
 # DSL parser
 # -------------------------
@@ -48,7 +41,7 @@ def make_dsl(obj: Any) -> Union[Any, Callable[[], Any]]:
         return parse_dsl(obj)
     if isinstance(obj, list):
         choices = [make_dsl(x) for x in obj]
-        fn = lambda: _choose(choices)
+        fn = lambda: call_if_zero_arg(random.choice(choices))
         # attach domain
         fn._domain = _compute_list_domain(choices)
         return fn
@@ -65,8 +58,7 @@ def parse_dsl(s: str) -> Union[Any, Callable[[], Any]]:
     # -------- validated "v:" --------
     if s.startswith("v:"):
         val = s[2:]
-        resolved = parse_dsl(val)
-        return resolved() if callable(resolved) else resolved
+        return call_if_zero_arg(parse_dsl(val))
 
     # -------- range r[...] --------
     if s.startswith(("r[", "r(", "r{")):
@@ -110,13 +102,14 @@ def parse_dsl(s: str) -> Union[Any, Callable[[], Any]]:
             raise ValueError(f"List cannot be empty: {s}")
         choices = [make_dsl(x) for x in items]
 
-        sample_type = type(choices[0]() if callable(choices[0]) else choices[0])
+        # check homogeneity
+        sample_cat = type_category(call_if_zero_arg(choices[0]))
         for c in choices[1:]:
-            val = c() if callable(c) else c
-            if type(val) != sample_type:
+            val = call_if_zero_arg(c)
+            if type_category(val) != sample_cat:
                 raise TypeError(f"List items must be homogeneous: {s}")
 
-        fn = lambda: _choose(choices)
+        fn = lambda: call_if_zero_arg(random.choice(choices))
         fn._domain = _compute_list_domain(choices)
         return fn
 
@@ -140,24 +133,39 @@ def parse_dsl(s: str) -> Union[Any, Callable[[], Any]]:
             values.append(make_dsl(val_str))
             weights.append(float(weight_str))
 
-        sample_type = type(values[0]() if callable(values[0]) else values[0])
+        # check homogeneity
+        sample_cat = type_category(call_if_zero_arg(values[0]))
         for v in values[1:]:
-            val = v() if callable(v) else v
-            if type(val) != sample_type:
+            val = call_if_zero_arg(v)
+            if type_category(val) != sample_cat:
                 raise TypeError(f"Weighted list items must be homogeneous: {s}")
 
-        fn = lambda: _choose_weighted(values, weights)
+        fn = lambda: call_if_zero_arg(random.choices(values, weights=weights, k=1)[0])
         fn._domain = _compute_list_domain(values)
         return fn
 
-    # -------- literal number --------
-    try:
-        return float(s)
-    except Exception:
-        pass
+    return parse_number(s)
 
-    # -------- fallback literal string --------
-    return s
+def type_category(v):
+    if isinstance(v, (int, float)):
+        return "number"
+    elif isinstance(v, str):
+        return "string"
+    else:
+        return type(v)
+    
+def parse_number(s: str):
+    if "." in s:
+        try:
+            return float(s)
+        except ValueError:
+            pass
+    else:
+        try:
+            return int(s)
+        except ValueError:
+            pass
+    return s  # fallback string
 
 # -------------------------
 # DSL domain helper
@@ -291,7 +299,7 @@ class RandomNumber(float):
             return v
 
         if isinstance(v, (int, float)):
-            return float(v)
+            return v
         if isinstance(v, str):
             val = parse_dsl(v)
             return val
@@ -327,8 +335,8 @@ class RandomString(str):
 # Aliases
 # -------------------------
 NUM = Union[int, float]
-RNUM = Union[RandomNumber, NUM, Callable[[], Any]]
-RINT = Union[RandomInt, int, Callable[[], Any]]
+RNUM = Union[NUM, RandomNumber, Callable[[], Any]]
+RINT = Union[int, RandomInt, Callable[[], Any]]
 RSTR = Union[RandomString, str, Callable[[], Any]]
 RVAL = Union[RNUM, RSTR]
 

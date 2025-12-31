@@ -40,7 +40,7 @@ Moves are JSON objects with a **context** and a list of **actions**. Context def
 ### Arithmetic evaluation
 
 ```
-effective_amount = (amount * multiply) + add
+effective_amount = ((base_amount * multiply) + add) * STAB(1.1 or 1.0) * type_effectiveness
 ```
 
 * `amount` float → fraction (percentage) of `calc_target.calc_field`.

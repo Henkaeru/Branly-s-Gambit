@@ -3,14 +3,14 @@
         "id": "fighter_001",
         "name": "Ryu",
         "description": "A skilled martial artist from Japan.",
-        "type": "dev",
+        "type": "proj",
         "stats": {
-            "hp": 101,
-            "attack": 15,
-            "defense": 12,
+            "hp": 300,
+            "attack": 80,
+            "defense": 140,
             "charge_bonus": 1.0
         },
-        "moves": ["flat_slash", "triple_slash", "ultimate_chaos_blast"]
+        "moves": ["damage_basic"]
     },
     {
         "id": "fighter_002",
@@ -18,11 +18,15 @@
         "type": "proj",
         "description": "A skilled martial artist from Japan.",
         "stats": {
-            "hp": 115,
-            "attack": 13,
-            "defense": 14,
-            "charge_bonus": 1.0
+            "hp": 300,
+            "attack": 999,
+            "defense": 90,
+            "charge_bonus": 1.0,
+            "charge": 999
         },
-        "moves": ["flat_slash", "triple_slash", "ultimate_chaos_blast"]
+        "starting_stats": {
+            "charge": 999
+        },
+        "moves": ["damage_basic"]
     }
 ]

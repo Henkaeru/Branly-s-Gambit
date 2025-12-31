@@ -1,9 +1,16 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field, RootModel, model_validator
+import random
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from systems.battle.schema import FighterVolatile
+    
+from pydantic import Field, RootModel, model_validator
 from typing import Annotated, Dict, Literal, Optional, Union
-from core.dsl.random_dsl import RINT, RNUM, RSTR, RVAL, check
+from core.dsl.random_dsl import NUM, RINT, RNUM, RSTR, RVAL, check
 import re
 import warnings
+
+from core.dsl.resolvable import ResolvableModel
 from ..fighters.schema import FighterStats
 
 Stat = tuple(FighterStats().model_dump().keys())
@@ -23,11 +30,14 @@ CONDITION = ("hp_below", "hp_above", "has_status", "lacks_status")
 TYPE = ("dev", "opti", "syst", "data", "proj", "team", "none")
 
 CATEGORY = ("damage", "support", "special", "none")
+
+CHARGE_BONUS = 0.5  # % of base power at full charge
+STAB_BONUS = 1.25    # STAB multiplier
     
 # ------------------------------
 # Full Move Context with defaults
 # ------------------------------
-class MoveContext(BaseModel):
+class MoveContext(ResolvableModel):
     amount: RNUM = 0
     chance: RNUM = 1.0
 
@@ -35,29 +45,53 @@ class MoveContext(BaseModel):
     calc_field: RSTR = "hp"
 
     mult: RNUM = 1.0
-    flat: RNUM = 0
+    flat: RINT = 0
 
     duration: RINT = -1
 
+    @property
+    def is_percentage(self) -> bool:
+        """Whether `amount` is meant to be a percentage."""
+        return isinstance(self.amount, float)
+    
+    def get_calc_target(self, user: FighterVolatile, target: FighterVolatile) -> FighterVolatile:
+        """Get the target fighter based on calc_target."""
+        if self.calc_target == "self":
+            return user
+        elif self.calc_target == "opponent":
+            return target
+        else:
+            raise ValueError(f"Invalid calc_target '{self.calc_target}'")
+
+    def get_calc_target_field_value(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
+        """The value of the field we are scaling against (hp, attack, etc.)."""
+        return getattr(self.get_calc_target(user, target).current_fighter.stats, self.calc_field)
+
+    def get_base_amount(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
+        """The base amount before any calculation."""
+        if self.is_percentage:
+            return self.amount * self.get_calc_target_field_value(user, target)
+        return self.amount
+
     @model_validator(mode="after")
     def check_context(self):
-        check("x >= 0", x=self.amount)
-        check("0 <= x <= 1", x=self.chance)
-        check("x >= 0", x=self.mult)
-        check("x >= -1", x=self.duration)
+        check("amount >= 0", amount=self.amount)
+        check("0 <= chance <= 1", chance=self.chance)
+        check("mult >= 0", mult=self.mult)
+        check("duration >= -1", duration=self.duration)
         try:
-            check("x in target", 
-                  x=self.calc_target, target=Target)
+            check("calc_target in target", 
+                  calc_target=self.calc_target, target=Target)
         except ValueError:
             raise ValueError("MoveContext 'calc_target' must be 'self' or 'opponent'.")
         try:
-            check("x in stat", 
-                  x=self.calc_field, stat=Stat)
+            check("calc_field in stat", 
+                  calc_field=self.calc_field, stat=Stat)
         except ValueError:
             raise ValueError("MoveContext 'calc_field' must be a valid stat.")
         try:
-            check("x + y >= 0", 
-                  x=self.amount, y=self.flat)
+            check("amount + flat >= 0", 
+                  amount=self.amount, flat=self.flat)
         except ValueError:
             raise ValueError("MoveContext 'amount' and 'flat' cannot sum to negative.")
         return self
@@ -65,7 +99,7 @@ class MoveContext(BaseModel):
 # ------------------------------
 # ActionBase
 # ------------------------------
-class ActionBase(BaseModel):
+class ActionBase(ResolvableModel):
     id: str
 
     model_config = {
@@ -79,30 +113,35 @@ class ActionBase(BaseModel):
 # ------------------------------
 # Leaf Actions
 # ------------------------------
-class DamageAction(ActionBase):
+class DamageAction(ResolvableModel):
     id: Literal["damage"]
     crit_chance: RNUM = 0.0
-    crit_damage: RNUM = 0
+    crit_damage: RNUM = 1.0
     piercing: RNUM = 0.0
 
     @model_validator(mode="after")
     def check_damage(self):
-        check("0 <= x <= 1", x=self.crit_chance)
-        check("x >= 0", x=self.crit_damage)
-        check("0 <= x <= 1", x=self.piercing)
+        check("0 <= crit_chance <= 1", crit_chance=self.crit_chance)
+        check("crit_damage >= 0", crit_damage=self.crit_damage)
+        check("0 <= piercing <= 1", piercing=self.piercing)
         return self
-
-class BuffAction(ActionBase):
+    
+    @property
+    def is_critical(self) -> bool:
+        """Determine if the hit is a critical hit based on crit_chance."""
+        return random.random() < self.crit_chance
+    
+class BuffAction(ResolvableModel):
     id: Literal["buff"]
-    stat: list[RSTR] | RSTR = "attack"
+    stats: list[RSTR] | RSTR = "attack"
 
     @model_validator(mode="after")
     def check_buff(self):
-        stats = [self.stat] if not isinstance(self.stat, list) else self.stat
-        for s in stats:
+        stats = [self.stats] if not isinstance(self.stats, list) else self.stats
+        for stat in stats:
             try:
-                check("x in stat", 
-                      x=s, stat=Stat)
+                check("stat in stats", 
+                      stat=stat, stats=Stat)
             except ValueError:
                 raise ValueError("Buff 'stat' must be a valid stat or list of stats.")
         return self
@@ -113,7 +152,7 @@ class ShieldAction(ActionBase):
 class HealAction(ActionBase):
     id: Literal["heal"]
 
-class ModifyAction(ActionBase):
+class ModifyAction(ResolvableModel):
     id: Literal["modify"]
     field: RSTR
     value: RVAL
@@ -123,8 +162,8 @@ class ModifyAction(ActionBase):
         pattern = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$")
         try:
             check(
-                "re.fullmatch(pattern, x) is not None",
-                x=self.field,
+                "re.fullmatch(pattern, field) is not None",
+                field=self.field,
                 pattern=pattern,
                 re=re,  # pass re module explicitly
             )
@@ -132,17 +171,17 @@ class ModifyAction(ActionBase):
             raise ValueError("field must be a dot-path of identifiers (e.g. 'foo.bar_baz')")
         return self
 
-class TextAction(ActionBase):
+class TextAction(ResolvableModel):
     id: Literal["text"]
     text: RSTR = "No text."
     style: RSTR = "{}"
 
 @model_validator(mode="after")
 def check_text(self):
-    check("len(x) < 511", x=self.text)
+    check("len(text) < 511", text=self.text)
 
     try:
-        check("x.startswith('{') and x.endswith('}')", x=self.style)
+        check("style.startswith('{') and style.endswith('}')", style=self.style)
     except ValueError:
         raise ValueError(
             "TextAction 'style' must be a dict-like string "
@@ -150,8 +189,8 @@ def check_text(self):
         )
 
     try:
-        check("json.loads(x.replace(\"'\", '\"')).get('color') in color", 
-              x=self.style, color=COLOR)
+        check("json.loads(style.replace(\"'\", '\"')).get('color') in color", 
+              style=self.style, color=COLOR)
     except ValueError:
         raise ValueError(
             "TextAction 'style' contains invalid color flags."
@@ -160,8 +199,8 @@ def check_text(self):
     try:
         check(
             "all(k in style and isinstance(v, bool) "
-            "for k,v in json.loads(x.replace(\"'\", '\"')).items() if k != 'color')", 
-            x=self.style, style=STYLE)
+            "for k,v in json.loads(style.replace(\"'\", '\"')).items() if k != 'color')", 
+            style=self.style, style=STYLE)
     except ValueError:
         raise ValueError(
             "TextAction 'style' contains invalid style flags."
@@ -173,27 +212,27 @@ def check_text(self):
 # Status / Condition
 # ------------------------------
 
-class Status(BaseModel):
+class Status(ResolvableModel):
     id: str
 
     @model_validator(mode="after")
     def check_status(self):
         try:
-            check("x in status", 
-                  x=self.id, status=STATUS)
+            check("status in statuses", 
+                  status=self.id, statuses=STATUS)
         except ValueError:
             raise ValueError(f"Invalid status id: {self.id}")
         return self
 
-class Condition(BaseModel):
+class Condition(ResolvableModel):
     id: str
     value: RVAL
 
     @model_validator(mode="after")
     def check_condition(self):
         try:
-            check("x in condition", 
-                  x=self.id, condition=CONDITION)
+            check("condition in conditions", 
+                  condition=self.id, conditions=CONDITION)
         except ValueError:
             raise ValueError(f"Invalid condition id: {self.id}")
         return self
@@ -206,7 +245,7 @@ class StatusAction(ActionBase):
     @model_validator(mode="after")
     def check_status_action(self):
         try:
-            check("x in ('add', 'remove')", x=self.operation)
+            check("operation in ('add', 'remove')", operation=self.operation)
         except ValueError:
             raise ValueError("StatusAction 'operation' must be 'add' or 'remove'.")
         if not self.status:
@@ -230,7 +269,7 @@ class ConditionAction(ActionBase):
 # Recursive Actions
 # ------------------------------
 
-class RandomChoice(BaseModel):
+class RandomChoice(ResolvableModel):
     action: Action
     weight: RINT = 1
 
@@ -263,7 +302,7 @@ class RepeatAction(ActionBase):
 
     @model_validator(mode="after")
     def check_repeat(self):
-        check("x >= 0", x=self.count)
+        check("count >= 0", count=self.count)
         if not self.actions:
             raise ValueError("RepeatAction must have at least one action")
         return self
@@ -308,32 +347,49 @@ class Move(MoveContext):
 
     actions: list[Action] = Field(default_factory=list)
 
+    def is_stab(self, user: FighterVolatile) -> bool:
+        """Whether the move gets STAB for the user."""
+        return self.type == user.current_fighter.type
+
+    def type_effectiveness(self, user: FighterVolatile, target: FighterVolatile) -> float:
+        """Calculate type effectiveness multiplier."""
+        # Placeholder for type effectiveness calculation TODO take this into account
+        return 1.0
+
+    def get_effective_amount(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
+        """The actual amount to apply after considering bonuses."""
+        base_amount = self.get_base_amount(user, target)
+        added_charge_amount = base_amount * CHARGE_BONUS * (user.current_fighter.stats.charge / user.base_fighter.stats.charge)
+        stab = STAB_BONUS if self.is_stab(user) else 1.0
+        type_effectiveness = self.type_effectiveness(user, target)
+        return ((base_amount + added_charge_amount) * self.mult + self.flat) * stab * type_effectiveness
+
     @model_validator(mode="after")
     def check_move(self):
         try:
-            check("1 <= len(x) <= 63", x=self.id)
+            check("1 <= len(id) <= 63", id=self.id)
         except ValueError:
             raise ValueError(f"Invalid move id: {self.id}")
         try:
-            check("len(x) <= 127", x=self.name)
+            check("len(name) <= 127", name=self.name)
         except ValueError:
             raise ValueError(f"Invalid move name: {self.name}")
         try:
-            check("len(x) <= 511", x=self.description)
+            check("len(description) <= 511", description=self.description)
         except ValueError:
             raise ValueError(f"Invalid move description: {self.description}")
         try:
-            check("x in type", 
-                  x=self.type, type=TYPE)
+            check("type in types", 
+                  type=self.type, types=TYPE)
         except ValueError:
             raise ValueError(f"Invalid move type: {self.type}")
         try:
-            check("x in category", 
-                  x=self.category, category=CATEGORY)
+            check("category in categories", 
+                  category=self.category, categories=CATEGORY)
         except ValueError:
             raise ValueError(f"Invalid move category: {self.category}")
         try:
-            check("0.0 <= x <= 999.0", x=self.charge_usage)
+            check("0.0 <= charge_usage <= 999.0", charge_usage=self.charge_usage)
         except ValueError:
             raise ValueError(f"Invalid move charge usage: {self.charge_usage}")
         return self

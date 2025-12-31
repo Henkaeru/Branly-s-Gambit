@@ -34,11 +34,22 @@ battle_engine.start(Battle.from_sides(
         ["fighter_002"]
     ]
 ))
+for battle_log in battle_engine.battle.current_context.get_next_logs():
+    print(f"{battle_log}")
 
-while(not battle_engine.battle.is_battle_over):
-    battle_engine.step()
-    while (battle_engine.battle.current_context.log):
-        print(battle_engine.battle.current_context.log.pop(0))
-    print(f"{battle_engine.battle.current_context.sides[0][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[0][0].current_stats.hp}")
-    print(f"{battle_engine.battle.current_context.sides[1][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[1][0].current_stats.hp}")
+print(f"{battle_engine.battle.current_context.sides[0][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[0][0].current_stats.hp} SHIELD: {battle_engine.battle.current_context.sides[0][0].current_stats.shield} CHARGE: {battle_engine.battle.current_context.sides[0][0].current_stats.charge}")
+print(f"{battle_engine.battle.current_context.sides[1][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[1][0].current_stats.hp} SHIELD: {battle_engine.battle.current_context.sides[1][0].current_stats.shield} CHARGE: {battle_engine.battle.current_context.sides[1][0].current_stats.charge}")
+while(battle_engine.step()):
+    for battle_log in battle_engine.battle.current_context.get_next_logs():
+        print(f"├── {battle_log}")
+    print(f"{battle_engine.battle.current_context.sides[0][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[0][0].current_stats.hp} SHIELD: {battle_engine.battle.current_context.sides[0][0].current_stats.shield} CHARGE: {battle_engine.battle.current_context.sides[0][0].current_stats.charge}")
+    print(f"{battle_engine.battle.current_context.sides[1][0].current_fighter.name} HP: {battle_engine.battle.current_context.sides[1][0].current_stats.hp} SHIELD: {battle_engine.battle.current_context.sides[1][0].current_stats.shield} CHARGE: {battle_engine.battle.current_context.sides[1][0].current_stats.charge}")
     sleep(1)  # just to slow down the output for readability
+
+for battle_log in battle_engine.battle.current_context.get_next_logs():
+    print(f"└── {battle_log}")
+print('\n')
+print("Final Logs:")
+for log in battle_engine.battle.current_context.log_history:
+    print(f"├── {log}")
+print("└── End of logs.")

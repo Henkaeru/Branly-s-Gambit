@@ -117,3 +117,5 @@ List of moves/strategies that don't really make a fighter category by themselves
 * some move that gives you a kind of undying status, next time you die you don't, and it does stuff, idk what
 * some fighter have a basic move, and all the other requires charge to use
 * some kind of fighter that change archetype entirely mid-battle, like by clicking his ultimate for example
+* some kind of fighter that uses his armor as damage
+* some kind of fighter that uses his charge amount as damage (so he doesn't wanna use is ult, but his ult like heal or smth)
