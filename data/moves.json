@@ -17,22 +17,21 @@
         "calc_target": "l[self, opponent]",
         "calc_field": "l[attack, hp, defense, shield, charge, charge_bonus]",
         "crit_chance": 0.5,
-        "crit_damage": 1.5,
-        "piercing": 0.2
+        "crit_damage": 1.5
       }
     ]
   },
   {
     "id": "buff_basic",
     "name": "Basic Buff",
-    "amount": 5,
+    "amount": 100,
     "enabled": true,
     "type": "dev",
     "category": "support",
     "actions": [
       {
         "id": "buff",
-        "stats": ["attack", "defense"]
+        "stats": ["attack"]
       }
     ]
   },

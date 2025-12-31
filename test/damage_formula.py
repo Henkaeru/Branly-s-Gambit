@@ -7,8 +7,10 @@ import statistics
 # ------------------------------
 STAT_LEVELS = {"low": 50, "normal": 100, "big": 150}
 CHARGE_LEVELS = {"low": 0, "normal": 500, "big": 999}
+# STAB_OPTIONS = [1.0, 1.25]
+# TYPE_EFFECTIVENESS = [0.0, 0.75, 1.0, 1.25]
 STAB_OPTIONS = [1.0]
-TYPE_EFFECTIVENESS = [0.0, 0.75, 1.0, 1.25]
+TYPE_EFFECTIVENESS = [1.0]
 ONLY_SELECTED = True   # <- set to False to keep full sweep behavior
 SHOW_STEPS = True      # <- detailed formula output
 

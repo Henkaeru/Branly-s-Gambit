@@ -1,20 +1,58 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from ...battle.schema import BattleContext, FighterVolatile
     from ..schema import ActionBase, MoveContext, Move
     from ..engine import MoveEngine
-    
-from .action import ActionHandler
 
+from .action import ActionHandler
+from ...fighters.schema import Buff
 
 class BuffHandler(ActionHandler):
-    def execute(self, engine : MoveEngine, action : ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx : BattleContext | None = None, move_ctx: MoveContext | None = None, move: Move | None = None):
-        # amount of buff is supposed to be able to be negative (debuff) but amount is always positive
-        # should check calc_target and calc_field
-        # max 4 stack for buffs + debuffs on an entity
-        # buffs last for duration turns
-        for stat in action.stats:
-            calc_target = move_ctx.get_calc_target(user, target)
-            battle_ctx.log_stack.append(f"{target.current_fighter.name} gains +{f'{move_ctx.get_base_amount()}{f'% of{f' {move_ctx.calc_target}' if move_ctx.calc_target == 'opponent' else ''} {calc_target.current_fighter.name}\'s {move_ctx.calc_field}' if move_ctx.is_percentage else ''}'} as {stat}{f' for {move_ctx.duration} turns' if not move_ctx.is_infinite_duration else ''} !")
+    """
+    Applies a flat buff (or debuff if action.reverse=True) to one or more stats.
+    The magnitude is move.get_effective_amount(user, target), which already
+    respects calc_target/calc_field from the effective MoveContext (percent-of-stat,
+    charge, mult/flat, STAB/type, etc.).
+    Buff target is always the move target (i.e., `target`).
+    """
+    def execute(
+        self,
+        engine: MoveEngine,
+        action: ActionBase,
+        user: FighterVolatile | None = None,
+        target: FighterVolatile | None = None,
+        battle_ctx: BattleContext | None = None,
+        move_ctx: MoveContext | None = None,
+        move: Move | None = None,
+    ):
+
+        buff_target = target
+
+        # Full effective amount (percent-of-stat, charge, mult/flat, stab/type)
+        amount = move.get_effective_amount(user, target)
+
+        # Debuff support: reverse flag on the action payload
+        if getattr(action, "reverse", False):
+            amount = -amount
+
+        # Normalize stats to a list
+        stats: List[str] = action.stats if isinstance(action.stats, list) else [action.stats]
+
+        # Build Buff objects with duration from move_ctx
+        new_buffs = [
+            Buff(stat=stat, amount=amount, duration=move_ctx.duration)
+            for stat in stats
+        ]
+
+        # Append and trigger re-balance via the setter
+        buff_target.current_buffs = (buff_target.current_buffs or []) + new_buffs
+
+        # Logging
+        verb = "loses" if amount < 0 else "gains"
+        amt_text = f"{amount:.2f}".rstrip("0").rstrip(".")
+        for stat in stats:
+            battle_ctx.log_stack.append(
+                f"{buff_target.current_fighter.name} {verb} {amt_text} {stat} for {move_ctx.duration} turn(s)"
+            )

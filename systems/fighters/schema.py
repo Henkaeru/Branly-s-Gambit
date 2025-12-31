@@ -12,6 +12,12 @@ STATUS = ("javaBien", "poison")
 DEFAULT_STARTING_SHIELD = 0
 DEFAULT_STARTING_CHARGE = 0
 MAX_BUFFS = 4
+MAX_HP = 999
+MAX_ATTACK = 999
+MAX_DEFENSE = 999
+MAX_SHIELD = 999
+MAX_CHARGE = 999
+MAX_CHARGE_BONUS = 10.0
 
 # ------------------------------
 # Fighter Stats
@@ -28,12 +34,12 @@ class FighterStats(ResolvableModel):
     def check_stats(self):
         if self.shield is None:
             self.shield = self.hp
-        check("0 <= hp <= 999", hp=self.hp)
-        check("0 <= attack <= 999", attack=self.attack)
-        check("0 <= defense <= 999", defense=self.defense)
-        check("0 <= shield <= 999", shield=self.shield)
-        check("0 <= charge <= 999", charge=self.charge)
-        check("0.0 <= charge_bonus <= 10.0", charge_bonus=self.charge_bonus)
+        check("0 <= hp <= max_hp", hp=self.hp, max_hp=MAX_HP)
+        check("0 <= attack <= max_attack", attack=self.attack, max_attack=MAX_ATTACK)
+        check("0 <= defense <= max_defense", defense=self.defense, max_defense=MAX_DEFENSE)
+        check("0 <= shield <= max_shield", shield=self.shield, max_shield=MAX_SHIELD)
+        check("0 <= charge <= max_charge", charge=self.charge, max_charge=MAX_CHARGE)
+        check("0.0 <= charge_bonus <= max_charge_bonus", charge_bonus=self.charge_bonus, max_charge_bonus=MAX_CHARGE_BONUS)
         check("shield <= hp", shield=self.shield, hp=self.hp)
         return self
 

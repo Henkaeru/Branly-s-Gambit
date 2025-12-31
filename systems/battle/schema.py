@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic import Field, model_validator
+from pydantic import Field, PrivateAttr, model_validator
 from typing import Callable, Optional
 from core.dsl.random_dsl import RINT, RNUM, RSTR, RVAL, check
 import copy
@@ -24,30 +24,34 @@ import systems.fighters
 class FighterVolatile(ResolvableModel):
     base_id: str
 
-    current_fighter: Optional[Fighter] = None # mutable, per-battle fighter
-    current_buffs: list[Buff] = None  # mutable, per-battle buffs
-    current_status: list[Status] = None # mutable, per-battle status effects
+    # Remove these as model fields; keep them purely as properties backed by private attrs
+    # current_buffs: list[Buff] = None
+    # current_status: list[Status] = None
+    current_fighter: Optional[Fighter] = None  # mutable, per-battle fighter
 
-    # Private backing fields for properties
-    _current_buffs: list[Buff] = None  # mutable, per-battle buffs
-    _current_status: list[Status] = None # mutable, per-battle status effects
+    # Private backing fields
+    _current_buffs: list[Buff] = PrivateAttr(default_factory=list)
+    _current_status: list[Status] = PrivateAttr(default_factory=list)
+    _buffed_max_stats: FighterStats | None = PrivateAttr(default=None)
+    _base_max_stats: FighterStats | None = PrivateAttr(default=None)
 
     def model_post_init(self, __context=None):
         base = self.base_fighter
         if base is None:
             raise ValueError(f"FighterVolatile references unknown fighter id: {self.base_id}")
 
-        # --- Merge current_fighter with base ---
+        # Preserve immutable base maxima
+        self._base_max_stats = copy.deepcopy(base.stats)
+
+        # Set up mutable current fighter/stats from starting_stats
         if self.current_fighter is None:
             self.current_fighter = copy.deepcopy(base)
             self.current_fighter.stats = copy.deepcopy(base.starting_stats)
         else:
-            # merge: keep overrides, fill missing with base
             base_data = base.model_dump()
             override_data = self.current_fighter.model_dump()
             merged_data = {**base_data, **override_data}
 
-            # merge stats separately: starting_stats + override
             merged_stats = copy.deepcopy(base.starting_stats)
             if override_data.get("stats"):
                 for k, v in override_data["stats"].model_dump().items():
@@ -56,68 +60,59 @@ class FighterVolatile(ResolvableModel):
 
             self.current_fighter = Fighter(**merged_data)
 
-        # --- Merge buffs/status ---
+        # Merge buffs/status defaults
         base_buffs = copy.deepcopy(base.starting_buffs)
         base_status = copy.deepcopy(base.starting_status)
+        self._current_buffs = list(base_buffs)
+        self._current_status = list(base_status)
 
-        self._current_buffs = (self._current_buffs or []) + base_buffs
-        self._current_status = (self._current_status or []) + base_status
-            
+        self._recompute_buffs()
+
     @property
     def base_fighter(self) -> Optional[Fighter]:
         return registry.get("fighters").set.get(self.base_id, None)
+
+    @property
+    def alive(self) -> bool:
+        return self.current_stats.hp > 0
+
+    @property
+    def has_shield(self) -> bool:
+        return self.current_stats.shield > 0
+
     @property
     def current_stats(self) -> FighterStats:
         return self.current_fighter.stats
+
     @current_stats.setter
     def current_stats(self, new_stats: FighterStats):
         for k, v in new_stats.model_dump().items():
             setattr(self.current_fighter.stats, k, v)
         FighterStats.model_validate(self.current_fighter.stats)
+        self._recompute_buffs()
+
     @property
     def computed_stats(self) -> FighterStats:
-        """
-        Compute all stats with buffs applied proportionally.
-        """
-        stats = copy.deepcopy(self.current_stats)
+        if self._buffed_max_stats is None:
+            self._recompute_buffs()
+        return copy.deepcopy(self._buffed_max_stats)
 
-        for buff in self._current_buffs or []:
-            if buff.stat not in stats.model_fields:
-                continue
-
-            base_value = getattr(self.current_stats, buff.stat)
-            buffed_value = base_value + buff.amount  # all buffs are flat amounts
-
-            # Maintain ratio: new / old
-            setattr(stats, buff.stat, buffed_value)
-
-        FighterStats.model_validate(stats)
-        return stats
     @property
     def current_buffs(self) -> list[Buff]:
         return self._current_buffs
+
     @current_buffs.setter
     def current_buffs(self, value: list[Buff]):
-        for i, buff in enumerate(value):
-            if i < len(self.current_buffs):
-                self.current_buffs[i] = buff
-            else:
-                self.current_buffs.append(buff)
-        if len(self.current_buffs) > MAX_BUFFS:
-            self.current_buffs = self.current_buffs[:MAX_BUFFS]
-    @property
-    def current_status(self) -> list[Status]:
-        return self._current_status
-    @current_status.setter
-    def current_status(self, value: list[Status]):
-        for i, status in enumerate(value):
-            if i < len(self.current_status):
-                self.current_status[i] = status
-            else:
-                self.current_status.append(status)
+        self._current_buffs = list(value)
+        if len(self._current_buffs) > MAX_BUFFS:
+            warnings.warn(f"FighterVolatile '{self.base_id}' has more than {MAX_BUFFS} buffs; truncating.", stacklevel=2)
+            self._current_buffs = self._current_buffs[:MAX_BUFFS]
+        self._recompute_buffs()
+
     @property
     def current_moves(self) -> list[str]:
         return self.current_fighter.moves
+
     @current_moves.setter
     def current_moves(self, new_moves: list[str]):
         for i, move in enumerate(new_moves):
@@ -126,35 +121,46 @@ class FighterVolatile(ResolvableModel):
             else:
                 self.current_fighter.moves.append(move)
         Fighter.model_validate(self.current_fighter)
+
     @property
-    def alive(self) -> bool:
-        return self.computed_stats.hp > 0
-    @property
-    def has_shield(self) -> bool:
-        return self.computed_stats.shield > 0
+    def current_status(self) -> list[Status]:
+        return self._current_status
 
-    def _apply_stat_delta(self, stat: str, delta: int):
-        """
-        Apply delta to a stat as if modifying computed_stats,
-        but actually update current_stats proportionally.
-        """
-        current_value = getattr(self.current_stats, stat)
-        computed_value = getattr(self.computed_stats, stat)
+    @current_status.setter
+    def current_status(self, value: list[Status]):
+        self._current_status = list(value)
 
-        if computed_value == 0:
-            # Avoid division by zero
-            setattr(self.current_stats, stat, max(0, current_value + delta))
-            return
+    def _calc_buffed_max(self) -> FighterStats:
+        max_stats = copy.deepcopy(self._base_max_stats)
+        for buff in self._current_buffs or []:
+            if buff.stat in max_stats.model_fields:
+                new_val = getattr(max_stats, buff.stat) + buff.amount
+                setattr(max_stats, buff.stat, max(0, new_val))
+        FighterStats.model_validate(max_stats)
+        return max_stats
 
-        # Determine the ratio in current_stats relative to computed_stats
-        ratio = current_value / computed_value
-        # Apply delta to computed_value, then scale back to current_stats
-        new_computed = computed_value + delta
-        new_current = int(new_computed * ratio)
-        # Clamp to 0..new_computed
-        new_current = max(0, min(new_current, new_computed))
-        setattr(self.current_stats, stat, new_current)
+    def _rebalance_current_against_new_max(self, new_max: FighterStats):
+        old_max = self._buffed_max_stats or copy.deepcopy(self._base_max_stats)
+        for stat_name in new_max.model_fields:
+            old_cap = getattr(old_max, stat_name)
+            new_cap = getattr(new_max, stat_name)
+            cur = getattr(self.current_stats, stat_name)
 
+            if new_cap >= old_cap:
+                if old_cap <= 0:
+                    new_cur = min(cur, new_cap)
+                else:
+                    new_cur = round(cur * new_cap / old_cap)
+            else:
+                new_cur = min(cur, new_cap)
+
+            new_cur = max(0, min(int(new_cur), new_cap))
+            setattr(self.current_stats, stat_name, new_cur)
+
+    def _recompute_buffs(self):
+        new_max = self._calc_buffed_max()
+        self._rebalance_current_against_new_max(new_max)
+        self._buffed_max_stats = copy.deepcopy(new_max)
 
     def take_damage(self, amount: int):
         if self.has_shield:

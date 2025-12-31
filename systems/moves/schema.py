@@ -198,9 +198,9 @@ def check_text(self):
 
     try:
         check(
-            "all(k in style and isinstance(v, bool) "
+            "all(k in styles and isinstance(v, bool) "
             "for k,v in json.loads(style.replace(\"'\", '\"')).items() if k != 'color')", 
-            style=self.style, style=STYLE)
+            style=self.style, styles=STYLE)
     except ValueError:
         raise ValueError(
             "TextAction 'style' contains invalid style flags."
@@ -359,7 +359,8 @@ class Move(MoveContext):
     def get_effective_amount(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
         """The actual amount to apply after considering bonuses."""
         base_amount = self.get_base_amount(user, target)
-        added_charge_amount = base_amount * CHARGE_BONUS * (user.current_fighter.stats.charge / user.base_fighter.stats.charge)
+        charge_ratio = user.current_stats.charge / max(user.computed_stats.charge, 1)
+        added_charge_amount = base_amount * CHARGE_BONUS * charge_ratio
         stab = STAB_BONUS if self.is_stab(user) else 1.0
         type_effectiveness = self.type_effectiveness(user, target)
         return ((base_amount + added_charge_amount) * self.mult + self.flat) * stab * type_effectiveness
