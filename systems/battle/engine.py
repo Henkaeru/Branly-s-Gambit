@@ -130,6 +130,12 @@ class BattleEngine:
         self.advance_active_fighter()
         return True
 
+    def _tick_all_buffs(self):
+        """Tick buffs for every fighter in the current battle context."""
+        for side in self.battle.current_context.sides:
+            for fv in side:
+                fv.tick_buffs(self.battle.current_context.log_stack)
+
     def advance_active_fighter(self):
         """
         Advance to the next active fighter in column-first order.
@@ -156,6 +162,7 @@ class BattleEngine:
             ctx.turn += 1
             ctx.active_fighter_index = 0
             ctx.active_side = 0
+            self._tick_all_buffs()
         else:
             # Start at first side with a fighter at the new index
             for i, side in enumerate(ctx.sides):

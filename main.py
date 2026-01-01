@@ -85,7 +85,7 @@ def main():
         print_logs(f"[Step {step_idx}] ", logs)
         print_state(f"After step {step_idx}:", battle_engine)
         print()
-        sleep(0.5)  # slow down output for readability (tweak/remove as needed)
+        sleep(0.2)  # slow down output for readability (tweak/remove as needed)
 
     # Final logs
     final_logs = battle_engine.battle.current_context.get_next_logs()

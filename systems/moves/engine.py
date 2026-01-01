@@ -51,7 +51,7 @@ class MoveEngine:
         for action in move.actions:
             self._execute_action(action, user, target, battle_ctx, exec_ctx, move)
 
-    def _execute_action(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, parent_ctx: MoveContext | None = None, move: Move | None = None):
+    def _execute_action(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, parent_ctx: MoveContext | None = None, move: Move | None = None) -> bool:
         """
         Execute a single action with proper context propagation.
         """
@@ -65,20 +65,27 @@ class MoveEngine:
         if hasattr(action, "chance"):
             if random.random() > (action.chance() if callable(action.chance) else action.chance):
                 return
-
+            
         # Dispatch action execution
-        self._dispatch(action, user, target, battle_ctx, ctx, move)
+        success = self._dispatch(action, user, target, battle_ctx, ctx, move)
 
-    def _dispatch(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, move_ctx: MoveContext | None = None, move: Move | None = None):
+        # Recharge charge for the user per executed action IF it succeeded
+        if success and user and ctx.charge_recharge > 0:
+            user.add_stat("charge", ctx.charge_recharge*user.current_stats.charge_bonus)
+
+        return success
+
+    def _dispatch(self, action: ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx: BattleContext | None = None, move_ctx: MoveContext | None = None, move: Move | None = None) -> bool:
         """
         Dispatch action execution.
-        This is intentionally dumb here — real logic lives elsewhere.
+        Returns True if the handler reports success, False otherwise.
         """
         handler = self.action_handlers.get(action.id)
         if not handler:
             raise RuntimeError(f"No handler registered for action '{action.id}'")
 
-        handler.execute(self, action, user, target, battle_ctx, move_ctx, move)
+        result = handler.execute(self, action, user, target, battle_ctx, move_ctx, move)
+        return False if result is False else True
 
 def merge_context(parent: MoveContext, obj) -> MoveContext:
     base = parent.model_dump()

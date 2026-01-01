@@ -6,32 +6,38 @@
     "enabled": true,
     "type": "dev",
     "amount": 80,
-    "chance": 1.0,
+    "chance": "l[0.85, 0.9, 0.95, 1.0]",
     "target": "opponent",
     "calc_target": "self",
-    "description": "Basic damage action.",
+    "description": "Baseline damaging move using random crit/piercing values.",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[0, 10]",
+    "charge_recharge": "l[20, 33, 40]",
     "actions": [
       {
         "id": "damage",
-        "amount": "l[10, 10.0]",
-        "calc_target": "l[self, opponent]",
-        "calc_field": "l[attack, hp, defense, shield, charge, charge_bonus]",
-        "crit_chance": 0.5,
-        "crit_damage": 1.5
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.25, 0.35, 0.5]",
+        "crit_damage": "l[1.4, 1.5, 1.6, 1.8]",
+        "piercing": "l[0.0, 0.05, 0.1, 0.2]"
       }
     ]
   },
   {
     "id": "buff_basic",
     "name": "Basic Buff",
-    "amount": 100,
+    "amount": "l[0.2, 0.25, 0.3]",
+    "duration": "r[2, 4]",
     "enabled": true,
     "type": "dev",
     "category": "support",
+    "chance": "l[0.85, 0.9, 1.0]",
     "actions": [
       {
         "id": "buff",
-        "stats": ["attack"]
+        "stats": "l[attack, defense, l[attack,charge], l[attack,defense]]",
+        "reverse": "l[false, false, false, true]"
       }
     ]
   },
@@ -39,24 +45,30 @@
     "id": "shield_basic",
     "name": "Basic Shield",
     "enabled": true,
+    "amount": "l[0.2, 0.25, 0.3]",
     "type": "dev",
     "category": "support",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[0, 10]",
     "actions": [
-      {
-        "id": "shield"
-      }
+      { "id": "shield" }
     ]
   },
   {
     "id": "heal_basic",
     "name": "Basic Heal",
     "enabled": true,
+    "amount": "l[0.2, 0.25, 0.3]",
     "type": "dev",
     "category": "support",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[0, 10]",
     "actions": [
-      {
-        "id": "heal"
-      }
+      { "id": "heal" }
     ]
   },
   {
@@ -65,11 +77,12 @@
     "enabled": true,
     "type": "dev",
     "category": "special",
+    "chance": "l[0.7, 0.85, 1.0]",
     "actions": [
       {
         "id": "modify",
         "field": "self.hp",
-        "value": 5
+        "value": "r[3, 12]"
       }
     ]
   },
@@ -82,8 +95,8 @@
     "actions": [
       {
         "id": "text",
-        "text": "Hello!",
-        "style": "{'color':'red','bold':true}"
+        "text": "l[Hello!, Nice!, Go!, Pow!]",
+        "style": "l[{'color':'red','bold':true},{'color':'gold','bold':true},{'color':'blue'}]"
       }
     ]
   },
@@ -93,12 +106,13 @@
     "enabled": true,
     "type": "dev",
     "category": "support",
+    "chance": "l[0.6, 0.8, 1.0]",
     "actions": [
       {
         "id": "status",
-        "operation": "add",
+        "operation": "l[add, add, remove]",
         "status": [
-          {"id": "poison"}
+          { "id": "l[poison, javaBien]" }
         ]
       }
     ]
@@ -113,10 +127,10 @@
       {
         "id": "condition",
         "conditions": [
-          {"id": "hp_below", "value": 0.5}
+          { "id": "hp_below", "value": "l[0.3, 0.4, 0.5]" }
         ],
         "actions": [
-          {"id": "damage", "amount": 10}
+          { "id": "damage", "amount": "r[15, 35]", "calc_target": "opponent", "calc_field": "hp" }
         ]
       }
     ]
@@ -125,14 +139,16 @@
     "id": "random_basic",
     "name": "Basic Random",
     "enabled": true,
+    "amount": "l[40, 50, 60]",
     "type": "dev",
     "category": "special",
     "actions": [
       {
         "id": "random",
         "choices": [
-          {"action": {"id": "damage"}, "weight": 1},
-          {"action": {"id": "heal"}, "weight": 1}
+          { "action": { "id": "damage" }, "weight": "r[1, 3]" },
+          { "action": { "id": "heal" }, "weight": "r[1, 3]" },
+          { "action": { "id": "shield" }, "weight": "r[1, 3]" }
         ]
       }
     ]
@@ -141,15 +157,16 @@
     "id": "repeat_basic",
     "name": "Basic Repeat",
     "enabled": true,
+    "amount": "l[40, 50, 60]",
     "type": "dev",
     "category": "special",
     "actions": [
       {
         "id": "repeat",
-        "count": 3,
+        "count": "l[2, 2, 3]",
         "actions": [
-          {"id": "text", "text": "Repeating!", "style": "{'color':'blue','bold':true}"},
-          {"id": "damage", "amount": 5}
+          { "id": "heal" },
+          { "id": "damage" }
         ]
       }
     ]
@@ -157,29 +174,30 @@
   {
     "id": "test_all",
     "name": "Ultimate Test Move",
-    "description": "A move that triggers every possible action for testing purposes.",
+    "description": "Covers all actions with DSL-driven variability.",
     "enabled": true,
     "type": "dev",
     "category": "special",
-    "amount": 50,
-    "chance": 1.0,
+    "amount": "l[50, 60, 70]",
+    "chance": "l[0.85, 0.9, 1.0]",
     "target": "opponent",
     "calc_target": "self",
     "calc_field": "hp",
-    "mult": 1.5,
-    "flat": 10,
-    "duration": 3,
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[0, 10]",
+    "duration": "r[2, 4]",
+    "charge_recharge": "l[20, 33, 40]",
     "actions": [
-      {"id": "damage", "crit_chance": 0.2, "crit_damage": 10, "piercing": 0.1, "amount": 20},
-      {"id": "buff", "stats": ["attack","defense"]},
-      {"id": "shield"},
-      {"id": "heal"},
-      {"id": "modify", "field": "self.hp", "value": 10},
-      {"id": "text", "text": "Ultimate Test!", "style": "{'color':'gold','bold':true}"},
-      {"id": "status", "operation": "add", "status":[{"id":"poison"},{"id":"javaBien"}]},
-      {"id": "condition", "conditions":[{"id":"hp_below","value":0.5}], "actions":[{"id":"damage","amount":15}]},
-      {"id": "random", "choices":[{"action":{"id":"damage"},"weight":1},{"action":{"id":"heal"},"weight":1}]},
-      {"id": "repeat", "count": 2, "actions":[{"id":"text","text":"Repeating Test","style":"{'color':'red'}"},{"id":"damage","amount":5}]}
+      { "id": "damage", "crit_chance": "l[0.2, 0.3, 0.4]", "crit_damage": "l[1.4, 1.6, 1.8]", "piercing": "l[0.05, 0.1, 0.2]" },
+      { "id": "buff", "stats": "l[attack, defense, l[attack,defense]]", "reverse": "l[false, false, true]" },
+      { "id": "shield" },
+      { "id": "heal" },
+      { "id": "modify", "field": "self.hp", "value": "r[5, 15]" },
+      { "id": "text", "text": "l[Ultimate Test!, Boom!, Zap!]", "style": "l[{'color':'gold','bold':true},{'color':'red','bold':true},{'color':'aqua'}]" },
+      { "id": "status", "operation": "l[add, add, remove]", "status": [ { "id": "l[poison, javaBien]" } ] },
+      { "id": "condition", "conditions": [ { "id": "hp_below", "value": "l[0.4, 0.5, 0.6]" } ], "actions": [ { "id": "damage", "amount": "r[20, 50]" } ] },
+      { "id": "random", "choices": [ { "action": { "id": "damage" }, "weight": "r[1, 3]" }, { "action": { "id": "heal" }, "weight": "r[1, 3]" }, { "action": { "id": "shield" }, "weight": "r[1, 3]" } ] },
+      { "id": "repeat", "count": "l[2, 3]", "actions": [ { "id": "text", "text": "Repeating Test", "style": "{'color':'red'}" }, { "id": "damage" } ] }
     ]
   }
 ]

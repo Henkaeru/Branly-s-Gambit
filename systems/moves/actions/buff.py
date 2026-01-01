@@ -27,22 +27,32 @@ class BuffHandler(ActionHandler):
         move_ctx: MoveContext | None = None,
         move: Move | None = None,
     ):
+        if action is None or user is None or target is None or battle_ctx is None or move_ctx is None or move is None:
+            return False  # Cannot execute without action/user/target/battle_ctx/move_ctx/move
 
         buff_target = target
 
         # Full effective amount (percent-of-stat, charge, mult/flat, stab/type)
-        amount = move.get_effective_amount(user, target)
+        amount = int(round(move.get_effective_amount(user, target, move_ctx)))
+
+        if amount <= 0:
+            battle_ctx.log_stack.append(f"{user.current_fighter.name} Failed to {"debuff" if action.reverse else "buff"}")
+            return False
 
         # Debuff support: reverse flag on the action payload
-        if getattr(action, "reverse", False):
+        if action.reverse:
             amount = -amount
 
         # Normalize stats to a list
         stats: List[str] = action.stats if isinstance(action.stats, list) else [action.stats]
 
+        # Duration semantics: duration 1 should expire at end of the *next* turn.
+        raw_duration = move_ctx.duration
+        adj_duration = raw_duration if raw_duration <= 0 else raw_duration + 1
+
         # Build Buff objects with duration from move_ctx
         new_buffs = [
-            Buff(stat=stat, amount=amount, duration=move_ctx.duration)
+            Buff(stat=stat, amount=amount, duration=adj_duration)
             for stat in stats
         ]
 
@@ -51,8 +61,8 @@ class BuffHandler(ActionHandler):
 
         # Logging
         verb = "loses" if amount < 0 else "gains"
-        amt_text = f"{amount:.2f}".rstrip("0").rstrip(".")
         for stat in stats:
             battle_ctx.log_stack.append(
-                f"{buff_target.current_fighter.name} {verb} {amt_text} {stat} for {move_ctx.duration} turn(s)"
+                f"{buff_target.current_fighter.name} {verb} {amount} {stat} for {move_ctx.duration} turn(s)"
             )
+        return True

@@ -149,12 +149,19 @@ def parse_dsl(s: str) -> Union[Any, Callable[[], Any]]:
 def type_category(v):
     if isinstance(v, (int, float)):
         return "number"
+    elif isinstance(v, bool):
+        return "bool"
     elif isinstance(v, str):
         return "string"
     else:
         return type(v)
     
 def parse_number(s: str):
+    ls = s.lower()
+    if ls == "true":
+        return True
+    if ls == "false":
+        return False
     if "." in s:
         try:
             return float(s)
@@ -310,9 +317,23 @@ class RandomInt(RandomNumber):
     @classmethod
     def validate(cls, v, info=None):
         val = super().validate(v)
+
+        if callable(val):
+            def _wrapped():
+                return int(round(call_if_zero_arg(val)))
+            # Preserve domain if present (rounded to ints when possible)
+            dom = getattr(val, "_domain", None)
+            if dom is not None:
+                try:
+                    _wrapped._domain = {int(round(x)) for x in dom} if isinstance(dom, set) else dom
+                except Exception:
+                    pass
+            return _wrapped
+
         if isinstance(val, float):
-            return int(val)
-        return val
+            return int(round(val))
+
+        return int(val)
 
 class RandomString(str):
     """String with DSL support."""
@@ -331,6 +352,24 @@ class RandomString(str):
             return val
         raise TypeError(f"RandomString must be a string or DSL string, got {type(v)}")
 
+class RandomBool:
+    """Bool with DSL support."""
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v, info=None):
+        # Direct pass-through for callables
+        if callable(v):
+            return v
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            val = parse_dsl(v)
+            return val
+        raise TypeError(f"RandomBool must be a bool or DSL string, got {type(v)}")
+
 # -------------------------
 # Aliases
 # -------------------------
@@ -339,6 +378,7 @@ RNUM = Union[NUM, RandomNumber, Callable[[], Any]]
 RINT = Union[int, RandomInt, Callable[[], Any]]
 RSTR = Union[RandomString, str, Callable[[], Any]]
 RVAL = Union[RNUM, RSTR]
+RBOOL = Union[bool, RandomBool, Callable[[], Any]]
 
 # -------------------------
 # Self-test

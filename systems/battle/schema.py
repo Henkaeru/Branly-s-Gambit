@@ -154,7 +154,7 @@ class FighterVolatile(ResolvableModel):
             else:
                 new_cur = min(cur, new_cap)
 
-            new_cur = max(0, min(int(new_cur), new_cap))
+            new_cur = max(0, min(int(round(new_cur)), new_cap))
             setattr(self.current_stats, stat_name, new_cur)
 
     def _recompute_buffs(self):
@@ -174,6 +174,54 @@ class FighterVolatile(ResolvableModel):
         self.current_stats.hp -= amount
         if self.current_stats.hp < 0:
             self.current_stats.hp = 0
+    
+    def tick_buffs(self, log_stack=None):
+        """
+        Decrement finite buffs by 1; remove those that reach 0.
+        duration == -1 is infinite.
+        """
+        new_buffs = []
+        expired = []
+        for buff in self.current_buffs or []:
+            # Infinite
+            if buff.duration == -1:
+                new_buffs.append(buff)
+                continue
+            # Finite: decrement
+            buff = copy.deepcopy(buff)
+            buff.duration = max(-1, buff.duration - 1)
+            if buff.duration == 0:
+                expired.append(buff)
+                continue
+            new_buffs.append(buff)
+
+        # Reassign via setter to trigger rebalance
+        self.current_buffs = new_buffs
+
+        if log_stack is not None:
+            for b in expired:
+                log_stack.append(f"{self.current_fighter.name}'s {b.stat} buff expired")
+    
+    def add_stat(self, stat: str, amount: int | float) -> int:
+        """
+        Add to a stat on current_stats, clamped to [0, computed_stats.<stat>].
+        Returns the actual amount applied (may be 0 if already at cap or amount <= 0).
+        """
+        amt = int(round(amount))
+        if amt == 0:
+            return 0
+        if stat not in self.current_stats.model_fields:
+            raise ValueError(f"Unknown stat '{stat}'")
+
+        cap = getattr(self.computed_stats, stat)
+        cap = max(0, int(round(cap)))
+        before = getattr(self.current_stats, stat)
+
+        new_val = before + amt
+        new_val = max(0, min(new_val, cap))
+        setattr(self.current_stats, stat, new_val)
+
+        return new_val - before
     
     @model_validator(mode="before")
     @classmethod

@@ -1,12 +1,13 @@
 from __future__ import annotations
 import random
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from systems.battle.schema import FighterVolatile
     
-from pydantic import Field, RootModel, model_validator
+from pydantic import Field, RootModel, TypeAdapter, model_validator
 from typing import Annotated, Dict, Literal, Optional, Union
-from core.dsl.random_dsl import NUM, RINT, RNUM, RSTR, RVAL, check
+from core.dsl.random_dsl import NUM, RBOOL, RINT, RNUM, RSTR, RVAL, check
 import re
 import warnings
 
@@ -48,6 +49,7 @@ class MoveContext(ResolvableModel):
     flat: RINT = 0
 
     duration: RINT = -1
+    charge_recharge: RINT = 33
 
     @property
     def is_percentage(self) -> bool:
@@ -56,12 +58,13 @@ class MoveContext(ResolvableModel):
     
     def get_calc_target(self, user: FighterVolatile, target: FighterVolatile) -> FighterVolatile:
         """Get the target fighter based on calc_target."""
-        if self.calc_target == "self":
+        fix_calc_tgt = self.calc_target
+        if fix_calc_tgt == "self":
             return user
-        elif self.calc_target == "opponent":
+        elif fix_calc_tgt == "opponent":
             return target
         else:
-            raise ValueError(f"Invalid calc_target '{self.calc_target}'")
+            raise ValueError(f"Invalid calc_target '{fix_calc_tgt}'")
 
     def get_calc_target_field_value(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
         """The value of the field we are scaling against (hp, attack, etc.)."""
@@ -79,6 +82,7 @@ class MoveContext(ResolvableModel):
         check("0 <= chance <= 1", chance=self.chance)
         check("mult >= 0", mult=self.mult)
         check("duration >= -1", duration=self.duration)
+        check("charge_recharge >= 0", charge_recharge=self.charge_recharge)
         try:
             check("calc_target in target", 
                   calc_target=self.calc_target, target=Target)
@@ -106,6 +110,23 @@ class ActionBase(ResolvableModel):
         "extra": "allow"
     }
 
+    @model_validator(mode="before")
+    @classmethod
+    def coerce_movecontext_extras(cls, values):
+        """
+        For any extra field whose name exists on MoveContext, coerce/validate it
+        using the MoveContext field's annotation (e.g., RNUM/RSTR).
+        """
+        for k, v in list(values.items()):
+            if k in cls.model_fields:  # native ActionBase fields
+                continue
+            mc_field = MoveContext.model_fields.get(k)
+            if mc_field is None:
+                continue
+            adapter = TypeAdapter(mc_field.annotation)
+            values[k] = adapter.validate_python(v)
+        return values
+
     @property
     def params(self) -> dict:
         return {k: v for k, v in self.model_dump(exclude_none=True).items() if k != "id"}
@@ -113,7 +134,7 @@ class ActionBase(ResolvableModel):
 # ------------------------------
 # Leaf Actions
 # ------------------------------
-class DamageAction(ResolvableModel):
+class DamageAction(ActionBase):
     id: Literal["damage"]
     crit_chance: RNUM = 0.0
     crit_damage: RNUM = 1.0
@@ -131,9 +152,10 @@ class DamageAction(ResolvableModel):
         """Determine if the hit is a critical hit based on crit_chance."""
         return random.random() < self.crit_chance
     
-class BuffAction(ResolvableModel):
+class BuffAction(ActionBase):
     id: Literal["buff"]
     stats: list[RSTR] | RSTR = "attack"
+    reverse: RBOOL = False
 
     @model_validator(mode="after")
     def check_buff(self):
@@ -152,7 +174,7 @@ class ShieldAction(ActionBase):
 class HealAction(ActionBase):
     id: Literal["heal"]
 
-class ModifyAction(ResolvableModel):
+class ModifyAction(ActionBase):
     id: Literal["modify"]
     field: RSTR
     value: RVAL
@@ -171,7 +193,7 @@ class ModifyAction(ResolvableModel):
             raise ValueError("field must be a dot-path of identifiers (e.g. 'foo.bar_baz')")
         return self
 
-class TextAction(ResolvableModel):
+class TextAction(ActionBase):
     id: Literal["text"]
     text: RSTR = "No text."
     style: RSTR = "{}"
@@ -213,7 +235,7 @@ def check_text(self):
 # ------------------------------
 
 class Status(ResolvableModel):
-    id: str
+    id: RSTR
 
     @model_validator(mode="after")
     def check_status(self):
@@ -225,7 +247,7 @@ class Status(ResolvableModel):
         return self
 
 class Condition(ResolvableModel):
-    id: str
+    id: RSTR
     value: RVAL
 
     @model_validator(mode="after")
@@ -336,7 +358,7 @@ class Move(MoveContext):
     name: RSTR = "unknown move"
     description: RSTR = "no description provided."
 
-    enabled: bool = True
+    enabled: RBOOL = True
 
     type: RSTR = "none"
     category: RSTR = "none"
@@ -356,9 +378,11 @@ class Move(MoveContext):
         # Placeholder for type effectiveness calculation TODO take this into account
         return 1.0
 
-    def get_effective_amount(self, user: FighterVolatile, target: FighterVolatile) -> NUM:
+    def get_effective_amount(self, user: FighterVolatile, target: FighterVolatile, move_ctx: MoveContext | None = None) -> NUM:
         """The actual amount to apply after considering bonuses."""
-        base_amount = self.get_base_amount(user, target)
+        if move_ctx is None:
+            move_ctx = self
+        base_amount = move_ctx.get_base_amount(user, target)
         charge_ratio = user.current_stats.charge / max(user.computed_stats.charge, 1)
         added_charge_amount = base_amount * CHARGE_BONUS * charge_ratio
         stab = STAB_BONUS if self.is_stab(user) else 1.0

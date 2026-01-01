@@ -5,15 +5,28 @@ if TYPE_CHECKING:
     from ...battle.schema import BattleContext, FighterVolatile
     from ..schema import ActionBase, MoveContext, Move
     from ..engine import MoveEngine
-    
+
 from .action import ActionHandler
 
 
 class RepeatHandler(ActionHandler):
-    def execute(self, engine : MoveEngine, action : ActionBase, user: FighterVolatile | None = None, target: FighterVolatile | None = None,  battle_ctx : BattleContext | None = None, move_ctx: MoveContext | None = None, move: Move | None = None):
+    def execute(
+        self,
+        engine: MoveEngine,
+        action: ActionBase,
+        user: FighterVolatile | None = None,
+        target: FighterVolatile | None = None,
+        battle_ctx: BattleContext | None = None,
+        move_ctx: MoveContext | None = None,
+        move: Move | None = None,
+    ):
+        if action is None:
+            return False
 
-        battle_ctx.log_stack.append(f"{user.current_fighter.name} will repeat actions {int(action.count)} times on {target.current_fighter.name}")
-        for _ in range(int(action.count)):
-            battle_ctx.log_stack.append(f"Repeating action {action.actions} for {user.current_fighter.name} on {target.current_fighter.name}")
+        any_success = False
+        for _ in range(int(round(action.count))):
             for sub_action in action.actions:
-                engine._execute_action(sub_action, user, target, battle_ctx, move_ctx)
+                res = engine._execute_action(sub_action, user, target, battle_ctx, move_ctx, move)
+                any_success = any_success or bool(res)
+
+        return any_success

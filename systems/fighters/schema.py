@@ -31,16 +31,41 @@ class FighterStats(ResolvableModel):
     charge_bonus: RNUM = 0.0
 
     @model_validator(mode="after")
-    def check_stats(self):
+    def check_or_clamp(self):
         if self.shield is None:
             self.shield = self.hp
-        check("0 <= hp <= max_hp", hp=self.hp, max_hp=MAX_HP)
-        check("0 <= attack <= max_attack", attack=self.attack, max_attack=MAX_ATTACK)
-        check("0 <= defense <= max_defense", defense=self.defense, max_defense=MAX_DEFENSE)
-        check("0 <= shield <= max_shield", shield=self.shield, max_shield=MAX_SHIELD)
-        check("0 <= charge <= max_charge", charge=self.charge, max_charge=MAX_CHARGE)
-        check("0.0 <= charge_bonus <= max_charge_bonus", charge_bonus=self.charge_bonus, max_charge_bonus=MAX_CHARGE_BONUS)
-        check("shield <= hp", shield=self.shield, hp=self.hp)
+        try:
+            check("0 <= hp <= max_hp", hp=self.hp, max_hp=MAX_HP)
+        except ValueError:
+            self.hp = MAX_HP
+        try:
+            check("0 <= attack <= max_attack", attack=self.attack, max_attack=MAX_ATTACK)
+        except ValueError:
+            self.attack = MAX_ATTACK
+        try:
+            check("0 <= defense <= max_defense", defense=self.defense, max_defense=MAX_DEFENSE)
+        except ValueError:
+            self.defense = MAX_DEFENSE
+        try:
+            check("0 <= shield <= max_shield", shield=self.shield, max_shield=MAX_SHIELD)
+        except ValueError:
+            self.shield = MAX_SHIELD
+
+        try:
+            check("0 <= charge <= max_charge", charge=self.charge, max_charge=MAX_CHARGE)
+        except ValueError:
+            self.charge = MAX_CHARGE
+
+        try:
+            check("0.0 <= charge_bonus <= max_charge_bonus", charge_bonus=self.charge_bonus, max_charge_bonus=MAX_CHARGE_BONUS)
+        except ValueError:
+            self.charge_bonus = MAX_CHARGE_BONUS
+
+        try:
+            check("shield <= hp", shield=self.shield, hp=self.hp)
+        except ValueError:
+            self.shield = self.hp
+
         return self
 
 
@@ -56,7 +81,6 @@ class Buff(ResolvableModel):
 
     @model_validator(mode="after")
     def check_buff(self):
-        check("amount >= 0", amount=self.amount)
         check("duration >= -1", duration=self.duration)
         try:
             check("stat in stats", 

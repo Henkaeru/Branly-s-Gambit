@@ -5,12 +5,12 @@
         "description": "A skilled martial artist from Japan.",
         "type": "proj",
         "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
+            "hp": 999,
+            "attack": 999,
+            "defense": 999,
             "charge_bonus": 1.0
         },
-        "moves": ["damage_basic", "buff_basic"]
+        "moves": ["damage_basic", "buff_basic", "shield_basic"]
     },
     {
         "id": "fighter_002",
@@ -18,11 +18,11 @@
         "type": "proj",
         "description": "A skilled martial artist from Japan.",
         "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
+            "hp": 999,
+            "attack": 999,
+            "defense": 999,
             "charge_bonus": 1.0
         },
-        "moves": ["damage_basic"]
+        "moves": ["heal_basic", "repeat_basic",  "random_basic"]
     }
 ]
