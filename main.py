@@ -1,7 +1,14 @@
 import random
 from time import sleep
 from core.registry import registry
+from systems.battle.engine import BattleMode
 from systems.battle.schema import Battle, FighterVolatile
+from systems.display.engine import DisplayEngine
+
+import systems.moves
+import systems.fighters
+import systems.battle
+import systems.display
 
 # Optional: deterministic runs for debugging
 random.seed(0)
@@ -63,35 +70,8 @@ def print_logs(prefix: str, logs: list[str]):
         print(f"{prefix}{log}")
 
 def main():
-    battle_engine = registry.get("battle")
-    battle_engine.start(Battle.from_sides(
-        id="1v1_match",
-        sides=[
-            ["fighter_001"],
-            ["fighter_002"]
-        ]
-    ))
-
-    # Initial logs
-    print_logs("", battle_engine.battle.current_context.get_next_logs())
-    print_state("Initial state:", battle_engine)
-    print()
-
-    # Battle loop
-    step_idx = 0
-    while battle_engine.step():
-        step_idx += 1
-        logs = battle_engine.battle.current_context.get_next_logs()
-        print_logs(f"[Step {step_idx}] ", logs)
-        print_state(f"After step {step_idx}:", battle_engine)
-        print()
-        sleep(0.2)  # slow down output for readability (tweak/remove as needed)
-
-    # Final logs
-    final_logs = battle_engine.battle.current_context.get_next_logs()
-    print_logs("[End] ", final_logs)
-    print("\nFinal log history:")
-    print_logs("  ", battle_engine.battle.current_context.log_history)
+    display_engine = registry.get("display")
+    display_engine.run()
 
 if __name__ == "__main__":
     main()

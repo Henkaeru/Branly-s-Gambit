@@ -9,9 +9,18 @@ if TYPE_CHECKING:
 import inspect
 import random
 import warnings
+from enum import Enum
 
 # to load moves system
 from .. import moves
+
+
+# ------------------------------
+# Battle Mode Enum
+# ------------------------------
+class BattleMode(Enum):
+    AUTO = "auto"
+    LOCAL_1V1 = "local_1v1"
 
 
 # ------------------------------
@@ -29,6 +38,15 @@ class BattleEngine:
     def __init__(self, config: BattleConfig, registry: SystemRegistry):
         self.config = config
         self.registry = registry
+        self.battle_mode = BattleMode.AUTO  # Default mode
+
+    # ------------------------------
+    # Battle Mode Management
+    # ------------------------------
+    def set_battle_mode(self, mode: BattleMode):
+        """Switch between battle modes"""
+        self.battle_mode = mode
+        self.battle.current_context.log_stack.append(f"Battle mode set to: {mode.value}")
 
     # ------------------------------
     # Battle Lifecycle Management
@@ -92,41 +110,106 @@ class BattleEngine:
 
         self.queue_action(do_move)
 
+    def get_available_moves(self, fighter: FighterVolatile) -> list[tuple[int, str, str]]:
+        """Get list of available moves for a fighter with their indices and names"""
+        if not fighter.current_fighter.moves:
+            return []
+        
+        move_engine = self.registry.get("moves")
+        moves_info = []
+        for idx, move_id in enumerate(fighter.current_fighter.moves, 1):
+            move = move_engine.set.get(move_id)
+            move_name = move.name if move else move_id
+            moves_info.append((idx, move_id, move_name))
+        return moves_info
+
+    def manual_move_selection(self, fighter: FighterVolatile) -> tuple[str, FighterVolatile] | None:
+        """
+        Handle manual move selection for local 1v1 mode.
+        Returns (move_id, target) or None if selection failed.
+        """
+        ctx = self.battle.current_context
+        moves_info = self.get_available_moves(fighter)
+        
+        if not moves_info:
+            self.battle.current_context.log_stack.append(f"{fighter.current_fighter.name} has no moves!")
+            return None
+
+        # Display available moves
+        print(f"\n{fighter.current_fighter.name}'s turn:")
+        for idx, move_id, move_name in moves_info:
+            print(f"  {idx}. {move_name}")
+
+        # Get move selection
+        try:
+            choice = int(input(f"Select move (1-{len(moves_info)}): "))
+            if 1 <= choice <= len(moves_info):
+                selected_move_id = moves_info[choice - 1][1]
+            else:
+                print("Invalid choice! Using first move.")
+                selected_move_id = moves_info[0][1]
+        except (ValueError, EOFError):
+            print("Invalid input! Using first move.")
+            selected_move_id = moves_info[0][1]
+
+        # Get random opponent
+        opponent_sides = [i for i in range(len(ctx.sides)) if i != ctx.active_side]
+        if opponent_sides:
+            target_side = random.choice(opponent_sides)
+            target_fighters = ctx.sides[target_side]
+            if target_fighters:
+                target = random.choice(target_fighters)
+                return (selected_move_id, target)
+        
+        return None
+
+    def _pick_default_target(self, user: FighterVolatile) -> FighterVolatile | None:
+        ctx = self.battle.current_context
+        opponent_sides = [i for i in range(len(ctx.sides)) if i != ctx.active_side]
+        for side_idx in opponent_sides:
+            for fv in ctx.sides[side_idx]:
+                if fv.alive:
+                    return fv
+        return None
+
     # ------------------------------
     # Battle Step
     # ------------------------------
-    def step(self) -> bool:
+    def step(self, selected_action: tuple[str, FighterVolatile] | None = None) -> bool:
         """
-        Execute a single battle step:
-        - Active fighter chooses move
-        - Events are queued
-        - Events are processed
-        - Active fighter advances
+        Execute a single battle step.
+        selected_action: optional (move_id, target) chosen externally (e.g., UI)
         """
         if self.battle.is_battle_over:
-            self.end()
+            self.end()  # End the battle if it's over
             return False
         
         ctx = self.battle.current_context
         fighter = ctx.active_fighter
 
-        # Skip if no moves
-        if fighter.current_fighter.moves:
-            # Pick random move
-            move_id = random.choice(fighter.current_fighter.moves)
-            # Choose opponent side randomly
-            opponent_sides = [i for i in range(len(ctx.sides)) if i != ctx.active_side]
-            if opponent_sides:
-                target_side = random.choice(opponent_sides)
-                target_fighters = ctx.sides[target_side]
-                if target_fighters:
-                    target = random.choice(target_fighters)
+        # Externally provided move/target (preferred when present)
+        if selected_action:
+            move_id, target = selected_action
+            target = target or self._pick_default_target(fighter)
+            if target:
+                self.execute_move(move_id, fighter, target)
+
+        # Legacy/manual selection
+        elif self.battle_mode == BattleMode.LOCAL_1V1:
+            result = self.manual_move_selection(fighter)
+            if result:
+                move_id, target = result
+                self.execute_move(move_id, fighter, target)
+
+        else:
+            # Auto mode: AI selects randomly
+            if fighter.current_fighter.moves:
+                move_id = random.choice(fighter.current_fighter.moves)
+                target = self._pick_default_target(fighter)
+                if target:
                     self.execute_move(move_id, fighter, target)
 
-        # Process queued actions
         self.process_events()
-
-        # Advance to next fighter in column-wise order
         self.advance_active_fighter()
         return True
 

@@ -222,7 +222,22 @@ class FighterVolatile(ResolvableModel):
         setattr(self.current_stats, stat, new_val)
 
         return new_val - before
-    
+
+    def add_shield(self, amount: int | float) -> int:
+        """
+        Add to shield, clamped to [0, current HP] (not max_shield or max_hp).
+        Returns the actual amount applied.
+        """
+        amt = int(round(amount))
+        if amt == 0:
+            return 0
+        cur_hp = getattr(self.current_stats, "hp")
+        before = self.current_stats.shield
+        new_val = before + amt
+        new_val = max(0, min(new_val, cur_hp))
+        self.current_stats.shield = new_val
+        return new_val - before
+
     @model_validator(mode="before")
     @classmethod
     def validate_id_or_abort(cls, data):
@@ -390,7 +405,7 @@ class Battle(ResolvableModel):
 
     max_turns: RINT = MAX_TURN
 
-    background_sprite: RSTR = "/backgrounds/default.png"
+    background_sprite: RSTR = "backgrounds/default_battle.png"
     music: Optional[RSTR] = None
 
     base_context: BattleContext = Field(default_factory=BattleContext)
@@ -426,7 +441,7 @@ class Battle(ResolvableModel):
         battle = cls(
             id=id,
             max_turns=max_turns,
-            background_sprite=background_sprite or "/backgrounds/default.png",
+            background_sprite=background_sprite or "backgrounds/default_battle.png",
             music=music,
             base_context=base_ctx,
         )

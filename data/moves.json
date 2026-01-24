@@ -187,6 +187,7 @@
     "flat": "r[0, 10]",
     "duration": "r[2, 4]",
     "charge_recharge": "l[20, 33, 40]",
+    "charge_usage": "100",
     "actions": [
       { "id": "damage", "crit_chance": "l[0.2, 0.3, 0.4]", "crit_damage": "l[1.4, 1.6, 1.8]", "piercing": "l[0.05, 0.1, 0.2]" },
       { "id": "buff", "stats": "l[attack, defense, l[attack,defense]]", "reverse": "l[false, false, true]" },

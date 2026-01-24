@@ -25,7 +25,7 @@ class ShieldHandler(ActionHandler):
             return False
 
         effective_amount = max(0, int(round(move.get_effective_amount(user, target, move_ctx))))
-        gained = target.add_stat("shield", effective_amount)
+        gained = target.add_shield(effective_amount)
         if gained <= 0:
             battle_ctx.log_stack.append(f"{user.current_fighter.name} Failed to shield")
             return False

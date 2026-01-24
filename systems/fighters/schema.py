@@ -125,8 +125,8 @@ class Fighter(ResolvableModel):
     category: RSTR = "wildcard" # see docs for categories
 
     # the sprite part is just a placeholder
-    fighter_sprite: RSTR = "/fighters/battle_sprite/default.png"
-    fighter_selection_sprite: RSTR = "/fighters/selection_sprite/default.png"
+    fighter_sprite: RSTR = "fighters/battle_sprite/default.png"
+    fighter_selection_sprite: RSTR = "fighters/selection_sprite/default.png"
     animations: dict = Field(default_factory=dict)  # placeholder for animations
 
     stats: FighterStats = Field(default_factory=FighterStats) # base stats

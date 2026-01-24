@@ -18,6 +18,6 @@ class StatusHandler(ActionHandler):
         # don't care about amount when removing
         for status in status:
             if action.operation == "add":
-                battle_ctx.log_stack.append(f"Applying status '{status}' to {target.current_fighter.name} for {move_ctx.effective_amount} turns !")
+                battle_ctx.log_stack.append(f"Applying status '{status}' to {target.current_fighter.name} for {move.get_effective_amount(user, target)} turns !")
             elif action.operation == "remove":
                 battle_ctx.log_stack.append(f"Removing status from {target.current_fighter.name} !")
