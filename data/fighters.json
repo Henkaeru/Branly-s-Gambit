@@ -24,5 +24,87 @@
             "charge_bonus": 1.0
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_003",
+        "name": "lietard ludovic",
+        "description": "druide du develloppement ce régene tout le temps et accumule les buffs",
+        "type": "dev",
+        "stats": {
+            "hp": 750,
+            "attack": 85,
+            "defense": 85,
+            "shield": 0,
+            "charge_bonus": 0.8
+        },
+        "starting_stats": {
+            "hp": 280
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_004",
+        "name": "tottereau benoit",
+        "type": "proj",
+        "description": "ulti donne plus de shield",
+        "stats": {
+            "hp": 150,
+            "attack": 155,
+            "defense": 65,
+            "charge_bonus": 1.2,
+            "shield": 500
+        },
+        "starting_stats": {
+            "shield": 100
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_005",
+        "name": "quiniou gildas",
+        "type": "syst",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_006",
+        "name": "porhiel clément",
+        "type": "data",
+        "stats": {
+            "hp": 400,
+            "attack": 60,
+            "defense": 150,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_007",
+        "name": "faure jean-batiste",
+        "type": "opti",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_008",
+        "name": "primot carole",
+        "type": "team",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     }
 ]
