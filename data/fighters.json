@@ -24,5 +24,77 @@
             "charge_bonus": 1.0
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_003",
+        "name": "lietard ludovic",
+        "type": "dev",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_004",
+        "name": "tottereau benoit",
+        "type": "proj",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_005",
+        "name": "quiniou gildas",
+        "type": "syst",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_006",
+        "name": "porhiel clément",
+        "type": "data",
+        "stats": {
+            "hp": 400,
+            "attack": 60,
+            "defense": 150,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_007",
+        "name": "faure jean-batiste",
+        "type": "opti",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+    },
+    {
+        "id": "fighter_008",
+        "name": "primot carole",
+        "type": "team",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "charge_bonus": 1.0
+        },
+        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     }
 ]
