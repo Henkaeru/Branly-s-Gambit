@@ -1,0 +1,48 @@
+{
+  "defaults": {
+    "colours": {
+      "normal_text": "#FFFFFF",
+      "active_text": "#F7A515",
+      "disabled_text": "#7B605F",
+
+      "dark_bg": "#2B2C38",
+      "button_bg": "#1A2E55",
+
+      "hp_bar": "#D85E22",
+      "shield_bar": "#496F9A",
+      "charge_bar": "#EAC52B",
+
+      "target_ring": "#D85E22",
+      "bar_bg": "#2B2C38"
+    }
+  },
+
+  "panel": {
+    "colours": {
+      "dark_bg": "#2B2C38"
+    }
+  },
+
+  "button": {
+    "colours": {
+      "normal_bg": "#1A2E55",
+      "hovered_bg": "#496F9A",
+      "active_bg": "#F7A515",
+      "normal_text": "#FFFFFF"
+    }
+  },
+
+  "label": {
+    "colours": {
+      "normal_text": "#FFFFFF",
+      "active_text": "#F7A515"
+    }
+  },
+
+  "text_box": {
+    "colours": {
+      "dark_bg": "#2B2C38",
+      "normal_text": "#FFFFFF"
+    }
+  }
+}
