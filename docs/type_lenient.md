@@ -1,0 +1,6 @@
+dev : tanky (no), damagy (no)
+opti : tanky (no), damagy (no)
+syst : tanky (yes), damagy (no)
+data : tanky (YES), damagy (NO)
+proj : tanky (no), damagy (almost)
+team : tanky (yes), damagy (no)
