@@ -49,7 +49,7 @@
         "description": "ulti donne plus de shield",
         "stats": {
             "hp": 150,
-            "attack": 155,
+            "attack": 165,
             "defense": 65,
             "charge_bonus": 1.2,
             "shield": 500
@@ -64,10 +64,14 @@
         "name": "quiniou gildas",
         "type": "syst",
         "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
-            "charge_bonus": 1.0
+            "hp": 350,
+            "attack": 85,
+            "defense": 110,
+            "charge_bonus": 1.0,
+            "shield": 300
+        },
+        "starting_stats":{
+            "shield": 75
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     },
@@ -76,10 +80,14 @@
         "name": "porhiel clément",
         "type": "data",
         "stats": {
-            "hp": 400,
+            "hp": 450,
             "attack": 60,
             "defense": 150,
-            "charge_bonus": 1.0
+            "charge_bonus": 1.0,
+            "shield": 200
+        },
+        "starting_stats":{
+            "shield": 50
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     },
@@ -87,11 +95,16 @@
         "id": "fighter_007",
         "name": "faure jean-batiste",
         "type": "opti",
+        "description": "assaillant frappe pas fort mais de nombreux coup",
         "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
-            "charge_bonus": 1.0
+            "hp": 285,
+            "attack": 75,
+            "defense": 90,
+            "charge_bonus": 1.3,
+            "shield": 85
+        },
+        "starting_stats":{
+            "shield": 25
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     },
@@ -99,11 +112,16 @@
         "id": "fighter_008",
         "name": "primot carole",
         "type": "team",
+        "description": "trickster spécialiser en debuff",
         "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
-            "charge_bonus": 1.0
+            "hp": 290,
+            "attack": 85,
+            "defense": 120,
+            "charge_bonus": 1.1,
+            "shield": 50
+        },
+        "starting_stats":{
+            "shield": 10
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     }
