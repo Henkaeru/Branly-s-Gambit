@@ -8,9 +8,9 @@ class DisplayOptions(ResolvableModel):
     height: int = 720
     fullscreen: bool = False
     master_volume: float = 0.8
-    title_image: Optional[str] = "backgrounds/default_title.png"
-    battle_background: Optional[str] = None
-    battle_music: Optional[str] = None
+    title_screen_background_sprite: Optional[str] = "backgrounds/default_title.png"
+    battle_screen_background_sprite: Optional[str] = None
+    battle_screen_music: Optional[str] = None
     log_height: int = 140
     move_height: int = 140
 

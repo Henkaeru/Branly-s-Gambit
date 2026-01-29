@@ -9,6 +9,7 @@ import systems.moves
 import systems.fighters
 import systems.battle
 import systems.display
+import systems.audio
 
 # Optional: deterministic runs for debugging
 random.seed(0)
