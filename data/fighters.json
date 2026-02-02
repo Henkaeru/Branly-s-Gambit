@@ -38,7 +38,8 @@
             "charge_bonus": 0.8
         },
         "starting_stats": {
-            "hp": 280
+            "hp": 280,
+            "shield": 0
         },
         "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
     },
