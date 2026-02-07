@@ -200,5 +200,856 @@
       { "id": "random", "choices": [ { "action": { "id": "damage" }, "weight": "r[1, 3]" }, { "action": { "id": "heal" }, "weight": "r[1, 3]" }, { "action": { "id": "shield" }, "weight": "r[1, 3]" } ] },
       { "id": "repeat", "count": "l[2, 3]", "actions": [ { "id": "text", "text": "Repeating Test", "style": "{'color':'red'}" }, { "id": "damage" } ] }
     ]
+  },
+  {
+    "id": "python_strike",
+    "name": "Python Strike",
+    "description": "Compétence Réaliser : Attaque basique avec Python - frappe simple mais efficace.",
+    "enabled": true,
+    "type": "dev",
+    "category": "damage",
+    "amount": 85,
+    "chance": "l[0.9, 0.95, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.05]",
+    "flat": "r[5, 15]",
+    "charge_recharge": "l[25, 35, 45]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.25, 0.35, 0.45]",
+        "crit_damage": "l[1.4, 1.6, 1.8]",
+        "piercing": "l[0.1, 0.15, 0.2]"
+      },
+      {
+        "id": "text",
+        "text": "l[Script Python exécuté!, Code pythonique!, Indentation parfaite!]",
+        "style": "{'color':'blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "man_page_read",
+    "name": "Man Page Read",
+    "description": "Compétence Réaliser : Lecture du manuel - buff d'attaque via la documentation.",
+    "enabled": true,
+    "type": "dev",
+    "category": "support",
+    "amount": "l[0.2, 0.25, 0.3]",
+    "duration": "r[3, 5]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": false
+      },
+      {
+        "id": "text",
+        "text": "l[Documentation étudiée!, Man page assimilée!, Compétence augmentée!]",
+        "style": "{'color':'green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "version_control",
+    "name": "Version Control",
+    "description": "Compétence Réaliser : Git Shield - crée un blindage via le contrôle de version.",
+    "enabled": true,
+    "type": "dev",
+    "category": "support",
+    "amount": "l[0.28, 0.33, 0.38]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[8, 18]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[Commit sauvegardé!, Repo sécurisé!, Backup créée!]",
+        "style": "{'color':'dark_green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "c_optimization",
+    "name": "C Optimization",
+    "description": "Compétence Optimiser : Attaque en C - frappe rapide et directe.",
+    "enabled": true,
+    "type": "opti",
+    "category": "damage",
+    "amount": 95,
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[8, 18]",
+    "charge_recharge": "l[28, 38, 48]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.35, 0.45, 0.55]",
+        "crit_damage": "l[1.6, 1.8, 2.0]",
+        "piercing": "l[0.1, 0.2, 0.3]"
+      },
+      {
+        "id": "text",
+        "text": "l[Compilé optimisé!, Pointeur déréférencé!, Mémoire libérée!]",
+        "style": "{'color':'red','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "big_o_analysis",
+    "name": "Big O Analysis",
+    "description": "Compétence Optimiser : Analyse de complexité - buff intelligent pour la performance.",
+    "enabled": true,
+    "type": "opti",
+    "category": "support",
+    "amount": "l[0.3, 0.35, 0.4]",
+    "duration": "r[4, 6]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "l[attack, l[attack, charge], attack]",
+        "reverse": false
+      },
+      {
+        "id": "text",
+        "text": "l[Algo optimisé!, Complexité réduite!, Performance +O(1)!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "compiler_shield",
+    "name": "Compiler Shield",
+    "description": "Compétence Optimiser : Compilateur défensif - protection par optimisation.",
+    "enabled": true,
+    "type": "opti",
+    "category": "support",
+    "amount": "l[0.32, 0.37, 0.42]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.15]",
+    "flat": "r[10, 20]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[Warnings supprimés!, -O3 activée!, Protégé!]",
+        "style": "{'color':'orange','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "sudo_attack",
+    "name": "Sudo Attack",
+    "description": "Compétence Administrer : Attaque avec droits root - frappe administrative puissante.",
+    "enabled": true,
+    "type": "syst",
+    "category": "damage",
+    "amount": 100,
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[10, 20]",
+    "charge_recharge": "l[30, 40, 50]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.3, 0.4, 0.5]",
+        "crit_damage": "l[1.5, 1.7, 1.9]",
+        "piercing": "l[0.15, 0.25, 0.35]"
+      },
+      {
+        "id": "text",
+        "text": "l[Sudo autorisé!, Privilèges escaladés!, Système pwned!]",
+        "style": "{'color':'dark_red','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "firewall_debuff",
+    "name": "Firewall Debuff",
+    "description": "Compétence Administrer : Pare-feu restrictif - réduit les capacités de l'adversaire.",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "l[0.2, 0.25, 0.3]",
+    "duration": "r[3, 5]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": true
+      },
+      {
+        "id": "text",
+        "text": "l[Ports bloqués!, Connexion refusée!, Accès denié!]",
+        "style": "{'color':'dark_gray','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "backup_shield",
+    "name": "Backup Shield",
+    "description": "Compétence Administrer : Sauvegarde système - protection via la redondance.",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "l[0.35, 0.4, 0.45]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.15]",
+    "flat": "r[12, 22]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[RAID activé!, Redondance double!, Sûr!]",
+        "style": "{'color':'blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "sql_injection",
+    "name": "SQL Injection",
+    "description": "Compétence Gérer : Attaque par injection SQL - frappe via mauvaise gestion de données.",
+    "enabled": true,
+    "type": "data",
+    "category": "damage",
+    "amount": 90,
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.05]",
+    "flat": "r[8, 18]",
+    "charge_recharge": "l[25, 35, 45]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.25, 0.35, 0.45]",
+        "crit_damage": "l[1.4, 1.6, 1.8]",
+        "piercing": "l[0.1, 0.15, 0.25]"
+      },
+      {
+        "id": "text",
+        "text": "l[Query injectée!, Tables droppées!, DB corrompue!]",
+        "style": "{'color':'aqua','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "normalization",
+    "name": "Normalization",
+    "description": "Compétence Gérer : Normalisation DB - optimise et buff la structure.",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "duration": "r[3, 5]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "l[attack, charge]",
+        "reverse": false
+      },
+      {
+        "id": "text",
+        "text": "l[3NF appliquée!, Redondance éliminée!, Requête optimisée!]",
+        "style": "{'color':'green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "transaction_shield",
+    "name": "Transaction Shield",
+    "description": "Compétence Gérer : Transaction ACID - protège via l'intégrité des données.",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "l[0.3, 0.35, 0.4]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[10, 20]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[Transaction safe!, Commit atomique!, Rollback possible!]",
+        "style": "{'color':'dark_blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "uml_strike",
+    "name": "UML Strike",
+    "description": "Compétence Concevoir : Diagramme UML - frappe basée sur l'architecture.",
+    "enabled": true,
+    "type": "proj",
+    "category": "damage",
+    "amount": 92,
+    "chance": "l[0.9, 0.95, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.05]",
+    "flat": "r[8, 18]",
+    "charge_recharge": "l[28, 38, 48]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.3, 0.4, 0.5]",
+        "crit_damage": "l[1.5, 1.7, 1.9]",
+        "piercing": "l[0.1, 0.2, 0.25]"
+      },
+      {
+        "id": "text",
+        "text": "l[Diagramme parfait!, Classes bien définies!, Architecture clean!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "design_pattern",
+    "name": "Design Pattern",
+    "description": "Compétence Concevoir : Applique un pattern - buff le design du système.",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": "l[0.28, 0.33, 0.38]",
+    "duration": "r[4, 6]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "l[attack, defense, l[attack, defense]]",
+        "reverse": false
+      },
+      {
+        "id": "text",
+        "text": "l[Singleton appliqué!, Factory créée!, Facade intégrée!]",
+        "style": "{'color':'light_purple','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "api_shield",
+    "name": "API Shield",
+    "description": "Compétence Concevoir : API bien documentée - défense par l'interface.",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": "l[0.32, 0.37, 0.42]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.15]",
+    "flat": "r[10, 20]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[API sécurisée!, Tokens validés!, CORS activé!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "git_commit",
+    "name": "Git Commit",
+    "description": "Compétence Collaborer : Commit d'équipe - frappe synchronisée via Git.",
+    "enabled": true,
+    "type": "team",
+    "category": "damage",
+    "amount": 88,
+    "chance": "l[0.9, 0.95, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.05]",
+    "flat": "r[8, 16]",
+    "charge_recharge": "l[25, 35, 45]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.25, 0.35, 0.45]",
+        "crit_damage": "l[1.4, 1.6, 1.8]",
+        "piercing": "l[0.05, 0.1, 0.2]"
+      },
+      {
+        "id": "text",
+        "text": "l[Commit poussé!, Pull request fusionnée!, Merge réussi!]",
+        "style": "{'color':'dark_green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "agile_sprint",
+    "name": "Agile Sprint",
+    "description": "Compétence Collaborer : Sprint Agile - buff du momentum d'équipe.",
+    "enabled": true,
+    "type": "team",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "duration": "r[3, 5]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "l[attack, l[attack, charge], charge]",
+        "reverse": false
+      },
+      {
+        "id": "text",
+        "text": "l[Sprint lancé!, Vélocité +1!, Daily standup fait!]",
+        "style": "{'color':'blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "code_review",
+    "name": "Code Review",
+    "description": "Compétence Collaborer : Revue de code - protection par pair programming.",
+    "enabled": true,
+    "type": "team",
+    "category": "support",
+    "amount": "l[0.3, 0.35, 0.4]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[10, 20]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[Pair reviewed!, Bug fixé!, Qualité OK!]",
+        "style": "{'color':'green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "python_growth",
+    "name": "Python Growth",
+    "description": "Croissance progressive - attaque faible qui accumule de l'expérience",
+    "enabled": true,
+    "type": "dev",
+    "category": "damage",
+    "amount": 35,
+    "chance": "l[0.95, 1.0, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[2, 8]",
+    "charge_recharge": "l[30, 40, 50]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.1, 0.15, 0.2]",
+        "crit_damage": "l[1.2, 1.3, 1.4]",
+        "piercing": "l[0.0, 0.05, 0.1]"
+      },
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": false,
+        "amount": "0.1",
+        "duration": "-1"
+      },
+      {
+        "id": "text",
+        "text": "l[Expérience gagnée!, Code amélioré!, +Puissance!]",
+        "style": "{'color':'green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "accumulate_power",
+    "name": "Accumulate Power",
+    "description": "Accumulation de puissance - buff d'attaque permanent et défense temporaire",
+    "enabled": true,
+    "type": "dev",
+    "category": "support",
+    "amount": "0.25",
+    "duration": "-1",
+    "chance": "l[0.95, 1.0, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": false
+      },
+      {
+        "id": "buff",
+        "stats": "defense",
+        "reverse": false,
+        "amount": "0.15",
+        "duration": "r[2, 3]"
+      },
+      {
+        "id": "text",
+        "text": "l[Puissance accumulée!, Armure renforcée!, Énergie stockée!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "defensive_shell",
+    "name": "Defensive Shell",
+    "description": "Carapace défensive - protection progressive qui s'améliore avec le temps",
+    "enabled": true,
+    "type": "dev",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[1.0, 1.05, 1.1]",
+    "flat": "r[8, 15]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "buff",
+        "stats": "defense",
+        "reverse": false,
+        "amount": "0.08",
+        "duration": "-1"
+      },
+      {
+        "id": "text",
+        "text": "l[Carapace tissée!, Défense +8%!, Blindage permanent!]",
+        "style": "{'color':'dark_blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "regenerate_code",
+    "name": "Regenerate Code",
+    "description": "Régénération de code - soigne ET augmente les stats à long terme",
+    "enabled": true,
+    "type": "dev",
+    "category": "support",
+    "amount": "l[0.2, 0.25, 0.3]",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[15, 25]",
+    "chance": "l[1.0, 1.0, 1.0]",
+    "actions": [
+      {
+        "id": "heal"
+      },
+      {
+        "id": "buff",
+        "stats": "l[hp, attack]",
+        "reverse": false,
+        "amount": "0.12",
+        "duration": "-1"
+      },
+      {
+        "id": "text",
+        "text": "l[Code régénéré!, Santé +12%!, Force +12%!]",
+        "style": "{'color':'blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "compound_buff",
+    "name": "Compound Buff",
+    "description": "Buff composé - augmente TOUS les buffs existants en les amplifiant",
+    "enabled": true,
+    "type": "dev",
+    "category": "special",
+    "amount": "l[0.3, 0.35, 0.4]",
+    "duration": "-1",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "l[attack, defense, l[attack, defense, attack]]",
+        "reverse": false,
+        "amount": "0.2"
+      },
+      {
+        "id": "buff",
+        "stats": "charge",
+        "reverse": false,
+        "amount": "0.15"
+      },
+      {
+        "id": "text",
+        "text": "l[Buffs amplifiés!, Effet synergique!, Puissance géométrique!]",
+        "style": "{'color':'light_purple','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "ultimate_transcendence",
+    "name": "Ultimate Transcendence",
+    "description": "Transcendance ultime - coup final qui multiplie tous les buffs accumulés par 2",
+    "enabled": true,
+    "type": "dev",
+    "category": "special",
+    "amount": "l[80, 100, 120]",
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[1.5, 2.0, 2.5]",
+    "flat": "r[30, 60]",
+    "duration": "-1",
+    "charge_usage": "1.0",
+    "charge_recharge": "l[50, 60, 70]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.5, 0.6, 0.7]",
+        "crit_damage": "l[2.0, 2.5, 3.0]",
+        "piercing": "l[0.2, 0.3, 0.4]"
+      },
+      {
+        "id": "buff",
+        "stats": "l[attack, defense, charge]",
+        "reverse": false,
+        "amount": "0.4",
+        "duration": "-1"
+      },
+      {
+        "id": "buff",
+        "stats": "l[attack, attack, defense]",
+        "reverse": false,
+        "amount": "0.25",
+        "duration": "-1"
+      },
+      {
+        "id": "text",
+        "text": "l[TRANSCENDANCE!, Puissance absolue!, Immense pouvoir!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "kanban_jab",
+    "name": "Kanban Jab",
+    "description": "Coup rapide Kanban - attaque faible mais rapide du workflow",
+    "enabled": true,
+    "type": "proj",
+    "category": "damage",
+    "amount": 45,
+    "chance": "l[0.95, 1.0, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[3, 8]",
+    "charge_recharge": "l[50, 60, 70]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.15, 0.2, 0.25]",
+        "crit_damage": "l[1.2, 1.3, 1.4]",
+        "piercing": "l[0.05, 0.1, 0.15]"
+      },
+      {
+        "id": "text",
+        "text": "l[Tâche déplacée!, Workflow fluide!, Kanban coup!]",
+        "style": "{'color':'blue','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "scrum_master_debuff",
+    "name": "Scrum Master Debuff",
+    "description": "Bloqueur Scrum - réduit l'énergie de l'adversaire avec des obstacles",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": "l[0.15, 0.2, 0.25]",
+    "duration": "r[2, 3]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": true
+      },
+      {
+        "id": "buff",
+        "stats": "charge",
+        "reverse": true,
+        "amount": "0.1"
+      },
+      {
+        "id": "text",
+        "text": "l[Bloqueur identifié!, Obstacle créé!, Sprint ralenti!]",
+        "style": "{'color':'orange','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "burndown_shield",
+    "name": "Burndown Shield",
+    "description": "Courbe de burndown - défense basée sur la réduction progressive",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": "l[0.2, 0.25, 0.3]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[8, 15]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "text",
+        "text": "l[Charge réduite!, Tâches complétées!, Risque diminué!]",
+        "style": "{'color':'cyan','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "sprint_planning",
+    "name": "Sprint Planning",
+    "description": "Planification de sprint - recharge rapide pour l'ultime",
+    "enabled": true,
+    "type": "proj",
+    "category": "special",
+    "amount": "25",
+    "chance": "l[0.95, 1.0, 1.0]",
+    "actions": [
+      {
+        "id": "modify",
+        "field": "self.charge",
+        "value": "r[40, 60]"
+      },
+      {
+        "id": "text",
+        "text": "l[Sprint préparé!, Charge accumulée!, Prêt pour l'ultime!]",
+        "style": "{'color':'light_purple','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "gantt_wall",
+    "name": "Gantt Wall",
+    "description": "Mur GANTT - construction d'une chronologie défensive",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": "l[0.4, 0.45, 0.5]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[1.0, 1.05, 1.15]",
+    "flat": "r[15, 25]",
+    "duration": "r[2, 4]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "buff",
+        "stats": "defense",
+        "reverse": false,
+        "amount": "0.12",
+        "duration": "r[2, 4]"
+      },
+      {
+        "id": "text",
+        "text": "l[Timeline construite!, Jalons définis!, Mur GANTT!]",
+        "style": "{'color':'green','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "project_tsunami",
+    "name": "Project Tsunami",
+    "description": "Tsunami de projet - ultime dévastatrice cheatée qui recharge rapidement",
+    "enabled": true,
+    "type": "proj",
+    "category": "special",
+    "amount": "l[150, 180, 220]",
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[2.0, 2.5, 3.0]",
+    "flat": "r[50, 100]",
+    "charge_usage": "0.8",
+    "charge_recharge": "l[70, 80, 90]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.6, 0.7, 0.8]",
+        "crit_damage": "l[2.5, 3.0, 3.5]",
+        "piercing": "l[0.3, 0.4, 0.5]"
+      },
+      {
+        "id": "buff",
+        "stats": "l[attack, defense]",
+        "reverse": false,
+        "amount": "0.3",
+        "duration": "r[2, 3]"
+      },
+      {
+        "id": "buff",
+        "stats": "charge",
+        "reverse": false,
+        "amount": "0.4",
+        "duration": "r[1, 2]"
+      },
+      {
+        "id": "text",
+        "text": "l[TSUNAMI DE PROJET!, Tous les sprints à la fois!, CHAOS!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
   }
 ]
