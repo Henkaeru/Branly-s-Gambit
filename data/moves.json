@@ -53,121 +53,8 @@
     "mult": "l[0.9, 1.0, 1.1]",
     "flat": "r[0, 10]",
     "actions": [
-      { "id": "shield" }
-    ]
-  },
-  {
-    "id": "heal_basic",
-    "name": "Basic Heal",
-    "enabled": true,
-    "amount": "l[0.2, 0.25, 0.3]",
-    "type": "dev",
-    "category": "support",
-    "calc_target": "self",
-    "calc_field": "hp",
-    "mult": "l[0.9, 1.0, 1.1]",
-    "flat": "r[0, 10]",
-    "actions": [
-      { "id": "heal" }
-    ]
-  },
-  {
-    "id": "modify_basic",
-    "name": "Basic Modify",
-    "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "chance": "l[0.7, 0.85, 1.0]",
-    "actions": [
       {
-        "id": "modify",
-        "field": "self.hp",
-        "value": "r[3, 12]"
-      }
-    ]
-  },
-  {
-    "id": "text_basic",
-    "name": "Basic Text",
-    "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "actions": [
-      {
-        "id": "text",
-        "text": "l[Hello!, Nice!, Go!, Pow!]",
-        "style": "l[{'color':'red','bold':true},{'color':'gold','bold':true},{'color':'blue'}]"
-      }
-    ]
-  },
-  {
-    "id": "status_basic",
-    "name": "Basic Status",
-    "enabled": true,
-    "type": "dev",
-    "category": "support",
-    "chance": "l[0.6, 0.8, 1.0]",
-    "actions": [
-      {
-        "id": "status",
-        "operation": "l[add, add, remove]",
-        "status": [
-          { "id": "l[poison, javaBien]" }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "condition_basic",
-    "name": "Basic Condition",
-    "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "actions": [
-      {
-        "id": "condition",
-        "conditions": [
-          { "id": "hp_below", "value": "l[0.3, 0.4, 0.5]" }
-        ],
-        "actions": [
-          { "id": "damage", "amount": "r[15, 35]", "calc_target": "opponent", "calc_field": "hp" }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "random_basic",
-    "name": "Basic Random",
-    "enabled": true,
-    "amount": "l[40, 50, 60]",
-    "type": "dev",
-    "category": "special",
-    "actions": [
-      {
-        "id": "random",
-        "choices": [
-          { "action": { "id": "damage" }, "weight": "r[1, 3]" },
-          { "action": { "id": "heal" }, "weight": "r[1, 3]" },
-          { "action": { "id": "shield" }, "weight": "r[1, 3]" }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "repeat_basic",
-    "name": "Basic Repeat",
-    "enabled": true,
-    "amount": "l[40, 50, 60]",
-    "type": "dev",
-    "category": "special",
-    "actions": [
-      {
-        "id": "repeat",
-        "count": "l[2, 2, 3]",
-        "actions": [
-          { "id": "heal" },
-          { "id": "damage" }
-        ]
+        "id": "shield"
       }
     ]
   },
@@ -189,20 +76,98 @@
     "charge_recharge": "l[20, 33, 40]",
     "charge_usage": "100",
     "actions": [
-      { "id": "damage", "crit_chance": "l[0.2, 0.3, 0.4]", "crit_damage": "l[1.4, 1.6, 1.8]", "piercing": "l[0.05, 0.1, 0.2]" },
-      { "id": "buff", "stats": "l[attack, defense, l[attack,defense]]", "reverse": "l[false, false, true]" },
-      { "id": "shield" },
-      { "id": "heal" },
-      { "id": "modify", "field": "self.hp", "value": "r[5, 15]" },
-      { "id": "text", "text": "l[Ultimate Test!, Boom!, Zap!]", "style": "l[{'color':'gold','bold':true},{'color':'red','bold':true},{'color':'aqua'}]" },
-      { "id": "status", "operation": "l[add, add, remove]", "status": [ { "id": "l[poison, javaBien]" } ] },
-      { "id": "condition", "conditions": [ { "id": "hp_below", "value": "l[0.4, 0.5, 0.6]" } ], "actions": [ { "id": "damage", "amount": "r[20, 50]" } ] },
-      { "id": "random", "choices": [ { "action": { "id": "damage" }, "weight": "r[1, 3]" }, { "action": { "id": "heal" }, "weight": "r[1, 3]" }, { "action": { "id": "shield" }, "weight": "r[1, 3]" } ] },
-      { "id": "repeat", "count": "l[2, 3]", "actions": [ { "id": "text", "text": "Repeating Test", "style": "{'color':'red'}" }, { "id": "damage" } ] }
+      {
+        "id": "damage",
+        "crit_chance": "l[0.2, 0.3, 0.4]",
+        "crit_damage": "l[1.4, 1.6, 1.8]",
+        "piercing": "l[0.05, 0.1, 0.2]"
+      },
+      {
+        "id": "buff",
+        "stats": "l[attack, defense, l[attack,defense]]",
+        "reverse": "l[false, false, true]"
+      },
+      {
+        "id": "shield"
+      },
+      {
+        "id": "heal"
+      },
+      {
+        "id": "modify",
+        "field": "self.hp",
+        "value": "r[5, 15]"
+      },
+      {
+        "id": "text",
+        "text": "l[Ultimate Test!, Boom!, Zap!]",
+        "style": "l[{'color':'gold','bold':true},{'color':'red','bold':true},{'color':'aqua'}]"
+      },
+      {
+        "id": "status",
+        "operation": "l[add, add, remove]",
+        "status": [
+          {
+            "id": "l[poison, javaBien]"
+          }
+        ]
+      },
+      {
+        "id": "condition",
+        "conditions": [
+          {
+            "id": "hp_below",
+            "value": "l[0.4, 0.5, 0.6]"
+          }
+        ],
+        "actions": [
+          {
+            "id": "damage",
+            "amount": "r[20, 50]"
+          }
+        ]
+      },
+      {
+        "id": "random",
+        "choices": [
+          {
+            "action": {
+              "id": "damage"
+            },
+            "weight": "r[1, 3]"
+          },
+          {
+            "action": {
+              "id": "heal"
+            },
+            "weight": "r[1, 3]"
+          },
+          {
+            "action": {
+              "id": "shield"
+            },
+            "weight": "r[1, 3]"
+          }
+        ]
+      },
+      {
+        "id": "repeat",
+        "count": "l[2, 3]",
+        "actions": [
+          {
+            "id": "text",
+            "text": "Repeating Test",
+            "style": "{'color':'red'}"
+          },
+          {
+            "id": "damage"
+          }
+        ]
+      }
     ]
   },
   {
-    "id": "python_strike",
+    "id": "python_growth",
     "name": "Python Strike",
     "description": "Compétence Réaliser : Attaque basique avec Python - frappe simple mais efficace.",
     "enabled": true,
@@ -228,206 +193,6 @@
       {
         "id": "text",
         "text": "l[Script Python exécuté!, Code pythonique!, Indentation parfaite!]",
-        "style": "{'color':'blue','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "man_page_read",
-    "name": "Man Page Read",
-    "description": "Compétence Réaliser : Lecture du manuel - buff d'attaque via la documentation.",
-    "enabled": true,
-    "type": "dev",
-    "category": "support",
-    "amount": "l[0.2, 0.25, 0.3]",
-    "duration": "r[3, 5]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "attack",
-        "reverse": false
-      },
-      {
-        "id": "text",
-        "text": "l[Documentation étudiée!, Man page assimilée!, Compétence augmentée!]",
-        "style": "{'color':'green','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "version_control",
-    "name": "Version Control",
-    "description": "Compétence Réaliser : Git Shield - crée un blindage via le contrôle de version.",
-    "enabled": true,
-    "type": "dev",
-    "category": "support",
-    "amount": "l[0.28, 0.33, 0.38]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.1]",
-    "flat": "r[8, 18]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[Commit sauvegardé!, Repo sécurisé!, Backup créée!]",
-        "style": "{'color':'dark_green','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "c_optimization",
-    "name": "C Optimization",
-    "description": "Compétence Optimiser : Attaque en C - frappe rapide et directe.",
-    "enabled": true,
-    "type": "opti",
-    "category": "damage",
-    "amount": 95,
-    "chance": "l[0.85, 0.9, 0.95]",
-    "target": "opponent",
-    "calc_target": "self",
-    "calc_field": "attack",
-    "mult": "l[0.95, 1.0, 1.1]",
-    "flat": "r[8, 18]",
-    "charge_recharge": "l[28, 38, 48]",
-    "actions": [
-      {
-        "id": "damage",
-        "calc_target": "self",
-        "calc_field": "attack",
-        "crit_chance": "l[0.35, 0.45, 0.55]",
-        "crit_damage": "l[1.6, 1.8, 2.0]",
-        "piercing": "l[0.1, 0.2, 0.3]"
-      },
-      {
-        "id": "text",
-        "text": "l[Compilé optimisé!, Pointeur déréférencé!, Mémoire libérée!]",
-        "style": "{'color':'red','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "big_o_analysis",
-    "name": "Big O Analysis",
-    "description": "Compétence Optimiser : Analyse de complexité - buff intelligent pour la performance.",
-    "enabled": true,
-    "type": "opti",
-    "category": "support",
-    "amount": "l[0.3, 0.35, 0.4]",
-    "duration": "r[4, 6]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "l[attack, l[attack, charge], attack]",
-        "reverse": false
-      },
-      {
-        "id": "text",
-        "text": "l[Algo optimisé!, Complexité réduite!, Performance +O(1)!]",
-        "style": "{'color':'gold','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "compiler_shield",
-    "name": "Compiler Shield",
-    "description": "Compétence Optimiser : Compilateur défensif - protection par optimisation.",
-    "enabled": true,
-    "type": "opti",
-    "category": "support",
-    "amount": "l[0.32, 0.37, 0.42]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.15]",
-    "flat": "r[10, 20]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[Warnings supprimés!, -O3 activée!, Protégé!]",
-        "style": "{'color':'orange','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "sudo_attack",
-    "name": "Sudo Attack",
-    "description": "Compétence Administrer : Attaque avec droits root - frappe administrative puissante.",
-    "enabled": true,
-    "type": "syst",
-    "category": "damage",
-    "amount": 100,
-    "chance": "l[0.85, 0.9, 0.95]",
-    "target": "opponent",
-    "calc_target": "self",
-    "calc_field": "attack",
-    "mult": "l[0.95, 1.0, 1.1]",
-    "flat": "r[10, 20]",
-    "charge_recharge": "l[30, 40, 50]",
-    "actions": [
-      {
-        "id": "damage",
-        "calc_target": "self",
-        "calc_field": "attack",
-        "crit_chance": "l[0.3, 0.4, 0.5]",
-        "crit_damage": "l[1.5, 1.7, 1.9]",
-        "piercing": "l[0.15, 0.25, 0.35]"
-      },
-      {
-        "id": "text",
-        "text": "l[Sudo autorisé!, Privilèges escaladés!, Système pwned!]",
-        "style": "{'color':'dark_red','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "firewall_debuff",
-    "name": "Firewall Debuff",
-    "description": "Compétence Administrer : Pare-feu restrictif - réduit les capacités de l'adversaire.",
-    "enabled": true,
-    "type": "syst",
-    "category": "support",
-    "amount": "l[0.2, 0.25, 0.3]",
-    "duration": "r[3, 5]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "attack",
-        "reverse": true
-      },
-      {
-        "id": "text",
-        "text": "l[Ports bloqués!, Connexion refusée!, Accès denié!]",
-        "style": "{'color':'dark_gray','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "backup_shield",
-    "name": "Backup Shield",
-    "description": "Compétence Administrer : Sauvegarde système - protection via la redondance.",
-    "enabled": true,
-    "type": "syst",
-    "category": "support",
-    "amount": "l[0.35, 0.4, 0.45]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.15]",
-    "flat": "r[12, 22]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[RAID activé!, Redondance double!, Sûr!]",
         "style": "{'color':'blue','bold':true}"
       }
     ]
@@ -464,201 +229,39 @@
     ]
   },
   {
-    "id": "normalization",
-    "name": "Normalization",
-    "description": "Compétence Gérer : Normalisation DB - optimise et buff la structure.",
+    "id": "python_growth",
+    "name": "Python Growth",
+    "description": "Croissance progressive - attaque faible qui accumule de l'expérience",
     "enabled": true,
-    "type": "data",
-    "category": "support",
-    "amount": "l[0.25, 0.3, 0.35]",
-    "duration": "r[3, 5]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "l[attack, charge]",
-        "reverse": false
-      },
-      {
-        "id": "text",
-        "text": "l[3NF appliquée!, Redondance éliminée!, Requête optimisée!]",
-        "style": "{'color':'green','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "transaction_shield",
-    "name": "Transaction Shield",
-    "description": "Compétence Gérer : Transaction ACID - protège via l'intégrité des données.",
-    "enabled": true,
-    "type": "data",
-    "category": "support",
-    "amount": "l[0.3, 0.35, 0.4]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.1]",
-    "flat": "r[10, 20]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[Transaction safe!, Commit atomique!, Rollback possible!]",
-        "style": "{'color':'dark_blue','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "uml_strike",
-    "name": "UML Strike",
-    "description": "Compétence Concevoir : Diagramme UML - frappe basée sur l'architecture.",
-    "enabled": true,
-    "type": "proj",
+    "type": "dev",
     "category": "damage",
-    "amount": 92,
-    "chance": "l[0.9, 0.95, 1.0]",
+    "amount": 35,
+    "chance": "l[0.95, 1.0, 1.0]",
     "target": "opponent",
     "calc_target": "self",
     "calc_field": "attack",
-    "mult": "l[0.95, 1.0, 1.05]",
-    "flat": "r[8, 18]",
-    "charge_recharge": "l[28, 38, 48]",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[2, 8]",
+    "charge_recharge": "l[30, 40, 50]",
     "actions": [
       {
         "id": "damage",
         "calc_target": "self",
         "calc_field": "attack",
-        "crit_chance": "l[0.3, 0.4, 0.5]",
-        "crit_damage": "l[1.5, 1.7, 1.9]",
-        "piercing": "l[0.1, 0.2, 0.25]"
+        "crit_chance": "l[0.1, 0.15, 0.2]",
+        "crit_damage": "l[1.2, 1.3, 1.4]",
+        "piercing": "l[0.0, 0.05, 0.1]"
       },
-      {
-        "id": "text",
-        "text": "l[Diagramme parfait!, Classes bien définies!, Architecture clean!]",
-        "style": "{'color':'gold','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "design_pattern",
-    "name": "Design Pattern",
-    "description": "Compétence Concevoir : Applique un pattern - buff le design du système.",
-    "enabled": true,
-    "type": "proj",
-    "category": "support",
-    "amount": "l[0.28, 0.33, 0.38]",
-    "duration": "r[4, 6]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
       {
         "id": "buff",
-        "stats": "l[attack, defense, l[attack, defense]]",
-        "reverse": false
+        "stats": "attack",
+        "reverse": false,
+        "amount": "0.1",
+        "duration": "-1"
       },
       {
         "id": "text",
-        "text": "l[Singleton appliqué!, Factory créée!, Facade intégrée!]",
-        "style": "{'color':'light_purple','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "api_shield",
-    "name": "API Shield",
-    "description": "Compétence Concevoir : API bien documentée - défense par l'interface.",
-    "enabled": true,
-    "type": "proj",
-    "category": "support",
-    "amount": "l[0.32, 0.37, 0.42]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.15]",
-    "flat": "r[10, 20]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[API sécurisée!, Tokens validés!, CORS activé!]",
-        "style": "{'color':'gold','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "git_commit",
-    "name": "Git Commit",
-    "description": "Compétence Collaborer : Commit d'équipe - frappe synchronisée via Git.",
-    "enabled": true,
-    "type": "team",
-    "category": "damage",
-    "amount": 88,
-    "chance": "l[0.9, 0.95, 1.0]",
-    "target": "opponent",
-    "calc_target": "self",
-    "calc_field": "attack",
-    "mult": "l[0.95, 1.0, 1.05]",
-    "flat": "r[8, 16]",
-    "charge_recharge": "l[25, 35, 45]",
-    "actions": [
-      {
-        "id": "damage",
-        "calc_target": "self",
-        "calc_field": "attack",
-        "crit_chance": "l[0.25, 0.35, 0.45]",
-        "crit_damage": "l[1.4, 1.6, 1.8]",
-        "piercing": "l[0.05, 0.1, 0.2]"
-      },
-      {
-        "id": "text",
-        "text": "l[Commit poussé!, Pull request fusionnée!, Merge réussi!]",
-        "style": "{'color':'dark_green','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "agile_sprint",
-    "name": "Agile Sprint",
-    "description": "Compétence Collaborer : Sprint Agile - buff du momentum d'équipe.",
-    "enabled": true,
-    "type": "team",
-    "category": "support",
-    "amount": "l[0.25, 0.3, 0.35]",
-    "duration": "r[3, 5]",
-    "chance": "l[0.9, 0.95, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "l[attack, l[attack, charge], charge]",
-        "reverse": false
-      },
-      {
-        "id": "text",
-        "text": "l[Sprint lancé!, Vélocité +1!, Daily standup fait!]",
-        "style": "{'color':'blue','bold':true}"
-      }
-    ]
-  },
-  {
-    "id": "code_review",
-    "name": "Code Review",
-    "description": "Compétence Collaborer : Revue de code - protection par pair programming.",
-    "enabled": true,
-    "type": "team",
-    "category": "support",
-    "amount": "l[0.3, 0.35, 0.4]",
-    "calc_target": "self",
-    "calc_field": "defense",
-    "mult": "l[0.95, 1.0, 1.1]",
-    "flat": "r[10, 20]",
-    "actions": [
-      {
-        "id": "shield"
-      },
-      {
-        "id": "text",
-        "text": "l[Pair reviewed!, Bug fixé!, Qualité OK!]",
+        "text": "l[Expérience gagnée!, Code amélioré!, +Puissance!]",
         "style": "{'color':'green','bold':true}"
       }
     ]
@@ -1070,7 +673,9 @@
         "name": "confused",
         "duration": 2,
         "reverse": true,
-        "stats": {"attack": -0.25},
+        "stats": {
+          "attack": -0.25
+        },
         "target": "opponent"
       },
       {
@@ -1098,7 +703,9 @@
         "name": "demoralized",
         "duration": 3,
         "reverse": true,
-        "stats": {"defense": -0.3},
+        "stats": {
+          "defense": -0.3
+        },
         "target": "opponent"
       },
       {
@@ -1126,7 +733,9 @@
         "name": "isolated",
         "duration": 2,
         "reverse": true,
-        "stats": {"charge_bonus": -0.4},
+        "stats": {
+          "charge_bonus": -0.4
+        },
         "target": "opponent"
       },
       {
@@ -1154,7 +763,10 @@
         "name": "overwhelmed",
         "duration": 3,
         "reverse": true,
-        "stats": {"attack": -0.2, "charge_bonus": -0.3},
+        "stats": {
+          "attack": -0.2,
+          "charge_bonus": -0.3
+        },
         "target": "opponent"
       },
       {
@@ -1165,58 +777,418 @@
     ]
   },
   {
-    "id": "morale_crash",
-    "name": "Morale Crash",
-    "description": "Completely destroy team morale and confidence",
-    "accuracy": 85,
-    "charge_cost": 7,
-    "priority": 0,
+    "id": "cache_hit",
+    "name": "Cache Hit",
+    "description": "Coup rapide optimisé par cache - recharge l'ult très vite",
+    "enabled": true,
+    "type": "opti",
+    "category": "damage",
+    "amount": 50,
+    "chance": "l[0.95, 1.0, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.9, 1.0, 1.1]",
+    "flat": "r[3, 8]",
+    "charge_recharge": "l[5, 10, 15]",
     "actions": [
       {
-        "type": "damage",
-        "value": 35,
-        "target": "opponent"
-      },
-      {
-        "type": "buff",
-        "name": "broken_morale",
-        "duration": 4,
-        "reverse": true,
-        "stats": {"attack": -0.35, "defense": -0.25},
-        "target": "opponent"
-      },
-      {
-        "type": "text",
-        "text": "[Morale Crash!, Team confidence shattered!]",
-        "style": "{'color':'darkred','bold':true}"
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.3, 0.4, 0.5]",
+        "crit_damage": "l[1.3, 1.4, 1.5]",
+        "piercing": "l[0.0, 0.05, 0.1]"
       }
     ]
   },
   {
-    "id": "psychological_warfare",
-    "name": "Psychological Warfare",
-    "description": "Master debuff: Attack all aspects of the opponent's capabilities",
-    "accuracy": 80,
-    "charge_cost": 9,
-    "priority": 1,
+    "id": "loop_optimization",
+    "name": "Loop Optimization",
+    "description": "Optimisation de boucle - recharge massivement l'ult",
+    "enabled": true,
+    "type": "opti",
+    "category": "special",
+    "amount": "35",
+    "chance": "l[0.95, 1.0, 1.0]",
     "actions": [
       {
-        "type": "damage",
-        "value": 50,
-        "target": "opponent"
+        "id": "modify",
+        "target": "self",
+        "field": "charge",
+        "operation": "add",
+        "value": "l[45, 55, 65]"
+      }
+    ]
+  },
+  {
+    "id": "cpu_pipeline",
+    "name": "CPU Pipeline",
+    "description": "Pipeline CPU optimisé - petit dégât + recharge",
+    "enabled": true,
+    "type": "opti",
+    "category": "damage",
+    "amount": 40,
+    "chance": "l[0.95, 1.0, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.85, 0.95, 1.0]",
+    "flat": "r[2, 6]",
+    "charge_recharge": "l[8, 12, 18]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.25, 0.35, 0.45]",
+        "crit_damage": "l[1.2, 1.3, 1.4]",
+        "piercing": "l[0.0, 0.05, 0.08]"
+      }
+    ]
+  },
+  {
+    "id": "memory_defrag",
+    "name": "Memory Defrag",
+    "description": "Défragmentation mémoire - défense + recharge",
+    "enabled": true,
+    "type": "opti",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[8, 15]",
+    "charge_recharge": "l[10, 15, 20]",
+    "actions": [
+      {
+        "id": "shield"
+      }
+    ]
+  },
+  {
+    "id": "compiler_turbo",
+    "name": "Compiler Turbo",
+    "description": "Compilateur turbo -O3 - ultime ultra-rapide",
+    "enabled": true,
+    "type": "opti",
+    "category": "special",
+    "amount": "l[120, 150, 180]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[1.5, 1.8, 2.0]",
+    "flat": "r[30, 50]",
+    "charge_usage": "0.7",
+    "charge_recharge": "l[40, 50, 60]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.4, 0.5, 0.6]",
+        "crit_damage": "l[1.5, 1.7, 1.9]",
+        "piercing": "l[0.1, 0.15, 0.2]"
       },
       {
-        "type": "buff",
-        "name": "psychological_breakdown",
-        "duration": 3,
+        "id": "text",
+        "text": "Compilation complète en {crit_chance}ms!"
+      }
+    ]
+  },
+  {
+    "id": "acid_commitment",
+    "name": "ACID Commitment",
+    "description": "Engagement ACID - shield permanent qui garantit l'intégrité",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "l[0.35, 0.4, 0.45]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[1.0, 1.05, 1.15]",
+    "flat": "r[15, 25]",
+    "duration": "-1",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "buff",
+        "stats": "defense",
+        "reverse": false,
+        "amount": "0.15",
+        "duration": "-1"
+      }
+    ]
+  },
+  {
+    "id": "transaction_rollback",
+    "name": "Transaction Rollback",
+    "description": "Annule les dégâts reçus - défense basée sur le rollback",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "l[0.3, 0.35, 0.4]",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[20, 35]",
+    "chance": "l[0.95, 1.0, 1.0]",
+    "actions": [
+      {
+        "id": "heal"
+      }
+    ]
+  },
+  {
+    "id": "index_wall",
+    "name": "Index Wall",
+    "description": "Mur d'index - défense très forte basée sur les index B-tree",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "l[0.4, 0.45, 0.5]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[1.0, 1.1, 1.2]",
+    "flat": "r[20, 30]",
+    "duration": "r[2, 4]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "buff",
+        "stats": "defense",
+        "reverse": false,
+        "amount": "0.18",
+        "duration": "r[2, 4]"
+      }
+    ]
+  },
+  {
+    "id": "foreign_key_lock",
+    "name": "Foreign Key Lock",
+    "description": "Verrou de clé étrangère - débuff et protection simultanée",
+    "enabled": true,
+    "type": "data",
+    "category": "special",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "duration": "r[2, 3]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "shield"
+      },
+      {
+        "id": "buff",
+        "stats": "attack",
         "reverse": true,
-        "stats": {"attack": -0.4, "defense": -0.35, "charge_bonus": -0.5},
-        "target": "opponent"
+        "amount": "0.2"
+      }
+    ]
+  },
+  {
+    "id": "database_fortress",
+    "name": "Database Fortress",
+    "description": "Forteresse DB - ultime défensive qui protège l'application",
+    "enabled": true,
+    "type": "data",
+    "category": "special",
+    "amount": "l[0.5, 0.55, 0.6]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[1.3, 1.5, 1.7]",
+    "flat": "r[40, 60]",
+    "duration": "r[3, 5]",
+    "charge_usage": "1.0",
+    "charge_recharge": "l[60, 75, 90]",
+    "actions": [
+      {
+        "id": "shield"
       },
       {
-        "type": "text",
-        "text": "[Psychological Warfare!, Opponent completely shattered!]",
-        "style": "{'color':'gold','bold':true}"
+        "id": "buff",
+        "stats": "l[defense, defense, hp]",
+        "reverse": false,
+        "amount": "0.3",
+        "duration": "r[3, 5]"
+      }
+    ]
+  },
+  {
+    "id": "process_kill",
+    "name": "Process Kill",
+    "description": "Tue un processus ennemi - attaque modérée",
+    "enabled": true,
+    "type": "syst",
+    "category": "damage",
+    "amount": 65,
+    "chance": "l[0.9, 0.95, 1.0]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[0.95, 1.0, 1.05]",
+    "flat": "r[5, 12]",
+    "charge_recharge": "l[20, 30, 40]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.2, 0.3, 0.4]",
+        "crit_damage": "l[1.3, 1.4, 1.5]",
+        "piercing": "l[0.05, 0.1, 0.15]"
+      }
+    ]
+  },
+  {
+    "id": "permission_shield",
+    "name": "Permission Shield",
+    "description": "Chmod 700 - défense personnelle modérée",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[8, 15]",
+    "actions": [
+      {
+        "id": "shield"
+      }
+    ]
+  },
+  {
+    "id": "system_heal",
+    "name": "System Heal",
+    "description": "Réparation système - restaure la santé",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "l[0.2, 0.25, 0.3]",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[15, 25]",
+    "chance": "l[0.95, 1.0, 1.0]",
+    "actions": [
+      {
+        "id": "heal"
+      }
+    ]
+  },
+  {
+    "id": "load_balancer",
+    "name": "Load Balancer",
+    "description": "Équilibreur de charge - débuff l'ennemi légèrement",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "l[0.15, 0.2, 0.25]",
+    "duration": "r[2, 3]",
+    "chance": "l[0.9, 0.95, 1.0]",
+    "actions": [
+      {
+        "id": "buff",
+        "stats": "attack",
+        "reverse": true,
+        "amount": "0.15"
+      }
+    ]
+  },
+  {
+    "id": "system_restoration",
+    "name": "System Restoration",
+    "description": "Restauration système complète - ultime équilibrée",
+    "enabled": true,
+    "type": "syst",
+    "category": "special",
+    "amount": "l[70, 90, 110]",
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[1.2, 1.5, 1.8]",
+    "flat": "r[20, 40]",
+    "duration": "r[2, 3]",
+    "charge_usage": "1.0",
+    "charge_recharge": "l[45, 55, 65]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.3, 0.4, 0.5]",
+        "crit_damage": "l[1.4, 1.6, 1.8]",
+        "piercing": "l[0.1, 0.15, 0.2]"
+      },
+      {
+        "id": "heal",
+        "amount": "0.2",
+        "calc_field": "hp"
+      },
+      {
+        "id": "buff",
+        "stats": "l[defense, hp]",
+        "reverse": false,
+        "amount": "0.15",
+        "duration": "r[2, 3]"
+      }
+    ]
+  },
+  {
+    "id": "team_defense",
+    "name": "Team Defense",
+    "description": "Stratégie défensive d'équipe - protection par coordination",
+    "enabled": true,
+    "type": "team",
+    "category": "support",
+    "amount": "l[0.25, 0.3, 0.35]",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "mult": "l[0.95, 1.0, 1.1]",
+    "flat": "r[10, 18]",
+    "actions": [
+      {
+        "id": "shield"
+      }
+    ]
+  },
+  {
+    "id": "total_breakdown",
+    "name": "Total Breakdown",
+    "description": "Effondrement total - ultime qui débuff massivement ET fait dégâts",
+    "enabled": true,
+    "type": "team",
+    "category": "special",
+    "amount": "l[60, 80, 100]",
+    "chance": "l[0.85, 0.9, 0.95]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "mult": "l[1.3, 1.6, 1.9]",
+    "flat": "r[25, 45]",
+    "charge_usage": "1.0",
+    "charge_recharge": "l[55, 65, 75]",
+    "actions": [
+      {
+        "id": "damage",
+        "calc_target": "self",
+        "calc_field": "attack",
+        "crit_chance": "l[0.35, 0.45, 0.55]",
+        "crit_damage": "l[1.5, 1.7, 1.9]",
+        "piercing": "l[0.15, 0.2, 0.3]"
+      },
+      {
+        "id": "buff",
+        "stats": "l[attack, defense, charge]",
+        "reverse": true,
+        "amount": "l[0.35, 0.4, 0.5]",
+        "duration": "r[3, 4]"
       }
     ]
   }

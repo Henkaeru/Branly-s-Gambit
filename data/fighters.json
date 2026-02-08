@@ -64,7 +64,7 @@
         "id": "fighter_005",
         "name": "quiniou gildas",
         "type": "syst",
-        "description": "administrateur système - maître du sudo, firewall et sauvegarde",
+        "description": "administrateur système - tank léger équilibré, tout-terrain fiable",
         "stats": {
             "hp": 350,
             "attack": 85,
@@ -75,13 +75,13 @@
         "starting_stats":{
             "shield": 75
         },
-        "moves": ["sudo_attack", "firewall_debuff", "backup_shield", "python_strike", "man_page_read", "version_control"]
+        "moves": ["process_kill", "permission_shield", "system_heal", "load_balancer", "system_restoration"]
     },
     {
         "id": "fighter_006",
         "name": "porhiel clément",
         "type": "data",
-        "description": "spécialiste données - SQL, normalisation et transactions ACID",
+        "description": "expert DB relationnel avec transactions ACID - gros tank qui garantit le bon fonctionnement des applications",
         "stats": {
             "hp": 450,
             "attack": 60,
@@ -92,13 +92,13 @@
         "starting_stats":{
             "shield": 50
         },
-        "moves": ["sql_injection", "normalization", "transaction_shield", "python_strike", "man_page_read", "version_control"]
+        "moves": ["sql_injection", "acid_commitment", "transaction_rollback", "index_wall", "foreign_key_lock", "database_fortress"]
     },
     {
         "id": "fighter_007",
         "name": "faure jean-batiste",
         "type": "opti",
-        "description": "assaillant optimisateur - C, Big O et compilateur -O3",
+        "description": "expert optimisation - charge son ult ultra-vite avec des mouvements légers mais rapides",
         "stats": {
             "hp": 285,
             "attack": 75,
@@ -109,13 +109,13 @@
         "starting_stats":{
             "shield": 25
         },
-        "moves": ["c_optimization", "big_o_analysis", "compiler_shield", "python_strike", "man_page_read", "version_control"]
+        "moves": ["cache_hit", "loop_optimization", "cpu_pipeline", "memory_defrag", "compiler_turbo"]
     },
     {
         "id": "fighter_008",
         "name": "primot carole",
         "type": "team",
-        "description": "expert communication et gestion d'équipe - débuff l'adversaire à mort",
+        "description": "expert communication et gestion d'équipe - débuff l'adversaire à mort avec défense",
         "stats": {
             "hp": 320,
             "attack": 65,
@@ -126,6 +126,6 @@
         "starting_stats":{
             "shield": 20
         },
-        "moves": ["communication_breakdown", "toxic_feedback", "team_isolation", "meeting_overload", "morale_crash", "psychological_warfare"]
+        "moves": ["communication_breakdown", "toxic_feedback", "team_isolation", "meeting_overload", "team_defense", "total_breakdown"]
     }
 ]
