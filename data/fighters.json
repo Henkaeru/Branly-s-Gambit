@@ -79,10 +79,10 @@
     },
     {
         "id": "fighter_005",
-        "name": "faure jean-baptiste",
+        "name": "jezequel tiphaine",
         "type": "opti",
         "description": "Assaillant : tempo et frappes répétées, mobile et polyvalent.",
-        "fighter_sprite": "fighters/battle_sprite/jean_baptiste_sprite.png",
+        "fighter_sprite": "fighters/battle_sprite/tiphaine_sprite.png",
         "stats": {
             "hp": 300,
             "attack": 50,
