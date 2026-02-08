@@ -1,109 +1,116 @@
 [
     {
-        "id": "fighter_003",
+        "id": "fighter_001",
         "name": "lietard ludovic",
-        "description": "druide du develloppement ce régene tout le temps et accumule les buffs",
+        "description": "Druide : spécialiste du soutien et des buffs à long terme.",
         "type": "dev",
         "fighter_sprite": "fighters/battle_sprite/ludovic_sprite.png",
         "stats": {
-            "hp": 750,
+            "hp": 500,
             "attack": 85,
             "defense": 85,
             "shield": 0,
             "charge_bonus": 0.8
         },
         "starting_stats": {
-            "hp": 280,
+            "hp": 200,
             "shield": 0
         },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+        "moves": ["git_branch", "hotfix", "refactoring_java", "java_bien"]
+    },
+    {
+        "id": "fighter_002",
+        "name": "tottereau benoit",
+        "type": "proj",
+        "description": "Canon de verre : très offensif mais fragile. shield back with ult",
+        "fighter_sprite": "fighters/battle_sprite/benoit_sprite.png",
+        "stats": {
+            "hp": 150,
+            "attack": 130,
+            "defense": 50,
+            "shield": 500,
+            "charge_bonus": 1.2
+        },
+        "starting_stats": {
+            "shield": 50
+        },
+        "moves": ["kickoff_critique", "filling_backlog", "poker", "dont_touch_my_daughter"]
+    },
+    {
+        "id": "fighter_003",
+        "name": "quiniou gildas",
+        "type": "syst",
+        "description": "Trickster : contrôle et debuffs, gameplay axé sur la disruption.",
+        "fighter_sprite": "fighters/battle_sprite/gildas_sprite.png",
+        "stats": {
+            "hp": 300,
+            "attack": 100,
+            "defense": 100,
+            "shield": 200,
+            "charge_bonus": 1.0
+        },
+        "starting_stats":{
+            "shield": 50
+        },
+        "moves": ["fork_bomb", "reverse_proxy", "cron_roulette", "home_bigpapoo"]
     },
     {
         "id": "fighter_004",
-        "name": "tottereau benoit",
-        "type": "proj",
-        "fighter_sprite": "fighters/battle_sprite/benoit_sprite.png",
-        "description": "ulti donne plus de shield",
+        "name": "porhiel clément",
+        "type": "data",
+        "description": "Tank : robuste, excelle dans l'attrition et la survie.",
+        "fighter_sprite": "fighters/battle_sprite/clement_sprite.png",
         "stats": {
-            "hp": 150,
-            "attack": 165,
-            "defense": 65,
-            "charge_bonus": 1.2,
-            "shield": 500
+            "hp": 400,
+            "attack": 60,
+            "defense": 150,
+            "shield": 200,
+            "charge_bonus": 0.8
         },
-        "starting_stats": {
+        "starting_stats":{
             "shield": 100
         },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+        "moves": [
+            "select_shield",
+            "select_defense_as_damage",
+            "alter_column_shield",
+            "begin_postgresql"
+        ]
     },
     {
         "id": "fighter_005",
-        "name": "quiniou gildas",
-        "type": "syst",
-        "fighter_sprite": "fighters/battle_sprite/gildas_sprite.png",
+        "name": "faure jean-baptiste",
+        "type": "opti",
+        "description": "Assaillant : tempo et frappes répétées, mobile et polyvalent.",
+        "fighter_sprite": "fighters/battle_sprite/jean_baptiste_sprite.png",
         "stats": {
-            "hp": 350,
-            "attack": 85,
-            "defense": 110,
-            "charge_bonus": 1.0,
-            "shield": 300
+            "hp": 300,
+            "attack": 50,
+            "defense": 90,
+            "shield": 85,
+            "charge_bonus": 1.1
         },
         "starting_stats":{
-            "shield": 75
+            "shield": 85
         },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+        "moves": ["linear_complexity", "cache_miss", "pruning_branch", "prime_sieve"]
     },
     {
         "id": "fighter_006",
-        "name": "porhiel clément",
-        "type": "data",
-        "fighter_sprite": "fighters/battle_sprite/clement_sprite.png",
-        "stats": {
-            "hp": 450,
-            "attack": 60,
-            "defense": 150,
-            "charge_bonus": 1.0,
-            "shield": 200
-        },
-        "starting_stats":{
-            "shield": 50
-        },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
-    },
-    {
-        "id": "fighter_007",
-        "name": "faure jean-batiste",
-        "type": "opti",
-        "description": "assaillant frappe pas fort mais de nombreux coup",
-        "fighter_sprite": "fighters/battle_sprite/jean_batiste_sprite.png",
-        "stats": {
-            "hp": 285,
-            "attack": 75,
-            "defense": 90,
-            "charge_bonus": 1.3,
-            "shield": 85
-        },
-        "starting_stats":{
-            "shield": 25
-        },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
-    },
-    {
-        "id": "fighter_008",
         "name": "primot carole",
         "type": "team",
-        "description": "trickster spécialiser en debuff",
+        "description": "Polyvalent (tout-terrain) : équilibré, conçu pour s'adapter.",
         "fighter_sprite": "fighters/battle_sprite/carole_sprite.png",
         "stats": {
-            "hp": 290,
-            "attack": 85,
-            "defense": 120,
-            "charge_bonus": 1.1,
-            "shield": 50
+            "hp": 300,
+            "attack": 110,
+            "defense": 110,
+            "shield": 300,
+            "charge_bonus": 1.0
         },
         "starting_stats":{
-            "shield": 10
+            "shield": 100
         },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
+        "moves": ["interview", "press_badge", "editorial_angle", "le_branly"]
     }
 ]

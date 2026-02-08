@@ -48,6 +48,7 @@ class BattleScreen(Screen):
 
         # small font for status/buff duration overlays
         self._status_font = pygame.font.SysFont(None, 24, bold=True)
+        self._last_active_fighter_id = None
 
     def on_enter(self):
         self._build_ui()
@@ -145,15 +146,19 @@ class BattleScreen(Screen):
         logs = self.controller.visible_logs()
         self.log_box.set_text("<br>".join(logs))
 
-        # Update move button usability and glow animation
+        user = None
+        moves = []
         try:
             ctx = self.battle_engine.battle.current_context
             user = ctx.active_fighter
+            if getattr(self, "_last_active_fighter_id", None) != id(user):
+                self._last_active_fighter_id = id(user)
+                self._build_move_buttons()
             moves = self.controller.current_moves(user)
         except Exception:
-            user = None
-            moves = []
+            pass
 
+        # Update move button usability and glow animation
         t = pygame.time.get_ticks() / 1000.0
         for i, btn in enumerate(self.move_buttons):
             move = moves[i] if i < len(moves) else None

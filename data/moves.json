@@ -1,204 +1,466 @@
 [
   {
-    "id": "damage_basic",
-    "name": "Basic Damage",
-    "calc_field": "attack",
+    "id": "git_branch",
+    "name": "Git Branch",
+    "description": "50 dégâts sur l’ennemi, +60 charge.",
     "enabled": true,
     "type": "dev",
-    "amount": 80,
-    "chance": "l[0.85, 0.9, 0.95, 1.0]",
+    "category": "damage",
+    "amount": 50,
     "target": "opponent",
     "calc_target": "self",
-    "description": "Baseline damaging move using random crit/piercing values.",
-    "mult": "l[0.9, 1.0, 1.1]",
-    "flat": "r[0, 10]",
-    "charge_recharge": "l[20, 33, 40]",
+    "calc_field": "attack",
+    "charge_recharge": 60,
     "actions": [
-      {
-        "id": "damage",
-        "calc_target": "self",
-        "calc_field": "attack",
-        "crit_chance": "l[0.25, 0.35, 0.5]",
-        "crit_damage": "l[1.4, 1.5, 1.6, 1.8]",
-        "piercing": "l[0.0, 0.05, 0.1, 0.2]"
-      }
+      { "id": "damage" }
     ]
   },
   {
-    "id": "buff_basic",
-    "name": "Basic Buff",
-    "amount": "l[0.2, 0.25, 0.3]",
-    "duration": "r[2, 4]",
+    "id": "hotfix",
+    "name": "Hotfix",
+    "description": "Soin 120 sur soi, +15 charge.",
     "enabled": true,
     "type": "dev",
     "category": "support",
-    "chance": "l[0.85, 0.9, 1.0]",
-    "actions": [
-      {
-        "id": "buff",
-        "stats": "l[attack, defense, l[attack,charge], l[attack,defense]]",
-        "reverse": "l[false, false, false, true]"
-      }
-    ]
-  },
-  {
-    "id": "shield_basic",
-    "name": "Basic Shield",
-    "enabled": true,
-    "amount": "l[0.2, 0.25, 0.3]",
-    "type": "dev",
-    "category": "support",
+    "amount": 120,
+    "target": "self",
     "calc_target": "self",
     "calc_field": "hp",
-    "mult": "l[0.9, 1.0, 1.1]",
-    "flat": "r[0, 10]",
-    "actions": [
-      { "id": "shield" }
-    ]
-  },
-  {
-    "id": "heal_basic",
-    "name": "Basic Heal",
-    "enabled": true,
-    "amount": "l[0.2, 0.25, 0.3]",
-    "type": "dev",
-    "category": "support",
-    "calc_target": "self",
-    "calc_field": "hp",
-    "mult": "l[0.9, 1.0, 1.1]",
-    "flat": "r[0, 10]",
+    "charge_recharge": 15,
     "actions": [
       { "id": "heal" }
     ]
   },
   {
-    "id": "modify_basic",
-    "name": "Basic Modify",
-    "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "chance": "l[0.7, 0.85, 1.0]",
-    "actions": [
-      {
-        "id": "modify",
-        "field": "self.hp",
-        "value": "r[3, 12]"
-      }
-    ]
-  },
-  {
-    "id": "text_basic",
-    "name": "Basic Text",
-    "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "actions": [
-      {
-        "id": "text",
-        "text": "l[Hello!, Nice!, Go!, Pow!]",
-        "style": "l[{'color':'red','bold':true},{'color':'gold','bold':true},{'color':'blue'}]"
-      }
-    ]
-  },
-  {
-    "id": "status_basic",
-    "name": "Basic Status",
+    "id": "refactoring_java",
+    "name": "Refactoring Java",
+    "description": "Buff attaque +15% et défense +15% (8 tours), coûte 30 de charge.",
     "enabled": true,
     "type": "dev",
     "category": "support",
-    "chance": "l[0.6, 0.8, 1.0]",
+    "amount": 0.15,
+    "duration": 8,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_usage": 30,
+    "charge_recharge": 0,
     "actions": [
-      {
-        "id": "status",
-        "operation": "l[add, add, remove]",
-        "status": [
-          { "id": "l[poison, javaBien]" }
-        ]
-      }
+      { "id": "buff", "stats": ["attack"], "amount": 0.15, "calc_field": "attack" },
+      { "id": "buff", "stats": ["defense"], "amount": 0.15, "calc_field": "defense" }
     ]
   },
   {
-    "id": "condition_basic",
-    "name": "Basic Condition",
+    "id": "java_bien",
+    "name": "JAVA BIEN ?",
+    "description": "Soin 999 sur soi et buff attaque +50% et défense +50% (3 tours), coûte 500 charge.",
     "enabled": true,
     "type": "dev",
     "category": "special",
+    "amount": 999,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "duration": 3,
+    "charge_usage": 500,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "heal", "amount": 999, "calc_field": "hp" },
+      { "id": "buff", "amount": 0.5, "stats": ["attack"], "calc_field": "attack" },
+      { "id": "buff", "amount": 0.5, "stats": ["defense"], "calc_field": "defense" }
+    ]
+  },
+  {
+    "id": "kickoff_critique",
+    "name": "Kickoff Critique",
+    "description": "140 dégâts, +100 charge.",
+    "enabled": true,
+    "type": "proj",
+    "category": "damage",
+    "amount": 140,
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 100,
+    "actions": [
+      { "id": "damage" }
+    ]
+  },
+  {
+    "id": "filling_backlog",
+    "name": "Filling Backlog",
+    "description": "1-5×1-20 dégâts, +40 charge (par coup).",
+    "enabled": true,
+    "type": "proj",
+    "category": "damage",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 40,
     "actions": [
       {
-        "id": "condition",
-        "conditions": [
-          { "id": "hp_below", "value": "l[0.3, 0.4, 0.5]" }
-        ],
+        "id": "repeat",
+        "count": "r[1,5]",
         "actions": [
-          { "id": "damage", "amount": "r[15, 35]", "calc_target": "opponent", "calc_field": "hp" }
+          { "id": "damage", "amount": "l[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" }
         ]
       }
     ]
   },
   {
-    "id": "random_basic",
-    "name": "Basic Random",
+    "id": "poker",
+    "name": "Poker",
+    "description": "50 dégâts, debuff -15% points de vie, +75 charge.",
     "enabled": true,
-    "amount": "l[40, 50, 60]",
-    "type": "dev",
+    "type": "proj",
     "category": "special",
+    "amount": 50,
+    "duration": 3,
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 75,
+    "actions": [
+      { "id": "damage" },
+      { "id": "buff", "amount": 0.15, "reverse": true, "stats": ["hp"], "calc_target": "opponent", "calc_field": "hp" }
+    ]
+  },
+  {
+    "id": "dont_touch_my_daughter",
+    "name": "Don't touch my daughter",
+    "description": "Bouclier 999 et buff attaque +20% (3 tours), coûte 900 charge.",
+    "enabled": true,
+    "type": "proj",
+    "category": "support",
+    "amount": 999,
+    "duration": 3,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_usage": 900,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "shield" },
+      { "id": "buff", "amount": 0.2, "stats": ["attack"], "calc_field": "attack" }
+    ]
+  },
+  {
+    "id": "fork_bomb",
+    "name": "Fork Bomb",
+    "description": "50-70 dégâts, 50% de chance de débuff attaque, défense ou hp de 5-25% (2-5 tours), +30 charge.",
+    "enabled": true,
+    "type": "syst",
+    "category": "damage",
+    "amount": "l[50,55,60,65,70]",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 30,
+    "actions": [
+      { "id": "damage" },
+      { "id": "random", "choices": [
+          { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["attack"], "calc_target": "opponent", "calc_field": "attack" }, "weight": 1 },
+          { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["defense"], "calc_target": "opponent", "calc_field": "defense" }, "weight": 1 },
+          { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["hp"], "calc_target": "opponent", "calc_field": "hp" }, "weight": 1 }
+        ], 
+        "chance": 0.5
+      }
+    ]
+  },
+  {
+    "id": "reverse_proxy",
+    "name": "Reverse Proxy",
+    "description": "Bouclier 50-100 sur soi et buff défense +10-25% (2-5 tours), +20 charge.",
+    "enabled": true,
+    "type": "syst",
+    "category": "support",
+    "amount": "r[50,100]",
+    "duration": "r[2,5]",
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_recharge": 20,
+    "actions": [
+      { "id": "shield" },
+      { "id": "buff", "amount": "r[0.1,0.25]", "stats": ["defense"], "calc_field": "defense" }
+    ]
+  },
+  {
+    "id": "cron_roulette",
+    "name": "Cron Roulette",
+    "description": "Effectue 1 action aléatoire : 80 dégâts OU 70 bouclier sur soi OU buff défense +15% (3 tours), coûte 60 charge.",
+    "enabled": true,
+    "type": "syst",
+    "category": "special",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_usage": 60,
+    "charge_recharge": 0,
     "actions": [
       {
         "id": "random",
         "choices": [
-          { "action": { "id": "damage" }, "weight": "r[1, 3]" },
-          { "action": { "id": "heal" }, "weight": "r[1, 3]" },
-          { "action": { "id": "shield" }, "weight": "r[1, 3]" }
+          { "action": { "id": "damage", "amount": 80 } , "weight": 1 },
+          { "action": { "id": "shield", "amount": 70, "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
+          { "action": { "id": "buff", "amount": 0.15, "duration": 3, "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 1 }
         ]
       }
     ]
   },
   {
-    "id": "repeat_basic",
-    "name": "Basic Repeat",
+    "id": "home_bigpapoo",
+    "name": "/home/bigpapoo",
+    "description": "Enchaîne 2 effets aléatoires distincts : 100-200 dégâts / 100-200 bouclier sur soi / buff défense +25-50% (3-6 tours), coûte 130 charge.",
     "enabled": true,
-    "amount": "l[40, 50, 60]",
-    "type": "dev",
+    "type": "syst",
     "category": "special",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "duration": "r[3,6]",
+    "charge_usage": 130,
+    "charge_recharge": 0,
+    "actions": [
+      {
+        "id": "random",
+        "count": 2,
+        "unique": true,
+        "choices": [
+          { "action": { "id": "damage", "amount": "r[100,200]" }, "weight": 1 },
+          { "action": { "id": "shield", "amount": "r[100,200]", "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
+          { "action": { "id": "buff", "amount": "r[0.25,0.5]", "duration": "r[3,6]", "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 1 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "select_shield",
+    "name": "SELECT shield...;",
+    "description": "Bouclier 50-150 sur soi, +25 charge.",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": "r[50,150]",
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_recharge": 25,
+    "actions": [
+      { "id": "shield" }
+    ]
+  },
+  {
+    "id": "select_defense_as_damage",
+    "name": "SELECT defense AS damage...;",
+    "description": "Inflige 30% de sa défense, +30 charge.",
+    "enabled": true,
+    "type": "data",
+    "category": "damage",
+    "amount": 0.3,
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "defense",
+    "charge_recharge": 30,
+    "actions": [
+      { "id": "damage", "calc_field": "defense", "calc_target": "self", "amount": 0.3 }
+    ]
+  },
+  {
+    "id": "alter_column_shield",
+    "name": "ALTER COLUMN shield...;",
+    "description": "Bouclier 150 et buff défense +25% (5 tours), coûte 70 charge.",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": 150,
+    "duration": 5,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_usage": 70,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "shield" },
+      { "id": "buff", "amount": 0.25, "stats": ["defense"], "calc_field": "defense" }
+    ]
+  },
+  {
+    "id": "begin_postgresql",
+    "name": "BEGIN PostgreSQL;",
+    "description": "Bouclier 250 et buff défense +40% (5 tours), coûte 300 charge.",
+    "enabled": true,
+    "type": "data",
+    "category": "support",
+    "amount": 250,
+    "duration": 5,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_usage": 300,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "shield" },
+      { "id": "buff", "amount": 0.4, "stats": ["defense"], "calc_field": "defense" }
+    ]
+  },
+  {
+    "id": "linear_complexity",
+    "name": "Linear Complexity",
+    "description": "2-6×20-50 dégâts, +20 charge (par coup).",
+    "enabled": true,
+    "type": "opti",
+    "category": "damage",
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 20,
     "actions": [
       {
         "id": "repeat",
-        "count": "l[2, 2, 3]",
+        "count": "r[2,6]",
         "actions": [
-          { "id": "heal" },
-          { "id": "damage" }
+          { "id": "damage", "amount": "l[20,25,30,35,40,45,50]" }
         ]
       }
     ]
   },
   {
-    "id": "test_all",
-    "name": "Ultimate Test Move",
-    "description": "Covers all actions with DSL-driven variability.",
+    "id": "cache_miss",
+    "name": "Cache Miss",
+    "description": "120 dégâts, +50 charge.",
     "enabled": true,
-    "type": "dev",
-    "category": "special",
-    "amount": "l[50, 60, 70]",
-    "chance": "l[0.85, 0.9, 1.0]",
+    "type": "opti",
+    "category": "damage",
+    "amount": 120,
     "target": "opponent",
     "calc_target": "self",
-    "calc_field": "hp",
-    "mult": "l[0.9, 1.0, 1.1]",
-    "flat": "r[0, 10]",
-    "duration": "r[2, 4]",
-    "charge_recharge": "l[20, 33, 40]",
-    "charge_usage": "100",
+    "calc_field": "attack",
+    "charge_recharge": 50,
     "actions": [
-      { "id": "damage", "crit_chance": "l[0.2, 0.3, 0.4]", "crit_damage": "l[1.4, 1.6, 1.8]", "piercing": "l[0.05, 0.1, 0.2]" },
-      { "id": "buff", "stats": "l[attack, defense, l[attack,defense]]", "reverse": "l[false, false, true]" },
-      { "id": "shield" },
-      { "id": "heal" },
-      { "id": "modify", "field": "self.hp", "value": "r[5, 15]" },
-      { "id": "text", "text": "l[Ultimate Test!, Boom!, Zap!]", "style": "l[{'color':'gold','bold':true},{'color':'red','bold':true},{'color':'aqua'}]" },
-      { "id": "status", "operation": "l[add, add, remove]", "status": [ { "id": "l[poison, javaBien]" } ] },
-      { "id": "condition", "conditions": [ { "id": "hp_below", "value": "l[0.4, 0.5, 0.6]" } ], "actions": [ { "id": "damage", "amount": "r[20, 50]" } ] },
-      { "id": "random", "choices": [ { "action": { "id": "damage" }, "weight": "r[1, 3]" }, { "action": { "id": "heal" }, "weight": "r[1, 3]" }, { "action": { "id": "shield" }, "weight": "r[1, 3]" } ] },
-      { "id": "repeat", "count": "l[2, 3]", "actions": [ { "id": "text", "text": "Repeating Test", "style": "{'color':'red'}" }, { "id": "damage" } ] }
+      { "id": "damage" }
+    ]
+  },
+  {
+    "id": "pruning_branch",
+    "name": "Pruning Branch",
+    "description": "1-3 buff d'attaque OU défense de 10% chacun (2-5 tours), coûte 100 charge.",
+    "enabled": true,
+    "type": "opti",
+    "category": "support",
+    "amount": 0.1,
+    "duration": "r[2,5]",
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_usage": 100,
+    "charge_recharge": 0,
+    "actions": [
+      {
+        "id": "repeat",
+        "count": "r[1,3]",
+        "actions": [
+          {
+            "id": "random",
+            "choices": [
+              { "action": { "id": "buff", "amount": 0.1, "duration": "r[2,5]", "stats": ["attack"], "calc_field": "attack" }, "weight": 1 },
+              { "action": { "id": "buff", "amount": 0.1, "duration": "r[2,5]", "stats": ["defense"], "calc_field": "defense" }, "weight": 1 }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prime_sieve",
+    "name": "Prime Sieve",
+    "description": "Frappe 2, 3, 5, 7, 11, 13 ou 17 fois pour 29 dégâts par coup; coûte 181 charge.",
+    "enabled": true,
+    "type": "opti",
+    "category": "special",
+    "amount": 29,
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_usage": 181,
+    "charge_recharge": 0,
+    "actions": [
+      {
+        "id": "repeat",
+        "count": "l[2,3,5,7,11,13,17]",
+        "actions": [
+          { "id": "damage", "amount": 29 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "interview",
+    "name": "Interview",
+    "description": "90 dégâts, +30 charge.",
+    "enabled": true,
+    "type": "team",
+    "category": "damage",
+    "amount": 90,
+    "target": "opponent",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_recharge": 30,
+    "actions": [
+      { "id": "damage" }
+    ]
+  },
+  {
+    "id": "press_badge",
+    "name": "Press Badge",
+    "description": "Bouclier 100 sur soi, +25 charge.",
+    "enabled": true,
+    "type": "team",
+    "category": "support",
+    "amount": 100,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_recharge": 25,
+    "actions": [
+      { "id": "shield" }
+    ]
+  },
+  {
+    "id": "editorial_angle",
+    "name": "Editorial Angle",
+    "description": "Buff attaque +12% et défense +12% sur soi (3 tours), coûte 90 charge.",
+    "enabled": true,
+    "type": "team",
+    "category": "support",
+    "amount": 0.12,
+    "duration": 3,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "attack",
+    "charge_usage": 90,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "buff", "amount": 0.12, "stats": ["attack"], "calc_field": "attack" },
+      { "id": "buff", "amount": 0.12, "stats": ["defense"], "calc_field": "defense" }
+    ]
+  },
+  {
+    "id": "le_branly",
+    "name": "Le Branly",
+    "description": "Soin 150 sur soi et bouclier 100 sur soi, coûte 150 charge.",
+    "enabled": true,
+    "type": "team",
+    "category": "special",
+    "amount": 150,
+    "target": "self",
+    "calc_target": "self",
+    "calc_field": "hp",
+    "charge_usage": 150,
+    "charge_recharge": 0,
+    "actions": [
+      { "id": "heal", "amount": 150, "calc_field": "hp" },
+      { "id": "shield", "amount": 100, "calc_field": "shield" }
     ]
   }
 ]

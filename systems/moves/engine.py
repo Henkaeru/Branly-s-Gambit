@@ -34,6 +34,8 @@ class MoveEngine:
             battle_ctx.log_stack.append(f"{user.current_fighter.name} does not have enough charge to use {move.name}. Required: {move.charge_usage}, Available: {user.current_stats.charge}")
             return
 
+        user.current_stats.charge -= move.charge_usage
+
         # This chance gates the entire move.
         # Action chances are independent and NOT inherited.
         if random.random() > move.chance:
