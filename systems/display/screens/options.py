@@ -16,7 +16,7 @@ class OptionsScreen(Screen):
 
         self.volume = UIHorizontalSlider(
             relative_rect=pygame.Rect((w//2 - 100, h//2 - 80), (200, 25)),
-            start_value=self.engine.config.master_volume,
+            start_value=self.engine.config.options.master_volume,
             value_range=(0.0, 1.0),
             manager=self.ui
         )
@@ -30,7 +30,7 @@ class OptionsScreen(Screen):
     def process_event(self, event):
         if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
             if event.ui_element == self.volume:
-                self.engine.config.master_volume = event.value
+                self.engine.config.options.master_volume = event.value
 
         elif event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.back:

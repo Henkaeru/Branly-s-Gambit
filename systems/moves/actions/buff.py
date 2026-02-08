@@ -63,6 +63,6 @@ class BuffHandler(ActionHandler):
         verb = "loses" if amount < 0 else "gains"
         for stat in stats:
             battle_ctx.log_stack.append(
-                f"{buff_target.current_fighter.name} {verb} {amount} {stat} for {move_ctx.duration} turn(s)"
+                f"{buff_target.current_fighter.name} {verb} {amount} {stat} for {raw_duration} turn(s)"
             )
         return True

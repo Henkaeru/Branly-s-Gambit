@@ -231,7 +231,6 @@ class BattleEngine:
         while side_idx < num_sides:
             if ctx.active_fighter_index < len(ctx.sides[side_idx]):
                 ctx.active_side = side_idx
-                ctx.log_stack.append(f"Active fighter is now {ctx.active_fighter.current_fighter.name}")
                 return
             side_idx += 1
 

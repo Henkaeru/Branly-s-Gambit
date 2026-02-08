@@ -225,7 +225,7 @@ class FighterVolatile(ResolvableModel):
 
     def add_shield(self, amount: int | float) -> int:
         """
-        Add to shield, clamped to [0, current HP] (not max_shield or max_hp).
+        Add to shield, clamped to [0, min(max_shield, current HP)].
         Returns the actual amount applied.
         """
         amt = int(round(amount))
@@ -233,8 +233,17 @@ class FighterVolatile(ResolvableModel):
             return 0
         cur_hp = getattr(self.current_stats, "hp")
         before = self.current_stats.shield
+
+        # determine shield cap: cannot exceed computed max shield or current HP
+        try:
+            max_shield = int(round(getattr(self.computed_stats, "shield")))
+        except Exception:
+            max_shield = cur_hp
+
+        cap = max(0, min(max_shield, cur_hp))
+
         new_val = before + amt
-        new_val = max(0, min(new_val, cur_hp))
+        new_val = max(0, min(new_val, cap))
         self.current_stats.shield = new_val
         return new_val - before
 
