@@ -28,7 +28,7 @@
     {
         "id": "fighter_003",
         "name": "lietard ludovic",
-        "description": "druide du développement - faible au début, devient inarrêtable avec le temps",
+        "description": "🧙 DRUIDE DU CODE | Faible au départ, il accumule une puissance démesurée au fil du combat. Chaque coup renforce ses buffs permanents jusqu'à la transcendance totale. Un adversaire patient mais inexorable.",
         "type": "dev",
         "stats": {
             "hp": 750,
@@ -47,7 +47,7 @@
         "id": "fighter_004",
         "name": "tottereau benoit",
         "type": "proj",
-        "description": "expert en gestion de projet - GATT et Agile, faible mais ultime cheaté",
+        "description": "⚡ CHEF DE PROJET BURST | Petit HP mais attaque dévastée! Maître du workflow Agile/Kanban, il recharge son ultime à la vitesse de l'éclair et se déchaîne avec Project Tsunami - un tsunami de gestion de projet qui écrase tout.",
         "stats": {
             "hp": 150,
             "attack": 165,
@@ -64,7 +64,7 @@
         "id": "fighter_005",
         "name": "quiniou gildas",
         "type": "syst",
-        "description": "administrateur système - tank léger équilibré, tout-terrain fiable",
+        "description": "🛡️ ADMIN SYSTÈME ALL-TERRAIN | L'équilibre parfait! Attaque solide, défense fiable, polyvalent sur tous les fronts. Maître des processus, des permissions et du load-balancing, il est toujours prêt à restaurer le système complet.",
         "stats": {
             "hp": 350,
             "attack": 85,
@@ -81,7 +81,7 @@
         "id": "fighter_006",
         "name": "porhiel clément",
         "type": "data",
-        "description": "expert DB relationnel avec transactions ACID - gros tank qui garantit le bon fonctionnement des applications",
+        "description": "🏰 FORTERESSE ACIDE | Tank massif de la donnée! Défense surhumaine garantie par l'intégrité ACID absolue. Chaque coup s'accompagne de commits atomiques et de rollbacks dévastateurs. Une base de données vivante qui ne tombe JAMAIS.",
         "stats": {
             "hp": 450,
             "attack": 60,
@@ -98,7 +98,7 @@
         "id": "fighter_007",
         "name": "faure jean-batiste",
         "type": "opti",
-        "description": "expert optimisation - charge son ult ultra-vite avec des mouvements légers mais rapides",
+        "description": "⚙️ EXPERT OPTIMISATION | Maître de l'efficacité ultime! Cache-hit, pipeline CPU et défragmentation mémoire le rendent ultra-rapide. Son ultime Compiler Turbo -O3 recharge en un clin d'œil, délivrant une frappe optimisée dévastrice.",
         "stats": {
             "hp": 285,
             "attack": 75,
@@ -115,7 +115,7 @@
         "id": "fighter_008",
         "name": "primot carole",
         "type": "team",
-        "description": "expert communication et gestion d'équipe - débuff l'adversaire à mort avec défense",
+        "description": "💔 SABOTEUR COMMUNICATIONNEL | Maîtresse du chaos émotionnel! Elle détruit l'adversaire via la toxicité, l'isolation et la surcharge de réunions. Son ultime Total Breakdown écrase tous les stats simultanément. Un psych-warfare humain dévastateur.",
         "stats": {
             "hp": 320,
             "attack": 65,
