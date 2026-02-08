@@ -673,7 +673,7 @@ class BattleScreen(Screen):
     
     def _update_fighter_name_ui(self, fv, center_x, top_y):
         # render a larger, brighter name surface with glow/background and present it as a UIImage
-        rect = pygame.Rect(center_x - 160, top_y - 150, 320, 48)
+        rect = pygame.Rect(center_x - 160, top_y - 100, 320, 48)
 
         name = fv.current_fighter.name.title()
         battle = self.battle_engine.battle
@@ -794,8 +794,8 @@ class BattleRenderer:
         # compute frames/rects and anchors for each fighter without blitting
         w, h = self.engine.window_size
         positions = [
-            (left, (self.engine.window_size[0] * 0.20, self.engine.window_size[1] * 0.5)),
-            (right, (self.engine.window_size[0] * 0.80, self.engine.window_size[1] * 0.5))
+            (left, (self.engine.window_size[0] * 0.25, self.engine.window_size[1] * 0.42)),
+            (right, (self.engine.window_size[0] * 0.75, self.engine.window_size[1] * 0.42))
         ]
 
         # prepare rects/anchors and update UI (names/icons)
@@ -856,11 +856,35 @@ class BattleRenderer:
             pass
 
     def build_view(self, fv, flip=False):
-        base = self.engine._load_image(
-            fv.current_fighter.fighter_sprite,
-            size=(260, 260),
-            flip=flip
-        )
+        # load original image (no forced scaling) and scale it to fit within a max box while preserving aspect ratio
+        max_w, max_h = 250, 250
+        # request original image by not passing size
+        orig = self.engine._load_image(fv.current_fighter.fighter_sprite, size=None, flip=False)
+
+        base = orig
+        try:
+            iw, ih = orig.get_size()
+        except Exception:
+            iw, ih = 0, 0
+
+        # if we have a valid image size, compute scale preserving aspect ratio
+        if iw > 0 and ih > 0:
+            scale = min(max_w / iw, max_h / ih, 1.0)
+            new_w = max(1, int(round(iw * scale)))
+            new_h = max(1, int(round(ih * scale)))
+            try:
+                if flip:
+                    # flip original then scale
+                    tmp = pygame.transform.flip(orig, True, False)
+                else:
+                    tmp = orig
+                base = pygame.transform.smoothscale(tmp, (new_w, new_h))
+            except Exception:
+                # fallback: ask engine to provide a sized image (best-effort)
+                base = self.engine._load_image(fv.current_fighter.fighter_sprite, size=(max_w, max_h), flip=flip)
+        else:
+            # fallback: force a sized image if original couldn't be loaded properly
+            base = self.engine._load_image(fv.current_fighter.fighter_sprite, size=(max_w, max_h), flip=flip)
 
         return {
             "idle": self._load_anim(fv, "idle", 2, base, flip),
@@ -979,7 +1003,7 @@ class BattleRenderer:
         t = pygame.time.get_ticks() / 1000.0
         pulse = (math.sin(t * 3.0) + 1) / 2
 
-        base_radius = 46
+        base_radius = 80
         radius = base_radius + pulse * 6
 
         # base shape size
@@ -1017,7 +1041,7 @@ class BattleRenderer:
 
         # nudge the highlight upward so it appears slightly above the ground anchor
         # use a fraction of the radius so the offset scales with ring size
-        vertical_nudge = int(radius * 1)
+        vertical_nudge = int(radius * -0.1)
         nudged_anchor = (anchor[0], anchor[1] - vertical_nudge)
         rect = ring.get_rect(center=nudged_anchor)
 

@@ -1,35 +1,10 @@
 [
     {
-        "id": "fighter_001",
-        "name": "Ryu",
-        "description": "A skilled martial artist from Japan.",
-        "type": "proj",
-        "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
-            "charge_bonus": 1.0
-        },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
-    },
-    {
-        "id": "fighter_002",
-        "name": "Ken",
-        "type": "proj",
-        "description": "A skilled martial artist from Japan.",
-        "stats": {
-            "hp": 300,
-            "attack": 100,
-            "defense": 100,
-            "charge_bonus": 1.0
-        },
-        "moves": ["damage_basic", "buff_basic", "shield_basic", "test_all"]
-    },
-    {
         "id": "fighter_003",
         "name": "lietard ludovic",
         "description": "druide du develloppement ce régene tout le temps et accumule les buffs",
         "type": "dev",
+        "fighter_sprite": "fighters/battle_sprite/ludovic_sprite.png",
         "stats": {
             "hp": 750,
             "attack": 85,
@@ -47,6 +22,7 @@
         "id": "fighter_004",
         "name": "tottereau benoit",
         "type": "proj",
+        "fighter_sprite": "fighters/battle_sprite/benoit_sprite.png",
         "description": "ulti donne plus de shield",
         "stats": {
             "hp": 150,
@@ -64,6 +40,7 @@
         "id": "fighter_005",
         "name": "quiniou gildas",
         "type": "syst",
+        "fighter_sprite": "fighters/battle_sprite/gildas_sprite.png",
         "stats": {
             "hp": 350,
             "attack": 85,
@@ -80,6 +57,7 @@
         "id": "fighter_006",
         "name": "porhiel clément",
         "type": "data",
+        "fighter_sprite": "fighters/battle_sprite/clement_sprite.png",
         "stats": {
             "hp": 450,
             "attack": 60,
@@ -97,6 +75,7 @@
         "name": "faure jean-batiste",
         "type": "opti",
         "description": "assaillant frappe pas fort mais de nombreux coup",
+        "fighter_sprite": "fighters/battle_sprite/jean_batiste_sprite.png",
         "stats": {
             "hp": 285,
             "attack": 75,
@@ -114,6 +93,7 @@
         "name": "primot carole",
         "type": "team",
         "description": "trickster spécialiser en debuff",
+        "fighter_sprite": "fighters/battle_sprite/carole_sprite.png",
         "stats": {
             "hp": 290,
             "attack": 85,
