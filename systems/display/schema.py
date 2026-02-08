@@ -8,6 +8,7 @@ class DisplayOptions(ResolvableModel):
     height: int = 720
     fullscreen: bool = False
     master_volume: float = 0.8
+    game_title: str = "Branly's Gambit"
     title_screen_background_sprite: Optional[str] = "backgrounds/default_title.png"
     character_selection_screen_background_sprite: Optional[str] = "backgrounds/default_character_selection.png"
     battle_screen_background_sprite: Optional[str] = "backgrounds/default_battle.png"
