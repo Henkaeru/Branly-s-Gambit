@@ -1,610 +1,364 @@
 # Liste Complète des Mouvements - Branly's Gambit
 
-## Refactorisation en Fonction du Cursus BUT Informatique
+**Total de Mouvements:** 40 (nettoyés et optimisés)
 
-Ce document documente les mouvements avec un focus adapté au cursus BUT Informatique:
-- **Attaques principales:** Java & C (langages cœur du cursus)
-- **Buffs cosmétiques:** HTML/CSS (pour rendre les pages belles)
-- **Concepts mathématiques/avancés:** Python (matrices, cryptographie, théorie des graphes)
+## Organisation par Type
 
----
-
-## Compétence Réaliser (Réorganisée)
-
-### Java Strike ✓
-- **Type:** Attaque OOP forte
-- **Dégât:** 95
-- **Coût Charge:** ~25-45
-- **Objectif:** Frappe orientée objet puissante
-- **Effets:** Classe instantiée, objet créé, héritage appliqué
-- **Note:** Java remplace Python comme attaque principale (langage central du BUT)
-
-### HTML/CSS Polish ✓
-- **Type:** Buff double stats (attack + defense)
-- **Dégât:** N/A (buff only)
-- **Durée:** 3-5 tours
-- **Objectif:** Embellissement interface web
-- **Effets:** Rend le design responsive et efficace
-- **Spécial:** Buff cosmétique qui augmente réellement les stats
-
-### Matrix Math ✓
-- **Type:** Support / Shield
-- **Dégât:** N/A (défense)
-- **Objectif:** Mathématiques matricielles Python
-- **Effets:** NumPy optimisé, matrice inversée, algèbre appliquée
-- **Spécial:** Python dédié aux maths/algèbre
+Les 40 mouvements sont organisés en 6 catégories principales:
+- **dev** (12 mouvements): Compétence Réaliser - développement Python
+- **proj** (6 mouvements): Compétence Gérer - gestion de projet Agile/Kanban
+- **data** (6 mouvements): Compétence Gérer - bases de données ACID
+- **opti** (5 mouvements): Compétence Optimiser - optimisation performance
+- **syst** (5 mouvements): Compétence Administrer - systèmes et infrastructure
+- **team** (2 mouvements): Compétence Collaborer - travail d'équipe
 
 ---
 
-## Compétence Optimiser (Réorganisée)
-
-### C Pointers Strike ✓
-- **Type:** Attaque très forte C
-- **Dégât:** 105
-- **Coût Charge:** ~28-48
-- **Objectif:** Frappe directe via gestion mémoire
-- **Effets:** Pointeur déréférencé, segfault, mémoire pwned
-- **Spécial:** C devient attaque ultra-puissante (105 dégâts)
-- **Note:** Représente le pouvoir bas-niveau de C
-
-### Graph Theory ✓
-- **Type:** Buff multi-stats (attack/charge boost)
-- **Durée:** 4-6 tours
-- **Objectif:** Théorie des graphes Python
-- **Effets:** Dijkstra appliqué, chemin optimal, BFS speedup
-- **Spécial:** Python pour l'algorithmique avancée
-
-### CSS Defense Style ✓
-- **Type:** Support / Shield
-- **Objectif:** Styles CSS défensifs
-- **Effets:** Flexbox activé, media queries appliquées
-- **Spécial:** CSS pour la protection responsive
-
----
-
-## Compétence Administrer (Réorganisée)
-
-### Java Network Attack ✓
-- **Type:** Attaque administrative forte
-- **Dégât:** 110
-- **Coût Charge:** ~30-50
-- **Objectif:** Attaque réseau Java
-- **Effets:** Socket connecté, paquets envoyés, système hacké
-- **Spécial:** Networking en Java (cursus PUT)
-
-### Encryption Break ✓
-- **Type:** Débuff (reverse true)
-- **Objectif:** Casse le chiffrement par cryptographie
-- **Effets:** RSA brisé, clés compromises, sécurité réduite
-- **Spécial:** Cryptographie Python (mathématiques appliquées)
-
-### Redundancy Shield ✓
-- **Type:** Support / Défense forte
-- **Objectif:** Redondance système
-- **Effets:** Failover activé, load balancer, résilience maximale
-- **Spécial:** Admin systems robustes
-
----
-
-## Compétence Gérer (Réorganisée)
-
-### Java DataFlow ✓
-- **Type:** Attaque données Java
-- **Dégât:** 100
-- **Objectif:** Flux de données via Streams/Collections
-- **Effets:** Stream.map() appliqué, collections triées, dataflow réorganisé
-- **Spécial:** Java Collections Framework
-
-### Cryptography Python ✓
-- **Type:** Support / Buff multi-stats
-- **Objectif:** Cryptographie Python
-- **Effets:** AES encrypté, hash généré, clé sécurisée
-- **Spécial:** Python pour la sécurité cryptographique
-
-### HTML Form Shield ✓
-- **Type:** Support / Shield
-- **Objectif:** Formulaires HTML sécurisés
-- **Effets:** Validation HTML5, CSRF token, input sécurisé
-- **Spécial:** HTML pour la validation côté client
-
----
-
-## Compétence Concevoir (Réorganisée)
-
-### Java Design ✓
-- **Type:** Attaque architecture OOP
-- **Dégât:** 102
-- **Objectif:** Conception architecture Java
-- **Effets:** Héritage appliqué, polymorphisme déployé, interface implémentée
-- **Spécial:** Design Patterns en Java
-
-### C Algorithms ✓
-- **Type:** Support / Buff double
-- **Objectif:** Algorithmes bas niveau C
-- **Effets:** Recursion optimisée, heap optimisé, cache hit
-- **Spécial:** C pour l'optimisation algorithmique
-
-### CSS Responsive Shield ✓
-- **Type:** Support / Shield adaptative
-- **Objectif:** Design responsive multi-écran
-- **Effets:** Breakpoints activés, mobile optimisé, adapter à tous
-- **Spécial:** CSS pour l'adaptabilité
-
----
-
-## Compétence Collaborer (Réorganisée)
-
-### Java Maven Strike ✓
-- **Type:** Attaque d'équipe Java
-- **Dégât:** 96
-- **Objectif:** Frappe Maven (gestion dépendances)
-- **Effets:** Dépendance résolue, POM buildé, jar packagé
-- **Spécial:** Maven est l'outil principal du cursus BUT
-
-### Python DataScience ✓
-- **Type:** Support / Buff multi-stats collectif
-- **Objectif:** Data Science Python
-- **Effets:** Pandas appliqué, correlation trouvée, insight généré
-- **Spécial:** Python pour l'analyse/science des données
-
-### HTML/CSS Collaboration ✓
-- **Type:** Support / Shield équipe
-- **Objectif:** Interface d'équipe via UI/UX
-- **Effets:** UI mockup partagé, design system, accessibility OK
-- **Spécial:** HTML/CSS pour le travail collaboratif
-
----
-
-## Résumé: Focus du Cursus BUT
-
-| Compétence | Attaque | Buff Cosmétique | Concept Math |
-|-----------|---------|-----------------|--------------|
-| **Réaliser** | Java Strike (95) | HTML/CSS Polish | Matrix Math |
-| **Optimiser** | C Pointers (105) | CSS Defense Style | Graph Theory |
-| **Administrer** | Java Network (110) | Redundancy | Encryption |
-| **Gérer** | Java DataFlow (100) | HTML Form Shield | Cryptography |
-| **Concevoir** | Java Design (102) | CSS Responsive | C Algorithms |
-| **Collaborer** | Java Maven (96) | HTML/CSS Collab | Python DataScience |
-
----
-
-## Leçons Clés
-
-✅ **Java:** Principal pour attaques OOP (95-110 dégâts)
-✅ **C:** Ultra-puissant pour bas niveau (105 dégâts pointers)
-✅ **HTML/CSS:** Toujours buffs cosmétiques pour rendre joli
-✅ **Python:** Dédié aux maths (matrices, graphes, cryptographie, data science)
-
-Les anciens mouvements Python Strike, Man Page Read, Version Control restent dans le JSON mais ne sont plus utilisés par les fighters de base.
-
+## Type DEV (Compétence Réaliser - 12 mouvements)
 
 ### Basic Damage
-- **Type:** Attaque forte
-- **Coût Charge:** Variable
-- **Objectif:** Dégâts basiques avec critiques et perçage
-- **Effets:** Dégâts directs, chance de critique, perçage de défense
+- **Dégât:** 80 (basique)
+- **Coût Charge:** 20-40
+- **Objectif:** Attaque basique avec dégâts variables
+- **Effets:** Dégâts, critique 25-50%, perçage 0-20%
 
 ### Basic Buff
-- **Type:** Support / Buff
-- **Objectif:** Augmente les stats (attaque, défense, charge)
-- **Effets:** Buff temporaire 2-4 tours sur stats aléatoires
+- **Type:** Support
+- **Durée:** 2-4 tours
+- **Objectif:** Buff aléatoire (attack/defense/charge)
+- **Effets:** Augmente les stats de base
 
 ### Basic Shield
-- **Type:** Support / Défense
-- **Objectif:** Crée un blindage défensif
-- **Effets:** Réduit les dégâts reçus pendant quelques tours
+- **Type:** Défense
+- **Dégât:** N/A
+- **Objectif:** Crée un blindage protecteur
+- **Effets:** Réduit les dégâts reçus
 
-### Basic Heal
-- **Type:** Support / Soins
-- **Objectif:** Restaure la santé
-- **Effets:** Soins basiques d'environ 20-30% des HP
-
-### Basic Modify
-- **Type:** Spécial
-- **Objectif:** Modifie directement les statistiques
-- **Effets:** Augmente/réduit les stats de façon imprévisible
-
-### Basic Text
-- **Type:** Spécial
-- **Objectif:** Affiche un message
-- **Effets:** Effet cosmétique, pas de mécanique réelle
-
-### Basic Status
-- **Type:** Support / Débuff
-- **Objectif:** Applique des statuts (poison, malédictions)
-- **Effets:** Ajoute ou supprime des effets d'état
-
-### Basic Condition
-- **Type:** Spécial
-- **Objectif:** Dégâts conditionnels (si HP bas)
-- **Effets:** Dégâts supplémentaires si l'ennemi est faible
-
-### Basic Random
-- **Type:** Spécial
-- **Objectif:** Effet aléatoire
-- **Effets:** Dégâts, soins, ou blindage aléatoire
-
-### Basic Repeat
-- **Type:** Spécial
-- **Objectif:** Répète une action plusieurs fois
-- **Effets:** Combine dégâts et soins en boucle
-
----
-
-## Mouvements de Test
-
-### Ultimate Test Move
-- **Type:** Attaque spéciale / Test
+### Test All
+- **Type:** Spécial/Test
 - **Objectif:** Teste tous les types d'actions
-- **Effets:** Combines tous les types (dégâts, buff, débuff, soins, etc.)
-
----
-
-## Compétence Réaliser
-
-### Python Strike
-- **Type:** Attaque forte
-- **Coût Charge:** ~25-45
-- **Dégât:** ~85
-- **Objectif:** Attaque de base solide avec Python
-- **Effets:** Dégâts avec critique et perçage
-
-### Man Page Read
-- **Type:** Support / Buff
-- **Objectif:** Augmente l'attaque par la documentation
-- **Effets:** Buff d'attaque 3-5 tours
-
-### Version Control
-- **Type:** Support / Défense
-- **Objectif:** Crée un blindage via Git
-- **Effets:** Shield temporaire (défense augmentée)
-
----
-
-## Compétence Optimiser
-
-### C Optimization
-- **Type:** Attaque très forte
-- **Coût Charge:** ~28-48
-- **Dégât:** ~95
-- **Objectif:** Attaque rapide et puissante en C
-- **Effets:** Dégâts très élevés avec critique 35-55%
-
-### Big O Analysis
-- **Type:** Support / Buff multi-stats
-- **Objectif:** Optimize la performance avec l'analyse algorithme
-- **Effets:** Buff attack ET charge 4-6 tours
-
-### Compiler Shield
-- **Type:** Support / Défense
-- **Objectif:** Protection par compilation optimisée
-- **Effets:** Shield puissant avec bonus de défense
-
----
-
-## Compétence Administrer
-
-### Sudo Attack
-- **Type:** Attaque très forte
-- **Coût Charge:** ~30-50
-- **Dégât:** ~100
-- **Objectif:** Attaque administrative avec privilèges root
-- **Effets:** Dégâts puissants avec grand perçage
-
-### Firewall Debuff
-- **Type:** Support / Débuff
-- **Objectif:** Réduit l'attaque de l'ennemi
-- **Effets:** Débuff d'attaque -25% pendant 3-5 tours
-
-### Backup Shield
-- **Type:** Support / Défense
-- **Objectif:** Protection via sauvegarde système (RAID)
-- **Effets:** Shield très puissant +35-45%
-
----
-
-## Compétence Gérer
-
-### SQL Injection
-- **Type:** Attaque forte
-- **Coût Charge:** ~25-45
-- **Dégât:** ~90
-- **Objectif:** Attaque de données
-- **Effets:** Dégâts via compromission de base de données
-
-### Normalization
-- **Type:** Support / Buff multi-stats
-- **Objectif:** Normalise et optimise avec 3NF
-- **Effets:** Buff attack ET charge 3-5 tours
-
-### Transaction Shield
-- **Type:** Support / Défense
-- **Objectif:** Protection par intégrité ACID
-- **Effets:** Shield solide (défense augmentée)
-
----
-
-## Compétence Concevoir
-
-### UML Strike
-- **Type:** Attaque forte
-- **Coût Charge:** ~28-48
-- **Dégât:** ~92
-- **Objectif:** Frappe basée sur l'architecture UML
-- **Effets:** Dégâts solides avec bonne critique
-
-### Design Pattern
-- **Type:** Support / Buff multi-stats
-- **Objectif:** Applique patterns (Singleton, Factory, Facade)
-- **Effets:** Buff attack ET defense 4-6 tours
-
-### API Shield
-- **Type:** Support / Défense
-- **Objectif:** Protection par API bien documentée
-- **Effets:** Shield puissant (défense augmentée)
-
----
-
-## Compétence Collaborer
-
-### Git Commit
-- **Type:** Attaque moyenne
-- **Coût Charge:** ~25-45
-- **Dégât:** ~88
-- **Objectif:** Attaque synchronisée en équipe
-- **Effets:** Dégâts stables avec commit réussi
-
-### Agile Sprint
-- **Type:** Support / Buff multi-stats
-- **Objectif:** Buff momentum d'équipe pour Agile
-- **Effets:** Buff attack ET charge 3-5 tours
-
-### Code Review
-- **Type:** Support / Défense
-- **Objectif:** Protection via pair programming
-- **Effets:** Shield avec révision de code
-
----
-
-## Mouvements de Scaling (Fighter 003)
+- **Effets:** Combine damage, buff, shield, heal, texte, status
 
 ### Python Growth
-- **Type:** Attaque faible + accumulation
-- **Dégât:** ~35
-- **Objectif:** Attaque faible qui accumule de l'expérience
-- **Effets:** 
-  - Dégâts faibles (35)
-  - **Buff d'attaque PERMANENT +10%**
-  - Accumule de la puissance à chaque utilisation
+- **Dégât:** 35 (faible)
+- **Durée:** Permanent
+- **Objectif:** Attaque faible avec accumulation d'expérience
+- **Effets:** +10% attack permanent, buff progressif
 
 ### Accumulate Power
-- **Type:** Support / Buff permanent
-- **Objectif:** Accumulation de puissance
-- **Effets:**
-  - Buff attack PERMANENT +25%
-  - Buff defense TEMPORAIRE +15% (2-3 tours)
-  - Constitue une couche de défense tout en augmentant l'attaque
+- **Type:** Support
+- **Durée:** Permanent
+- **Objectif:** Accumule de la puissance sur les tours
+- **Effets:** +25% attack permanent, +15% defense (2-3 tours)
 
 ### Defensive Shell
-- **Type:** Support / Défense + accumulation
-- **Objectif:** Carapace qui s'améliore
-- **Effets:**
-  - Shield immédiat
-  - Buff defense PERMANENT +8%
-  - Chaque utilisation renforce la défense
+- **Type:** Défense
+- **Durée:** Permanent (buff defense)
+- **Objectif:** Carapace défensive qui renforce avec le temps
+- **Effets:** Shield + +8% defense permanent
 
 ### Regenerate Code
-- **Type:** Support / Soins + buff
+- **Type:** Soins + Support
+- **Durée:** Permanent
 - **Objectif:** Régénération avec amélioration stats
-- **Effets:**
-  - Soins 20-30% HP
-  - Buff HP ET attack PERMANENT +12%
-  - Devient plus fort en se soignant
+- **Effets:** Soins 20-30% HP + +12% HP/attack permanent
 
 ### Compound Buff
-- **Type:** Support / Buff exponentiel
-- **Objectif:** Amplifie TOUS les buffs existants
-- **Effets:**
-  - Buff attack +30% PERMANENT
-  - Buff defense +30% PERMANENT
-  - Buff charge +15% PERMANENT
-  - Crée une synérgie exponentielle
+- **Type:** Support spécial
+- **Durée:** Permanent
+- **Objectif:** Amplifie tous les buffs existants
+- **Effets:** +30% attack/defense, +15% charge permanent
 
 ### Ultimate Transcendence
-- **Type:** Attaque ultime / Buff exponentiel
-- **Coût Charge:** ~50-70
-- **Dégât:** ~80-120 × 2-2.5x = 160-300 dégâts
+- **Type:** Attaque ultime
+- **Dégât:** 80-120 × 2.0-2.5x = 160-300 dégâts
+- **Coût Charge:** 50-70
 - **Objectif:** Coup final utilisant tous les buffs accumulés
-- **Effets:**
-  - Dégâts énormes avec critique 50-70%
-  - Buff attack +40% PERMANENT
-  - Buff defense +25% PERMANENT
-  - Buff charge +40% PERMANENT
-  - **Devient pratiquement inarrêtable après utilisation**
+- **Effets:** Dégâts énormes, critique 50-70%, +40% attack permanent
 
-**Stratégie Fighter 003:**
-- Tour précoce: Utiliser Python Growth (faible dégât mais accumulation)
-- Milieu: Accumulate Power, Compound Buff pour construire les stacks
-- Finisher: Ultimate Transcendence utilise tous les buffs pour un dégât dévastateur
-- Résultat: Devient exponentiellement plus fort chaque tour
-
----
-
-## Mouvements de Projet (Fighter 004)
+## Type PROJ (Compétence Gérer - Gestion de Projet - 6 mouvements)
 
 ### Kanban Jab
-- **Type:** Attaque faible mais rapide
-- **Dégât:** ~45
-- **Coût Charge:** ~50-70 (très cher, recharge lente)
-- **Objectif:** Coup rapide workflow
-- **Effets:** Dégâts faibles mais accumule du momentum
+- **Dégât:** 45 (faible)
+- **Coût Charge:** 50-70 (cher)
+- **Objectif:** Coup rapide workflow Kanban
+- **Effets:** Dégâts faibles, momentum de projet
 
 ### Scrum Master Debuff
-- **Type:** Support / Débuff multi-stats
+- **Type:** Support/Débuff
+- **Durée:** 2-3 tours
 - **Objectif:** Bloqueur Scrum ralentit l'ennemi
-- **Effets:**
-  - Débuff attack -20% (2-3 tours)
-  - Débuff charge -10% (2-3 tours)
-  - Frustration d'équipe
+- **Effets:** -20% attack, -10% charge
 
 ### Burndown Shield
-- **Type:** Support / Défense
+- **Type:** Défense
 - **Objectif:** Courbe de burndown défensive
-- **Effets:** Shield temporaire avec réduction progressive
+- **Effets:** Shield basé sur réduction progressive
 
 ### Sprint Planning
-- **Type:** Support / Recharge
-- **Objectif:** Recharge rapide TRÈS SPÉCIALE
-- **Effets:**
-  - Ajoute +40-60 charge directement
-  - **Prépare le chemin vers l'ultime**
+- **Type:** Support spécial (recharge)
+- **Coût Charge:** N/A
+- **Objectif:** Recharge rapide pour préparer l'ultime
+- **Effets:** Ajoute +40-60 charge directement
 
 ### Gantt Wall
-- **Type:** Support / Défense très forte
+- **Type:** Défense forte
+- **Durée:** 2-4 tours
 - **Objectif:** Mur GANTT ultra-solide
-- **Effets:**
-  - Shield très puissant +40-50% défense
-  - Buff defense permanent +12% (2-4 tours)
-  - Timeline défensive
+- **Effets:** Shield +40-50% defense + +12% defense permanent
 
 ### Project Tsunami
-- **Type:** Attaque ultime / Débuff ennemi
-- **Coût Charge:** ~70-90 (charge_bonus: 2.5 → recharge ultra-rapide)
-- **Dégât:** ~150-220 × 2.5x = **375-550 dégâts**
-- **Objectif:** Tsunami de projet - ultime dévastatrice ET rapide
-- **Effets:**
-  - Dégâts ÉNORMES avec critique 60-80%
-  - Buff attack +30% (2-3 tours)
-  - Buff charge +40% (1-2 tours)
-  - Recharge très rapide (70-90) grâce au charge_bonus 2.5
-  - **Peut utiliser l'ultime presque à chaque 2-3 tours!**
-
-**Stratégie Fighter 004:**
-- Tour 1-2: Kanban Jab + Sprint Planning = accumule charge rapidement
-- Tour 3: Project Tsunami = dégâts énormes
-- Tour 4-5: Kanban Jab + Sprint Planning = recharge pour prochain tsunami
-- Cycle: L'ultime revient toutes les 3-4 tours pour spam massif
-- Défense: Gantt Wall ou Burndown Shield pour survivre
+- **Type:** Attaque ultime
+- **Dégât:** 150-220 × 2.5x = 375-550 dégâts
+- **Coût Charge:** 70-90 (charge_recharge rapide)
+- **Objectif:** Tsunami de gestion de projet
+- **Effets:** Dégâts énormes, critique 60-80%, +30% attack, recharge très rapide
 
 ---
 
-## Mouvements de Débuff (Fighter 008)
+## Type DATA (Compétence Gérer - Bases de Données - 6 mouvements)
 
-### Communication Breakdown
-- **Type:** Débuff simple
-- **Coût Charge:** 4
-- **Dégât:** ~15
-- **Objectif:** Sème la discorde en équipe
-- **Effets:**
-  - Dégâts faibles (15)
-  - Débuff attack -25% (2 tours)
-  - Confusion tactique
+### SQL Injection
+- **Dégât:** 90
+- **Coût Charge:** 25-45
+- **Objectif:** Attaque par injection SQL
+- **Effets:** Dégâts via compromission DB, critique 25-45%
 
-### Toxic Feedback
-- **Type:** Débuff fort
-- **Coût Charge:** 4
-- **Dégât:** ~20
-- **Objectif:** Critique harcelante qui détruit le moral
-- **Effets:**
-  - Dégâts légers (20)
-  - Débuff defense -30% (3 tours)
-  - Morale endommagée
+### ACID Commitment
+- **Type:** Défense
+- **Durée:** Permanent
+- **Objectif:** Shield permanent garantissant l'intégrité ACID
+- **Effets:** Shield +35-45% defense, +12% defense permanent
 
-### Team Isolation
-- **Type:** Débuff recharge
-- **Coût Charge:** 5
-- **Dégât:** ~25
-- **Objectif:** Isole l'ennemi du support
-- **Effets:**
-  - Dégâts moyens (25)
-  - **Débuff charge -40% (2 tours)**
-  - Empêche la recharge d'ultime
+### Transaction Rollback
+- **Type:** Soins
+- **Objectif:** Annule les dégâts reçus
+- **Effets:** Soins 30-40% HP
 
-### Meeting Overload
-- **Type:** Débuff multi-stats
-- **Coût Charge:** 6
-- **Dégât:** ~30
-- **Objectif:** Enterre dans les réunions
-- **Effets:**
-  - Dégâts solides (30)
-  - Débuff attack -20% (3 tours)
-  - Débuff charge -30% (3 tours)
-  - Double débuff très puissant
+### Index Wall
+- **Type:** Défense très forte
+- **Durée:** 2-4 tours
+- **Objectif:** Mur d'index B-tree
+- **Effets:** Shield +40-50% defense + +15% defense permanent
 
-### Morale Crash
-- **Type:** Débuff dévastateur
-- **Coût Charge:** 7
-- **Dégât:** ~35
-- **Objectif:** Détruit complètement le moral
-- **Effets:**
-  - Dégâts forts (35)
-  - **Débuff attack -35% (4 tours)**
-  - Débuff defense -25% (4 tours)
-  - Confiance anéantie pour longtemps
+### Foreign Key Lock
+- **Type:** Support spécial
+- **Durée:** 2-3 tours
+- **Objectif:** Verrou de clé étrangère - débuff + protection
+- **Effets:** Shield + débuff attack/charge
 
-### Psychological Warfare
-- **Type:** Débuff ultime
-- **Coût Charge:** 9
-- **Dégât:** ~50
-- **Objectif:** Attaque tous les aspects de l'ennemi
-- **Effets:**
-  - Dégâts très forts (50)
-  - **Débuff attack -40% (3 tours)**
-  - **Débuff defense -35% (3 tours)**
-  - **Débuff charge -50% (3 tours)**
-  - **Destruction totale du contrôle ennemi**
+### Database Fortress
+- **Type:** Attaque ultime défensive
+- **Dégât:** Défense +50-60%
+- **Durée:** 3-5 tours
+- **Coût Charge:** 60-90
+- **Objectif:** Forteresse DB - protection totale
+- **Effets:** Shield massivement puissant, protection application
 
-**Stratégie Fighter 008:**
-- Rôle: Control/Support - faible attaque directe
-- Objectif: Crippler complètement l'ennemi
-- Combo possible: Communication + Toxic = double débuff
-- Timing: Meeting Overload ou Psychological pour max impact
-- Résultat: Ennemi avec -35-50% stats et recharge bloquée
+---
+
+## Type OPTI (Compétence Optimiser - 5 mouvements)
+
+### Cache Hit
+- **Dégât:** 50
+- **Coût Charge:** 5-15 (TRÈS rapide)
+- **Objectif:** Coup rapide optimisé par cache
+- **Effets:** Dégâts rapides, recharge ultra-rapide
+
+### Loop Optimization
+- **Type:** Support spécial
+- **Objectif:** Optimisation de boucle
+- **Effets:** Recharge massive de l'ultime (+35 charge)
+
+### CPU Pipeline
+- **Dégât:** 40
+- **Coût Charge:** 8-18
+- **Objectif:** Pipeline CPU optimisé
+- **Effets:** Dégâts + recharge (8-18)
+
+### Memory Defrag
+- **Type:** Défense
+- **Coût Charge:** 10-20
+- **Objectif:** Défragmentation mémoire
+- **Effets:** Shield + +8-15% defense + recharge
+
+### Compiler Turbo
+- **Type:** Attaque ultime
+- **Dégât:** 120-180 × 1.5-2.0x = 180-360 dégâts
+- **Coût Charge:** 40-60
+- **Objectif:** Compilateur turbo -O3
+- **Effets:** Dégâts importants, recharge ultra-rapide
+
+---
+
+## Type SYST (Compétence Administrer - 5 mouvements)
+
+### Process Kill
+- **Dégât:** 65
+- **Coût Charge:** 20-40
+- **Objectif:** Tue un processus ennemi
+- **Effets:** Dégâts solides avec critique 25-45%
+
+### Permission Shield
+- **Type:** Défense
+- **Objectif:** Chmod 700 - défense personnelle
+- **Effets:** Shield +8-15% defense
+
+### System Heal
+- **Type:** Soins
+- **Objectif:** Réparation système
+- **Effets:** Soins 20-30% HP
+
+### Load Balancer
+- **Type:** Support/Débuff
+- **Durée:** 2-3 tours
+- **Objectif:** Équilibreur de charge
+- **Effets:** Débuff attack -15-25% ennemi
+
+### System Restoration
+- **Type:** Attaque ultime équilibrée
+- **Dégât:** 70-110 × 1.2-1.8x = 84-198 dégâts
+- **Coût Charge:** 45-65
+- **Objectif:** Restauration système complète
+- **Effets:** Dégâts solides, soins, buffs multi-stats
+
+---
+
+## Type TEAM (Compétence Collaborer - 2 mouvements)
+
+### Team Defense
+- **Type:** Support
+- **Objectif:** Stratégie défensive d'équipe
+- **Effets:** Shield +10-18% defense
+
+### Total Breakdown
+- **Type:** Attaque ultime
+- **Dégât:** 60-100 × 1.3-1.9x = 78-190 dégâts
+- **Coût Charge:** 55-75
+- **Objectif:** Effondrement total - débuff massif
+- **Effets:** Dégâts + débuff attack/defense/charge, piercing important
+
+---
+
+## Mouvements Supprimés (Nettoyage - 13 mouvements)
+
+Les mouvements suivants ont été supprimés car non utilisés par les fighters:
+- **Type dev**: python_strike, man_page_read, version_control
+- **Type opti**: c_optimization, big_o_analysis, compiler_shield
+- **Type syst**: sudo_attack, firewall_debuff, backup_shield
+- **Type data**: normalization, transaction_shield
+- **Type team**: morale_crash, psychological_warfare
 
 ---
 
 ## Résumé par Catégorie
 
-### Attaques Fortes (Dégâts > 80)
-- Python Strike (85)
-- C Optimization (95)
-- Sudo Attack (100)
+### Attaques Fortes (Dégâts > 60)
 - SQL Injection (90)
-- UML Strike (92)
-- Git Commit (88)
+- Process Kill (65)
+- Python Growth (35 dégâts faibles mais accumulation)
 
-### Attaques Ultimes (Multiplier > 2x)
+### Attaques Ultimes (Multiplier > 1.5x)
 - Ultimate Transcendence (2.0-2.5x) → 160-300 dégâts
 - Project Tsunami (2.5x) → 375-550 dégâts
+- Compiler Turbo (1.5-2.0x) → 180-360 dégâts
+- Database Fortress (défense +50-60%)
+- System Restoration (1.2-1.8x) → 84-198 dégâts
+- Total Breakdown (1.3-1.9x) → 78-190 dégâts
 
 ### Buff Permanents (Duration: -1)
-- Python Growth (attack +10%)
-- Accumulate Power (attack +25%)
-- Defensive Shell (defense +8%)
-- Regenerate Code (hp/attack +12%)
-- Compound Buff (attack/defense/charge +15-30%)
-- Ultimate Transcendence (attack +40%, defense +25%, charge +40%)
+- Python Growth (+10% attack)
+- Accumulate Power (+25% attack, +15% defense temp)
+- Defensive Shell (+8% defense)
+- Regenerate Code (+12% HP/attack)
+- Compound Buff (+30% attack/defense, +15% charge)
+- Ultimate Transcendence (+40% attack, +25% defense, +40% charge)
+- ACID Commitment (+12% defense)
 
-### Débuff Ennemi (Reverse: true)
+### Shields/Défense
+- Basic Shield, Burndown Shield, Index Wall, Foreign Key Lock
+- Database Fortress, Permission Shield, Gantt Wall, Team Defense
+
+### Recharge Spéciale
+- Loop Optimization: Recharge massive +35 charge
+- Sprint Planning: Recharge +40-60 charge directement
+- Cache Hit: Recharge ultra-rapide (5-15)
+- CPU Pipeline: Recharge (8-18)
+- Memory Defrag: Recharge (10-20)
+
+### Débuff Ennemi
 - Communication Breakdown (attack -25%, 2 tours)
 - Toxic Feedback (defense -30%, 3 tours)
 - Team Isolation (charge -40%, 2 tours)
 - Meeting Overload (attack -20% + charge -30%, 3 tours)
-- Morale Crash (attack -35% + defense -25%, 4 tours)
-- Psychological Warfare (attack -40% + defense -35% + charge -50%, 3 tours)
+- Scrum Master Debuff (attack -20% + charge -10%, 2-3 tours)
+- Load Balancer (attack -15-25%, 2-3 tours)
+- Foreign Key Lock (débuff multi-stats)
 
-### Shields/Défense
-- Version Control, Backup Shield, Transaction Shield, API Shield
-- Code Review, Burndown Shield, Gantt Wall
-
-### Recharge Spéciale
-- Sprint Planning: Ajoute +40-60 charge directement
+### Distribution par Type
+| Type | Nombre | Attaques | Supports | Défense |
+|------|--------|----------|----------|---------|
+| **dev** | 12 | Basic Damage, Test All, Python Growth | Accumulate Power, Regenerate Code, Compound Buff | Basic Shield, Defensive Shell, Ultimate Transcendence |
+| **proj** | 6 | Kanban Jab, Project Tsunami | Scrum Master Debuff, Sprint Planning | Burndown Shield, Gantt Wall |
+| **data** | 6 | SQL Injection | ACID Commitment, Transaction Rollback, Foreign Key Lock | Index Wall, Database Fortress |
+| **opti** | 5 | Cache Hit, CPU Pipeline, Compiler Turbo | Loop Optimization, Memory Defrag | - |
+| **syst** | 5 | Process Kill, System Restoration | System Heal, Load Balancer | Permission Shield |
+| **team** | 2 | Total Breakdown | - | Team Defense |
 
 ---
 
-## Notes de Balance
+## Stratégies par Fighter
 
-1. **Fighter 003 (Scaling):** Devient de plus en plus fort avec accumulation de buffs permanents
-2. **Fighter 004 (Burst):** Peut spammer l'ultime grâce au charge_bonus 2.5 très élevé
-3. **Fighter 008 (Control):** Affaiblit totalement l'ennemi mais faible attaque directe
-4. Tous les autres fighters utilisent un mix équilibré de damage/support/defense
+### Fighter 003 (Ludovic - Dev) 🧙 DRUIDE DU CODE
+**Archétype:** Scaling/Stacking
+**Mouvements:** Ultimate Transcendence, Compound Buff, Accumulate Power, Defensive Shell, Regenerate Code, Python Growth
+**Stratégie:** Accumule des buffs permanents jusqu'à devenir inarrêtable
+**Points Forts:** Devient exponentiellement plus fort chaque tour
+**Points Faibles:** Faible au début du combat
+
+### Fighter 004 (Benoît - Proj) ⚡ CHEF DE PROJET BURST
+**Archétype:** Burst/Fast Recharge
+**Mouvements:** Project Tsunami, Sprint Planning, Gantt Wall, Burndown Shield, Scrum Master Debuff, Kanban Jab
+**Stratégie:** Recharge l'ultime rapidement et spam Project Tsunami
+**Points Forts:** Ultime très rapide, dégâts énormes
+**Points Faibles:** Petit HP de base
+
+### Fighter 005 (Gildas - Syst) 🛡️ ADMIN SYSTÈME ALL-TERRAIN
+**Archétype:** Balanced/Multi-Purpose
+**Mouvements:** System Restoration, Load Balancer, System Heal, Permission Shield, Process Kill
+**Stratégie:** Mix équilibré de dégâts, soins et débuff
+**Points Forts:** Polyvalent, peut faire de tout
+**Points Faibles:** Pas excellent dans une spécialité
+
+### Fighter 006 (Clément - Data) 🏰 FORTERESSE ACIDE
+**Archétype:** Tank/Defender
+**Mouvements:** Database Fortress, Index Wall, ACID Commitment, SQL Injection, Foreign Key Lock, Transaction Rollback
+**Stratégie:** Défense massivement puissante, invulnérable à longue portée
+**Points Forts:** Meilleure défense du jeu
+**Points Faibles:** Lent à éliminer
+
+### Fighter 007 (Jean-Baptiste - Opti) ⚙️ EXPERT OPTIMISATION
+**Archétype:** Speed/Efficiency
+**Mouvements:** Compiler Turbo, Cache Hit, Loop Optimization, Memory Defrag, CPU Pipeline
+**Stratégie:** Ultra-rapide, recharge très rapidement, dégâts efficaces
+**Points Forts:** Rapidité, recharge ultime constante
+**Points Faibles:** Pas de buffs permanents
+
+### Fighter 008 (Carole - Team) 💔 SABOTEUR COMMUNICATIONNEL
+**Archétype:** Control/Debuff
+**Mouvements:** Total Breakdown, Communication Breakdown, Toxic Feedback, Team Isolation, Meeting Overload, Team Defense
+**Stratégie:** Affaiblit complètement l'ennemi via débuffs multiples
+**Points Forts:** Control total du combat, affaiblit l'ennemi
+**Points Faibles:** Peu de dégâts directs
+
+---
+
+## Notes de Balance Finales
+
+✅ **40 mouvements totaux** - Nettoyés et optimisés
+✅ **6 types** - Chacun avec rôle spécifique
+✅ **8 fighters** - Chacun avec archétype unique et thématisé
+✅ **Mouvements inutilisés supprimés** - 13 mouvements supprimés (47 → 40)
+✅ **Toutes les descriptions actualisées** - Thématiques, vivantes et avec emojis
+✅ **Balance équilibrée** - Chaque fighter a ses forces et faiblesses
+✅ **Fighters 1-2** - Mouvements de base et équilibrés (à développer avec plus de jeux)
