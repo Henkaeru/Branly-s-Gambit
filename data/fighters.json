@@ -115,17 +115,17 @@
         "id": "fighter_008",
         "name": "primot carole",
         "type": "team",
-        "description": "trickster collaboratif - Git, Agile et code review",
+        "description": "expert communication et gestion d'équipe - débuff l'adversaire à mort",
         "stats": {
-            "hp": 290,
-            "attack": 85,
-            "defense": 120,
-            "charge_bonus": 1.1,
-            "shield": 50
+            "hp": 320,
+            "attack": 65,
+            "defense": 110,
+            "charge_bonus": 1.15,
+            "shield": 80
         },
         "starting_stats":{
-            "shield": 10
+            "shield": 20
         },
-        "moves": ["git_commit", "agile_sprint", "code_review", "python_strike", "man_page_read", "version_control"]
+        "moves": ["communication_breakdown", "toxic_feedback", "team_isolation", "meeting_overload", "morale_crash", "psychological_warfare"]
     }
 ]

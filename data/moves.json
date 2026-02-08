@@ -1051,5 +1051,173 @@
         "style": "{'color':'gold','bold':true}"
       }
     ]
+  },
+  {
+    "id": "communication_breakdown",
+    "name": "Communication Breakdown",
+    "description": "Sow discord and confusion in the opponent's team",
+    "accuracy": 85,
+    "charge_cost": 4,
+    "priority": 0,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 15,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "confused",
+        "duration": 2,
+        "reverse": true,
+        "stats": {"attack": -0.25},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Communication Breakdown!, Opponent attack reduced!]",
+        "style": "{'color':'orange','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "toxic_feedback",
+    "name": "Toxic Feedback",
+    "description": "Attack with harsh criticism that damages morale",
+    "accuracy": 90,
+    "charge_cost": 4,
+    "priority": 0,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 20,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "demoralized",
+        "duration": 3,
+        "reverse": true,
+        "stats": {"defense": -0.3},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Toxic Feedback!, Opponent defense cracked!]",
+        "style": "{'color':'red','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "team_isolation",
+    "name": "Team Isolation",
+    "description": "Isolate the opponent from support and resources",
+    "accuracy": 80,
+    "charge_cost": 5,
+    "priority": 0,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 25,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "isolated",
+        "duration": 2,
+        "reverse": true,
+        "stats": {"charge_bonus": -0.4},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Team Isolation!, Opponent cannot charge!]",
+        "style": "{'color':'purple','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "meeting_overload",
+    "name": "Meeting Overload",
+    "description": "Bury the opponent in endless meetings and tasks",
+    "accuracy": 75,
+    "charge_cost": 6,
+    "priority": 0,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 30,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "overwhelmed",
+        "duration": 3,
+        "reverse": true,
+        "stats": {"attack": -0.2, "charge_bonus": -0.3},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Meeting Overload!, Opponent is swamped!]",
+        "style": "{'color':'cyan','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "morale_crash",
+    "name": "Morale Crash",
+    "description": "Completely destroy team morale and confidence",
+    "accuracy": 85,
+    "charge_cost": 7,
+    "priority": 0,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 35,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "broken_morale",
+        "duration": 4,
+        "reverse": true,
+        "stats": {"attack": -0.35, "defense": -0.25},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Morale Crash!, Team confidence shattered!]",
+        "style": "{'color':'darkred','bold':true}"
+      }
+    ]
+  },
+  {
+    "id": "psychological_warfare",
+    "name": "Psychological Warfare",
+    "description": "Master debuff: Attack all aspects of the opponent's capabilities",
+    "accuracy": 80,
+    "charge_cost": 9,
+    "priority": 1,
+    "actions": [
+      {
+        "type": "damage",
+        "value": 50,
+        "target": "opponent"
+      },
+      {
+        "type": "buff",
+        "name": "psychological_breakdown",
+        "duration": 3,
+        "reverse": true,
+        "stats": {"attack": -0.4, "defense": -0.35, "charge_bonus": -0.5},
+        "target": "opponent"
+      },
+      {
+        "type": "text",
+        "text": "[Psychological Warfare!, Opponent completely shattered!]",
+        "style": "{'color':'gold','bold':true}"
+      }
+    ]
   }
 ]

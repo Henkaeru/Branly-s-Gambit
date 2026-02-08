@@ -36,7 +36,7 @@ class BuffHandler(ActionHandler):
         amount = int(round(move.get_effective_amount(user, target, move_ctx)))
 
         if amount <= 0:
-            battle_ctx.log_stack.append(f"{user.current_fighter.name} Failed to {"debuff" if action.reverse else "buff"}")
+            battle_ctx.log_stack.append(f"{user.current_fighter.name} Failed to {'debuff' if action.reverse else 'buff'}")
             return False
 
         # Debuff support: reverse flag on the action payload
