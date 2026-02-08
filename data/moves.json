@@ -18,7 +18,7 @@
   {
     "id": "hotfix",
     "name": "Hotfix",
-    "description": "Soin 120 sur soi, +15 charge.",
+    "description": "Soin 120, +15 charge.",
     "enabled": true,
     "type": "dev",
     "category": "support",
@@ -53,7 +53,7 @@
   {
     "id": "java_bien",
     "name": "JAVA BIEN ?",
-    "description": "Soin 999 sur soi et buff attaque +50% et défense +50% (3 tours), coûte 500 charge.",
+    "description": "Soin 999 et buff attaque +50% et défense +50% (3 tours), coûte 500 charge.",
     "enabled": true,
     "type": "dev",
     "category": "special",
@@ -147,19 +147,23 @@
   {
     "id": "fork_bomb",
     "name": "Fork Bomb",
-    "description": "50-70 dégâts, 50% de chance de débuff attaque, défense ou hp de 5-25% (2-5 tours), +30 charge.",
+    "description": "1-2x40-50 dégâts, 50% de chance de débuff défense ou hp de 5-25% (2-5 tours), +30 charge.",
     "enabled": true,
     "type": "syst",
     "category": "damage",
-    "amount": "l[50,55,60,65,70]",
+    "amount": "l[40,45,50]",
     "target": "opponent",
     "calc_target": "self",
     "calc_field": "attack",
     "charge_recharge": 30,
     "actions": [
-      { "id": "damage" },
+      { "id": "repeat",
+        "count": "r[1,2]",
+        "actions": [
+           { "id": "damage", "amount": "l[40,45,50]" }
+        ]
+      },
       { "id": "random", "choices": [
-          { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["attack"], "calc_target": "opponent", "calc_field": "attack" }, "weight": 1 },
           { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["defense"], "calc_target": "opponent", "calc_field": "defense" }, "weight": 1 },
           { "action": { "id": "buff", "amount": "r[0.05, 0.25]", "reverse": true, "duration": "r[2,5]", "stats": ["hp"], "calc_target": "opponent", "calc_field": "hp" }, "weight": 1 }
         ], 
@@ -170,11 +174,11 @@
   {
     "id": "reverse_proxy",
     "name": "Reverse Proxy",
-    "description": "Bouclier 50-100 sur soi et buff défense +10-25% (2-5 tours), +20 charge.",
+    "description": "Bouclier 50-100 et buff défense +10-25% (2-5 tours), +20 charge.",
     "enabled": true,
     "type": "syst",
     "category": "support",
-    "amount": "r[50,100]",
+    "amount": "l[50,55,60,65,70,75,80,85,90,95,100]",
     "duration": "r[2,5]",
     "target": "self",
     "calc_target": "self",
@@ -188,7 +192,7 @@
   {
     "id": "cron_roulette",
     "name": "Cron Roulette",
-    "description": "Effectue 1 action aléatoire : 80 dégâts OU 70 bouclier sur soi OU buff défense +15% (3 tours), coûte 60 charge.",
+    "description": "Effectue 1-3 action aléatoire : 120 dégâts OU 40 bouclier OU debuff défense +35% (3 tours), coûte 60 charge.",
     "enabled": true,
     "type": "syst",
     "category": "special",
@@ -199,11 +203,17 @@
     "charge_recharge": 0,
     "actions": [
       {
-        "id": "random",
-        "choices": [
-          { "action": { "id": "damage", "amount": 80 } , "weight": 1 },
-          { "action": { "id": "shield", "amount": 70, "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
-          { "action": { "id": "buff", "amount": 0.15, "duration": 3, "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 1 }
+        "id": "repeat",
+        "count": "r[1,3]",
+        "actions": [
+          {
+            "id": "random",
+            "choices": [
+              { "action": { "id": "damage", "amount": 120 } , "weight": 2 },
+              { "action": { "id": "shield", "amount": 40, "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
+              { "action": { "id": "buff", "amount": 0.35, "reverse": true, "duration": 3, "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 2 }
+            ]
+          }
         ]
       }
     ]
@@ -211,7 +221,7 @@
   {
     "id": "home_bigpapoo",
     "name": "/home/bigpapoo",
-    "description": "Enchaîne 2 effets aléatoires distincts : 100-200 dégâts / 100-200 bouclier sur soi / buff défense +25-50% (3-6 tours), coûte 130 charge.",
+    "description": "Enchaîne 3 effets aléatoires : 100-200 dégâts / 50-100 bouclier / debuff défense +35-50% (3-6 tours), coûte 130 charge.",
     "enabled": true,
     "type": "syst",
     "category": "special",
@@ -222,14 +232,17 @@
     "charge_usage": 130,
     "charge_recharge": 0,
     "actions": [
-      {
-        "id": "random",
-        "count": 2,
-        "unique": true,
-        "choices": [
-          { "action": { "id": "damage", "amount": "r[100,200]" }, "weight": 1 },
-          { "action": { "id": "shield", "amount": "r[100,200]", "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
-          { "action": { "id": "buff", "amount": "r[0.25,0.5]", "duration": "r[3,6]", "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 1 }
+      { "id": "repeat",
+        "count": 3,
+        "actions": [
+          {
+            "id": "random",
+            "choices": [
+              { "action": { "id": "damage", "amount": "l[100,110,120,130,140,150,160,170,180,190,200]" }, "weight": 5 },
+              { "action": { "id": "shield", "amount": "l[50,55,60,65,70,75,80,85,90,95,100]", "calc_target": "self", "calc_field": "shield" }, "weight": 1 },
+              { "action": { "id": "buff", "amount": "r[0.25,0.5]", "reverse": true, "duration": "r[3,6]", "stats": ["defense"], "calc_target": "self", "calc_field": "defense" }, "weight": 3 }
+            ]
+          }
         ]
       }
     ]
@@ -237,15 +250,15 @@
   {
     "id": "select_shield",
     "name": "SELECT shield...;",
-    "description": "Bouclier 50-150 sur soi, +25 charge.",
+    "description": "Bouclier 50-100, +25 charge.",
     "enabled": true,
     "type": "data",
     "category": "support",
-    "amount": "r[50,150]",
+    "amount": "l[50,55,60,65,70,75,80,85,90,95,100]",
     "target": "self",
     "calc_target": "self",
     "calc_field": "hp",
-    "charge_recharge": 25,
+    "charge_recharge": 45,
     "actions": [
       { "id": "shield" }
     ]
@@ -253,17 +266,17 @@
   {
     "id": "select_defense_as_damage",
     "name": "SELECT defense AS damage...;",
-    "description": "Inflige 30% de sa défense, +30 charge.",
+    "description": "Inflige 50% de sa défense, +30 charge.",
     "enabled": true,
     "type": "data",
     "category": "damage",
-    "amount": 0.3,
+    "amount": 0.5,
     "target": "opponent",
     "calc_target": "self",
     "calc_field": "defense",
-    "charge_recharge": 30,
+    "charge_recharge": 60,
     "actions": [
-      { "id": "damage", "calc_field": "defense", "calc_target": "self", "amount": 0.3 }
+      { "id": "damage", "calc_field": "defense", "calc_target": "self", "amount": 0.5 }
     ]
   },
   {
@@ -288,12 +301,12 @@
   {
     "id": "begin_postgresql",
     "name": "BEGIN PostgreSQL;",
-    "description": "Bouclier 250 et buff défense +40% (5 tours), coûte 300 charge.",
+    "description": "Bouclier 250 et buff défense +150% (15 tours), coûte 300 charge.",
     "enabled": true,
     "type": "data",
     "category": "support",
     "amount": 250,
-    "duration": 5,
+    "duration": 15,
     "target": "self",
     "calc_target": "self",
     "calc_field": "hp",
@@ -301,7 +314,7 @@
     "charge_recharge": 0,
     "actions": [
       { "id": "shield" },
-      { "id": "buff", "amount": 0.4, "stats": ["defense"], "calc_field": "defense" }
+      { "id": "buff", "amount": 1.5, "stats": ["defense"], "calc_field": "defense" }
     ]
   },
   {
@@ -413,7 +426,7 @@
   {
     "id": "press_badge",
     "name": "Press Badge",
-    "description": "Bouclier 100 sur soi, +25 charge.",
+    "description": "Bouclier 100, +25 charge.",
     "enabled": true,
     "type": "team",
     "category": "support",
@@ -429,7 +442,7 @@
   {
     "id": "editorial_angle",
     "name": "Editorial Angle",
-    "description": "Buff attaque +12% et défense +12% sur soi (3 tours), coûte 90 charge.",
+    "description": "Buff attaque +12% et défense +12% (3 tours), coûte 90 charge.",
     "enabled": true,
     "type": "team",
     "category": "support",
@@ -448,7 +461,7 @@
   {
     "id": "le_branly",
     "name": "Le Branly",
-    "description": "Soin 150 sur soi et bouclier 100 sur soi, coûte 150 charge.",
+    "description": "Soin 150 et bouclier 100, coûte 150 charge.",
     "enabled": true,
     "type": "team",
     "category": "special",

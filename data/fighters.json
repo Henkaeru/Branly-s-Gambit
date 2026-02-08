@@ -5,6 +5,7 @@
         "description": "Druide : spécialiste du soutien et des buffs à long terme.",
         "type": "dev",
         "fighter_sprite": "fighters/battle_sprite/ludovic_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/ludovic_sprite.png",
         "stats": {
             "hp": 500,
             "attack": 85,
@@ -24,6 +25,7 @@
         "type": "proj",
         "description": "Canon de verre : très offensif mais fragile. shield back with ult",
         "fighter_sprite": "fighters/battle_sprite/benoit_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/benoit_sprite.png",
         "stats": {
             "hp": 150,
             "attack": 130,
@@ -42,6 +44,7 @@
         "type": "syst",
         "description": "Trickster : contrôle et debuffs, gameplay axé sur la disruption.",
         "fighter_sprite": "fighters/battle_sprite/gildas_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/gildas_sprite.png",
         "stats": {
             "hp": 300,
             "attack": 100,
@@ -60,6 +63,7 @@
         "type": "data",
         "description": "Tank : robuste, excelle dans l'attrition et la survie.",
         "fighter_sprite": "fighters/battle_sprite/clement_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/clement_sprite.png",
         "stats": {
             "hp": 400,
             "attack": 60,
@@ -83,6 +87,7 @@
         "type": "opti",
         "description": "Assaillant : tempo et frappes répétées, mobile et polyvalent.",
         "fighter_sprite": "fighters/battle_sprite/tiphaine_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/tiphaine_sprite.png",
         "stats": {
             "hp": 300,
             "attack": 50,
@@ -101,6 +106,7 @@
         "type": "team",
         "description": "Polyvalent (tout-terrain) : équilibré, conçu pour s'adapter.",
         "fighter_sprite": "fighters/battle_sprite/carole_sprite.png",
+        "fighter_selection_sprite": "fighters/selection_sprite/carole_sprite.png",
         "stats": {
             "hp": 300,
             "attack": 110,

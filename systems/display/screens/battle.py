@@ -113,6 +113,16 @@ class BattleScreen(Screen):
                 glow.visible = False
             except Exception:
                 pass
+            # prevent glow from capturing hover/click, so button tooltips still show
+            try:
+                glow.set_blocking(False)
+            except Exception:
+                try:
+                    glow.blocking = False
+                except Exception:
+                    pass
+            # also never report hover, so UIManager keeps hovering the button instead
+            glow.hover_point = lambda *_args, **_kwargs: False
             self.move_glows.append(glow)
             self.ui_elements.append(glow)
 
@@ -124,6 +134,16 @@ class BattleScreen(Screen):
                 container=self.action_bar
             )
             btn.move_idx = i
+            # add tooltip from move description (safe fallback)
+            tooltip = getattr(move, "description", None)
+            if tooltip:
+                try:
+                    btn.set_tooltip(tooltip)
+                except Exception:
+                    try:
+                        btn.tool_tip_text = tooltip
+                    except Exception:
+                        pass
             self.move_buttons.append(btn)
             self.ui_elements.append(btn)
 
@@ -825,7 +845,7 @@ class BattleRenderer:
             screen = self.engine.active_screen
             name_y = rect.top - 40
             screen._update_fighter_name_ui(fv, rect.centerx, name_y)
-            buffs_y = name_y + 30 + 8
+            buffs_y = name_y
             screen._build_buffs_and_statuses_ui(fv, rect.centerx, buffs_y)
 
         # draw target highlight under fighters (uses anchors)
